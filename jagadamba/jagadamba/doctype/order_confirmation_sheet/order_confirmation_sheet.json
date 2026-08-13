@@ -97,12 +97,12 @@
   {
    "fieldname": "scope_section",
    "fieldtype": "Section Break",
-   "label": "Item Groups"
+   "label": "Build Categories"
   },
   {
    "fieldname": "item_groups",
    "fieldtype": "Table",
-   "label": "Item Groups",
+   "label": "Build Categories",
    "options": "OCS Item Group"
   },
   {

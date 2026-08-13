@@ -5,17 +5,17 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "item_group",
+  "parent_item",
   "estimated_budget",
   "remarks"
  ],
  "fields": [
   {
-   "fieldname": "item_group",
+   "fieldname": "parent_item",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Item Group",
-   "options": "Item Group",
+   "label": "Category Item",
+   "options": "Item",
    "reqd": 1
   },
   {
@@ -35,7 +35,7 @@
  "index_web_pages_for_search": 0,
  "istable": 1,
  "links": [],
- "modified": "2026-08-12 00:00:00.000000",
+ "modified": "2026-08-13 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "OCS Item Group",
