@@ -1,7 +1,7 @@
 frappe.ui.form.on("Designing", {
 	refresh: function (frm) {
 		frm.set_query("item", function () {
-			return { filters: { is_stock_item: 1, disabled: 0 } };
+			return { filters: { item_group: "Finished Items", disabled: 0 } };
 		});
 
 		if (frm.doc.docstatus !== 2) {
