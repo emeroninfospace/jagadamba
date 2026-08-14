@@ -1,5 +1,57 @@
 frappe.ui.form.on("Designing", {
 	refresh: function (frm) {
+		frm.set_query("item", function () {
+			return { filters: { is_stock_item: 1, disabled: 0 } };
+		});
+
+		if (frm.doc.docstatus !== 2) {
+			frm.add_custom_button(__("Fetch PO Items"), () => {
+				if (!frm.doc.project) {
+					frappe.msgprint({
+						title: __("Project Required"),
+						message: __("Please set the Project before fetching PO items."),
+						indicator: "orange",
+					});
+					return;
+				}
+				frappe.call({
+					method: "jagadamba.jagadamba.api.get_po_items_for_designing",
+					args: { project: frm.doc.project },
+					freeze: true,
+					freeze_message: __("Fetching PO Items..."),
+					callback: function (r) {
+						if (!r.message || !r.message.length) {
+							frappe.show_alert({
+								message: __("No submitted PO items found for this project."),
+								indicator: "orange",
+							});
+							return;
+						}
+						let added = 0;
+						r.message.forEach((item) => {
+							let exists = (frm.doc.raw_materials || []).some(
+								(i) => i.item_code === item.item_code
+							);
+							if (!exists) {
+								let child = frm.add_child("raw_materials");
+								child.item_code = item.item_code;
+								child.item_name = item.item_name;
+								child.qty = item.qty;
+								child.uom = item.uom;
+								child.description = item.description;
+								added++;
+							}
+						});
+						frm.refresh_field("raw_materials");
+						frappe.show_alert({
+							message: __("{0} item(s) added to Raw Materials", [added]),
+							indicator: "green",
+						});
+					},
+				});
+			});
+		}
+
 		if (frm.doc.docstatus === 1) {
 			frm.add_custom_button(
 				__("BOM"),
@@ -12,10 +64,17 @@ frappe.ui.form.on("Designing", {
 						});
 						return;
 					}
-					frappe.new_doc("BOM", {
-						item: frm.doc.item,
-						project: frm.doc.project,
-						quantity: 1,
+					frappe.call({
+						method: "jagadamba.jagadamba.api.create_bom_from_designing",
+						args: { designing: frm.doc.name },
+						freeze: true,
+						freeze_message: __("Creating BOM..."),
+						callback: function (r) {
+							if (r.message) {
+								var doc = frappe.model.sync(r.message);
+								frappe.set_route("Form", "BOM", doc[0].name);
+							}
+						},
 					});
 				},
 				__("Create")

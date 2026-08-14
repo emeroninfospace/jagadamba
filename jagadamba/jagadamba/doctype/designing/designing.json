@@ -17,6 +17,8 @@
   "ocs",
   "vehicle_type",
   "bom",
+  "raw_materials_section",
+  "raw_materials",
   "design_files_section",
   "design_attachments",
   "design_notes",
@@ -127,6 +129,17 @@
    "label": "Design Notes"
   },
   {
+   "fieldname": "raw_materials_section",
+   "fieldtype": "Section Break",
+   "label": "Raw Materials"
+  },
+  {
+   "fieldname": "raw_materials",
+   "fieldtype": "Table",
+   "label": "Raw Materials",
+   "options": "Designing Raw Material"
+  },
+  {
    "fieldname": "confirmation_section",
    "fieldtype": "Section Break",
    "label": "Customer Confirmation"
@@ -164,7 +177,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-08-14 08:21:17.074310",
+ "modified": "2026-08-14 13:56:09.841327",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Designing",

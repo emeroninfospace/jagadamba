@@ -15,6 +15,7 @@ def make_purchase_order(sales_order):
 
 	po = frappe.new_doc("Purchase Order")
 	po.company = so.company
+	po.project = so.project
 	po.transaction_date = frappe.utils.today()
 	po.schedule_date = frappe.utils.today()
 
@@ -49,6 +50,49 @@ def create_project(project_name, customer=None, sales_order=None):
 		frappe.db.set_value("Sales Order", sales_order, "project", project.name)
 
 	return project.name
+
+
+@frappe.whitelist()
+def get_po_items_for_designing(project):
+	po_items = frappe.db.sql(
+		"""
+		SELECT poi.item_code, poi.item_name, poi.qty, poi.uom, poi.description
+		FROM `tabPurchase Order Item` poi
+		JOIN `tabPurchase Order` po ON po.name = poi.parent
+		WHERE po.project = %s AND po.docstatus = 1
+		""",
+		(project,),
+		as_dict=True,
+	)
+	return po_items
+
+
+@frappe.whitelist()
+def create_bom_from_designing(designing):
+	doc = frappe.get_doc("Designing", designing)
+	if not doc.item:
+		frappe.throw("Please set the Item field before creating a BOM.")
+
+	bom = frappe.new_doc("BOM")
+	bom.item = doc.item
+	bom.project = doc.project
+	bom.quantity = 1
+
+	for rm in doc.raw_materials:
+		uom = rm.uom or frappe.db.get_value("Item", rm.item_code, "stock_uom") or "Nos"
+		bom.append(
+			"items",
+			{
+				"item_code": rm.item_code,
+				"item_name": rm.item_name,
+				"qty": rm.qty or 1,
+				"uom": uom,
+				"stock_uom": uom,
+				"description": rm.description,
+			},
+		)
+
+	return bom
 
 
 @frappe.whitelist()

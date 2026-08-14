@@ -16,38 +16,53 @@ frappe.ui.form.on("Sales Order", {
 				frm.add_custom_button(
 					__("Project"),
 					() => {
-						frappe.prompt(
-							{
-								label: __("Project Name"),
-								fieldname: "project_name",
-								fieldtype: "Data",
-								reqd: 1,
-							},
-							(values) => {
-								frappe.call({
-									method: "jagadamba.jagadamba.api.create_project",
-									args: {
-										project_name: values.project_name,
-										customer: frm.doc.customer,
-										sales_order: frm.doc.name,
-									},
-									freeze: true,
-									freeze_message: __("Creating Project..."),
-									callback: function (r) {
-										if (r.message) {
-											frappe.show_alert({
-												message: __("Project {0} created", [r.message]),
-												indicator: "green",
-											});
-											frm.reload_doc();
-											frappe.set_route("Form", "Project", r.message);
-										}
-									},
-								});
-							},
-							__("Create Project"),
-							__("Create")
-						);
+						let show_dialog = (default_name) => {
+							frappe.prompt(
+								{
+									label: __("Project Name"),
+									fieldname: "project_name",
+									fieldtype: "Data",
+									reqd: 1,
+									default: default_name || "",
+								},
+								(values) => {
+									frappe.call({
+										method: "jagadamba.jagadamba.api.create_project",
+										args: {
+											project_name: values.project_name,
+											customer: frm.doc.customer,
+											sales_order: frm.doc.name,
+										},
+										freeze: true,
+										freeze_message: __("Creating Project..."),
+										callback: function (r) {
+											if (r.message) {
+												frappe.show_alert({
+													message: __("Project {0} created", [r.message]),
+													indicator: "green",
+												});
+												frm.reload_doc();
+												frappe.set_route("Form", "Project", r.message);
+											}
+										},
+									});
+								},
+								__("Create Project"),
+								__("Create")
+							);
+						};
+
+						if (frm.doc.custom_quotation) {
+							frappe.call({
+								method: "frappe.client.get",
+								args: { doctype: "Quotation", name: frm.doc.custom_quotation },
+								callback: function (r) {
+									show_dialog(r.message && r.message.custom_project ? r.message.custom_project : "");
+								},
+							});
+						} else {
+							show_dialog("");
+						}
 					},
 					__("Create")
 				);
@@ -107,15 +122,38 @@ frappe.ui.form.on("Sales Order", {
 });
 
 frappe.ui.form.on("Sales Order Item", {
-	item_code: function (frm, cdt, cdn) {
+	before_remove: function (frm, cdt, cdn) {
 		let row = locals[cdt][cdn];
 		if (!row.item_code) return;
+		frm.doc.custom_item_groups = (frm.doc.custom_item_groups || []).filter(
+			(i) => i.parent_item !== row.item_code
+		);
+		frm.refresh_field("custom_item_groups");
+	},
 
+	item_code: function (frm, cdt, cdn) {
+		let row = locals[cdt][cdn];
+
+		// Remove entries whose parent_item is no longer in the items table
+		let current_parents = new Set(
+			(frm.doc.items || []).map((i) => i.item_code).filter(Boolean)
+		);
+		frm.doc.custom_item_groups = (frm.doc.custom_item_groups || []).filter(
+			(i) => !i.parent_item || current_parents.has(i.parent_item)
+		);
+		frm.refresh_field("custom_item_groups");
+
+		if (!row.item_code) return;
+
+		frappe.dom.freeze(__("Fetching build category items..."));
 		frappe.call({
 			method: "jagadamba.jagadamba.api.get_child_items_for_parent_items",
 			args: { parent_item_codes: JSON.stringify([row.item_code]) },
 			callback: function (r) {
+				frappe.dom.unfreeze();
 				if (!r.message || !r.message.length) return;
+
+				let added = 0;
 				r.message.forEach((item) => {
 					let exists = (frm.doc.custom_item_groups || []).some(
 						(i) => i.item_code === item.item_code
@@ -126,9 +164,16 @@ frappe.ui.form.on("Sales Order Item", {
 						child.item_code = item.item_code;
 						child.item_name = item.item_name;
 						child.uom = item.uom;
+						added++;
 					}
 				});
 				frm.refresh_field("custom_item_groups");
+				if (added) {
+					frappe.show_alert({
+						message: __("{0} item(s) added to Build Categories", [added]),
+						indicator: "green",
+					});
+				}
 			},
 		});
 	},
