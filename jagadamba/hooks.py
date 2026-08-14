@@ -48,6 +48,10 @@ doctype_js = {
 	"Lead": "public/js/lead.js",
 	"Sales Order": "public/js/sales_order.js",
 }
+fixtures = [
+	{"dt": "Custom HTML Block", "filters": [["name", "=", "Production Dashboard"]]},
+]
+
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
