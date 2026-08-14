@@ -9,9 +9,9 @@
   "sales_order",
   "customer",
   "customer_name",
-  "project",
   "column_break_1",
   "date",
+  "project",
   "vehicle_type",
   "quotation",
   "status",
@@ -74,6 +74,7 @@
    "reqd": 1
   },
   {
+   "fetch_from": "quotation.custom_vehicle_type",
    "fieldname": "vehicle_type",
    "fieldtype": "Link",
    "label": "Vehicle Type",
@@ -81,6 +82,7 @@
    "read_only": 1
   },
   {
+   "fetch_from": "sales_order.custom_quotation",
    "fieldname": "quotation",
    "fieldtype": "Link",
    "label": "Quotation",
@@ -134,10 +136,11 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-08-13 11:13:57.876257",
+ "modified": "2026-08-14 08:21:38.867339",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Order Confirmation Sheet",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {

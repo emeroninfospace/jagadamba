@@ -1,54 +1,35 @@
 frappe.ui.form.on("Quotation", {
 	refresh: function (frm) {
-		frm.set_query("parent_item", "custom_item_groups", function () {
+		frm.set_query("item_code", "items", function () {
 			return { filters: { custom_parent_item: 1, disabled: 0 } };
 		});
 	},
 });
 
-frappe.ui.form.on("Quotation Item Group", {
-	parent_item: function (frm, cdt, cdn) {
+frappe.ui.form.on("Quotation Item", {
+	item_code: function (frm, cdt, cdn) {
 		let row = locals[cdt][cdn];
-		if (!row.parent_item) return;
+		if (!row.item_code) return;
 
-		frappe.db.get_value("Item", row.parent_item, "item_group", (r) => {
-			if (!r || !r.item_group) return;
-
-			frappe.call({
-				method: "frappe.client.get_list",
-				args: {
-					doctype: "Item",
-					filters: {
-						item_group: r.item_group,
-						disabled: 0,
-						custom_parent_item: 0,
-					},
-					fields: ["item_code", "item_name", "item_group", "stock_uom"],
-					limit_page_length: 0,
-				},
-				callback: function (r2) {
-					if (!r2.message || !r2.message.length) {
-						frappe.msgprint(
-							__("No child items found for parent item: {0}", [row.parent_item])
-						);
-						return;
+		frappe.call({
+			method: "jagadamba.jagadamba.api.get_child_items_for_parent_items",
+			args: { parent_item_codes: JSON.stringify([row.item_code]) },
+			callback: function (r) {
+				if (!r.message || !r.message.length) return;
+				r.message.forEach((item) => {
+					let exists = (frm.doc.custom_item_groups || []).some(
+						(i) => i.item_code === item.item_code
+					);
+					if (!exists) {
+						let child = frm.add_child("custom_item_groups");
+						child.parent_item = item.parent_item;
+						child.item_code = item.item_code;
+						child.item_name = item.item_name;
+						child.uom = item.uom;
 					}
-					(r2.message || []).forEach((item) => {
-						let exists = (frm.doc.items || []).some(
-							(i) => i.item_code === item.item_code
-						);
-						if (!exists) {
-							let child = frm.add_child("items");
-							child.item_code = item.item_code;
-							child.item_name = item.item_name;
-							child.item_group = item.item_group;
-							child.uom = item.stock_uom;
-							child.qty = 0;
-						}
-					});
-					frm.refresh_field("items");
-				},
-			});
+				});
+				frm.refresh_field("custom_item_groups");
+			},
 		});
 	},
 });

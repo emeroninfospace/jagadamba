@@ -1,4 +1,28 @@
 frappe.ui.form.on("Designing", {
+	refresh: function (frm) {
+		if (frm.doc.docstatus === 1) {
+			frm.add_custom_button(
+				__("BOM"),
+				() => {
+					if (!frm.doc.item) {
+						frappe.msgprint({
+							title: __("Item Required"),
+							message: __("Please set the Item field before creating a BOM."),
+							indicator: "orange",
+						});
+						return;
+					}
+					frappe.new_doc("BOM", {
+						item: frm.doc.item,
+						project: frm.doc.project,
+						quantity: 1,
+					});
+				},
+				__("Create")
+			);
+		}
+	},
+
 	project: function (frm) {
 		if (!frm.doc.project) return;
 

@@ -7,29 +7,40 @@
  "engine": "InnoDB",
  "field_order": [
   "parent_item",
-  "estimated_budget",
-  "remarks"
+  "item_code",
+  "item_name",
+  "uom"
  ],
  "fields": [
   {
    "fieldname": "parent_item",
    "fieldtype": "Link",
+   "label": "Category",
+   "options": "Item",
+   "read_only": 1
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Category Item",
+   "label": "Item",
    "options": "Item",
    "reqd": 1
   },
   {
-   "fieldname": "estimated_budget",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "Estimated Budget"
+   "fetch_from": "item_code.item_name",
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "label": "Item Name",
+   "read_only": 1
   },
   {
-   "fieldname": "remarks",
-   "fieldtype": "Small Text",
+   "fetch_from": "item_code.stock_uom",
+   "fieldname": "uom",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Remarks"
+   "label": "UOM",
+   "options": "UOM"
   }
  ],
  "grid_page_length": 50,

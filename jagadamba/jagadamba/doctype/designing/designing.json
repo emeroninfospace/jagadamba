@@ -1,6 +1,5 @@
 {
  "actions": [],
- "allow_rename": 0,
  "autoname": "naming_series:",
  "creation": "2026-08-13 14:47:17.857719",
  "doctype": "DocType",
@@ -11,13 +10,15 @@
   "customer",
   "customer_name",
   "sales_order",
-  "ocs",
-  "vehicle_type",
   "column_break_1",
   "date",
+  "item",
   "status",
+  "ocs",
+  "vehicle_type",
+  "bom",
   "design_files_section",
-  "design_drawing",
+  "design_attachments",
   "design_notes",
   "confirmation_section",
   "sent_to_customer_date",
@@ -30,6 +31,7 @@
   {
    "fieldname": "naming_series",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Series",
    "options": "DES-.YYYY.-.####",
    "reqd": 1,
@@ -38,6 +40,7 @@
   {
    "fieldname": "project",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Project",
    "options": "Project",
    "reqd": 1
@@ -74,6 +77,20 @@
    "options": "Vehicle Type"
   },
   {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bom",
+   "fieldtype": "Link",
+   "label": "BOM",
+   "options": "BOM",
+   "read_only": 1
+  },
+  {
    "fieldname": "column_break_1",
    "fieldtype": "Column Break"
   },
@@ -81,6 +98,7 @@
    "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
+   "in_list_view": 1,
    "label": "Design Date",
    "reqd": 1
   },
@@ -98,9 +116,10 @@
    "label": "Design Files"
   },
   {
-   "fieldname": "design_drawing",
-   "fieldtype": "Attach",
-   "label": "Design Drawing"
+   "fieldname": "design_attachments",
+   "fieldtype": "Table",
+   "label": "Design Attachments",
+   "options": "Designing Attachment"
   },
   {
    "fieldname": "design_notes",
@@ -145,10 +164,11 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-08-13 14:47:17.857719",
+ "modified": "2026-08-14 08:21:17.074310",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Designing",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {

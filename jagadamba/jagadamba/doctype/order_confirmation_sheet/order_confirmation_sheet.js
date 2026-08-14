@@ -1,6 +1,6 @@
 frappe.ui.form.on("Order Confirmation Sheet", {
 	refresh: function (frm) {
-		frm.set_query("parent_item", "item_groups", function () {
+		frm.set_query("item_code", "item_groups", function () {
 			return { filters: { custom_parent_item: 1, disabled: 0 } };
 		});
 
@@ -37,32 +37,17 @@ frappe.ui.form.on("Order Confirmation Sheet", {
 					frm.set_value("project", r.message.project);
 				}
 
-				if (r.message.custom_item_groups && r.message.custom_item_groups.length && !frm.doc.item_groups.length) {
-					r.message.custom_item_groups.forEach((row) => {
-						let child = frm.add_child("item_groups");
-						child.parent_item = row.parent_item;
-						child.estimated_budget = row.estimated_budget;
-						child.remarks = row.remarks;
-					});
-					frm.refresh_field("item_groups");
-				}
-			},
-		});
-	},
+				if (frm.doc.item_groups && frm.doc.item_groups.length) return;
 
-	quotation: function (frm) {
-		if (!frm.doc.quotation || frm.doc.item_groups.length) return;
+				// Copy parent items directly from SO's main items table
+				let so_items = r.message.items || [];
+				if (!so_items.length) return;
 
-		frappe.call({
-			method: "frappe.client.get",
-			args: { doctype: "Quotation", name: frm.doc.quotation },
-			callback: function (r) {
-				if (!r.message || !r.message.custom_item_groups) return;
-				r.message.custom_item_groups.forEach((row) => {
+				so_items.forEach((item) => {
 					let child = frm.add_child("item_groups");
-					child.parent_item = row.parent_item;
-					child.estimated_budget = row.estimated_budget;
-					child.remarks = row.remarks;
+					child.item_code = item.item_code;
+					child.item_name = item.item_name;
+					child.uom = item.uom;
 				});
 				frm.refresh_field("item_groups");
 			},
