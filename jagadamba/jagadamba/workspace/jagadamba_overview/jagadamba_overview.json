@@ -1,0 +1,34 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"PFjwK1whe-\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Jagadamba Overview</span>\",\"col\":12}},{\"id\":\"MTktvba6YW\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Production Dashboard\",\"col\":12}}]",
+ "creation": "2026-08-15 11:25:33.106181",
+ "custom_blocks": [
+  {
+   "custom_block_name": "Production Dashboard",
+   "label": "Production Dashboard"
+  }
+ ],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 1,
+ "icon": "crm",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Jagadamba Overview",
+ "links": [],
+ "modified": "2026-08-15 11:26:06.169378",
+ "modified_by": "Administrator",
+ "module": "Jagadamba",
+ "name": "Jagadamba Overview",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 3.0,
+ "shortcuts": [],
+ "title": "Jagadamba Overview"
+}
