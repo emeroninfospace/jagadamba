@@ -49,7 +49,10 @@ doctype_js = {
 	"Sales Order": "public/js/sales_order.js",
 }
 fixtures = [
-	{"dt": "Custom HTML Block", "filters": [["name", "=", "Production Dashboard"]]},
+    {
+        "dt": "Custom HTML Block",
+        "filters": [["name", "in", ["Production Dashboard", "Accounting Dashboard"]]],
+    },
 ]
 
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
