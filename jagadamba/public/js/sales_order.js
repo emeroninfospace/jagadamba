@@ -12,7 +12,7 @@ frappe.ui.form.on("Sales Order", {
 			frm.remove_custom_button("Purchase Order", "Create");
 			frm.remove_custom_button("Project", "Create");
 
-			if (frm.doc.docstatus === 1) {
+			if (frm.doc.docstatus === 1 && !frm.doc.project) {
 				frm.add_custom_button(
 					__("Project"),
 					() => {
