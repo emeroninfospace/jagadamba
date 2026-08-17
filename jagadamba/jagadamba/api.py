@@ -44,10 +44,27 @@ def create_project(project_name, customer=None, sales_order=None):
 		"project_name": project_name,
 		"customer": customer or "",
 	})
+
+	if sales_order:
+		sales_order_doc = frappe.get_doc("Sales Order", sales_order)
+
+		for so_item in sales_order_doc.items:
+			project.append("custom_project_items", {
+				"item_code": so_item.item_code,
+				"item_name": so_item.item_name,
+				"amount": so_item.amount,
+				"estimated_amount": 0,
+			})
+
 	project.insert(ignore_permissions=True)
 
 	if sales_order:
-		frappe.db.set_value("Sales Order", sales_order, "project", project.name)
+		frappe.db.set_value(
+			"Sales Order",
+			sales_order,
+			"project",
+			project.name
+		)
 
 	return project.name
 
