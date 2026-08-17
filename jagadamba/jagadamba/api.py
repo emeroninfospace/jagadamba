@@ -1,5 +1,6 @@
 import json
 import frappe
+from frappe import _
 from frappe.utils import flt
 
 
@@ -454,3 +455,87 @@ def get_operation_load():
 		""",
 		as_dict=True,
 	)
+
+
+
+def validate_project_budget(doc, method=None):
+
+    if doc.doctype == "Material Request":
+        project_flag = "custom_applicable_on_material_request"
+
+    elif doc.doctype == "Purchase Order":
+        project_flag = "custom_applicable_on_purchase_order"
+
+    else:
+        return
+
+    project_amounts = {}
+
+    if doc.get("project"):
+        total_amount = 0
+
+        for item in doc.get("items", []):
+            total_amount += flt(item.get("amount"))
+
+        if total_amount:
+            project_amounts[doc.project] = total_amount
+
+    else:
+        for item in doc.get("items", []):
+            project = item.get("project")
+
+            if not project:
+                continue
+
+            amount = flt(item.get("amount"))
+
+            project_amounts[project] = (
+                project_amounts.get(project, 0) + amount
+            )
+
+    if not project_amounts:
+        return
+
+    for project_name, current_amount in project_amounts.items():
+
+        project = frappe.get_cached_doc("Project", project_name)
+        if not project.get(project_flag):
+            continue
+
+        estimated_cost = flt(project.get("estimated_costing"))
+
+
+        if current_amount > estimated_cost:
+
+            excess_amount = current_amount - estimated_cost
+
+            frappe.throw(
+                _(
+                    "{doctype} cannot be submitted for Project {project}. "
+                    "Estimated Cost: {estimated}. "
+                    "Document Amount: {amount}. "
+                    "Excess Amount: {excess}."
+                ).format(
+                    doctype=doc.doctype,
+                    project=frappe.bold(project_name),
+                    estimated=frappe.bold(
+                        frappe.format_value(
+                            estimated_cost,
+                            {"fieldtype": "Currency"}
+                        )
+                    ),
+                    amount=frappe.bold(
+                        frappe.format_value(
+                            current_amount,
+                            {"fieldtype": "Currency"}
+                        )
+                    ),
+                    excess=frappe.bold(
+                        frappe.format_value(
+                            excess_amount,
+                            {"fieldtype": "Currency"}
+                        )
+                    ),
+                ),
+                title=_("Project Budget Exceeded"),
+            )

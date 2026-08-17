@@ -43,6 +43,16 @@ app_license = "mit"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
+doc_events = {
+    "Material Request": {
+        "before_submit": "jagadamba.jagadamba.api.validate_project_budget"
+    },
+
+    "Purchase Order": {
+        "before_submit": "jagadamba.jagadamba.api.validate_project_budget"
+    },
+}
+
 doctype_js = {
 	"Quotation": "public/js/quotation.js",
 	"Lead": "public/js/lead.js",
