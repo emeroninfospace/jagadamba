@@ -1,0 +1,34 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"zxnEDeoz9I\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Sales Overview</span>\",\"col\":12}},{\"id\":\"X6nt697FOD\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Sales Dashboard\",\"col\":12}}]",
+ "creation": "2026-08-17 14:40:21.844967",
+ "custom_blocks": [
+  {
+   "custom_block_name": "Sales Dashboard",
+   "label": "Sales Dashboard"
+  }
+ ],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 1,
+ "icon": "number-card",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Sales Overview",
+ "links": [],
+ "modified": "2026-08-17 14:42:01.942360",
+ "modified_by": "Administrator",
+ "module": "Jagadamba",
+ "name": "Sales Overview",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 5.0,
+ "shortcuts": [],
+ "title": "Sales Overview"
+}
