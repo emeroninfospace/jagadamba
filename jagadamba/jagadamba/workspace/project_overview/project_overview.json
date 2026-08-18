@@ -1,0 +1,34 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"tC23K8OA8_\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Project Overview</span>\",\"col\":12}},{\"id\":\"WKDtL4la4V\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Project Dashboard\",\"col\":12}}]",
+ "creation": "2026-08-18 12:09:37.865611",
+ "custom_blocks": [
+  {
+   "custom_block_name": "Project Dashboard",
+   "label": "Project Dashboard"
+  }
+ ],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 1,
+ "icon": "milestone",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Project Overview",
+ "links": [],
+ "modified": "2026-08-18 12:10:14.623027",
+ "modified_by": "Administrator",
+ "module": "Jagadamba",
+ "name": "Project Overview",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 4.0,
+ "shortcuts": [],
+ "title": "Project Overview"
+}
