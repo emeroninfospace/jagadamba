@@ -1,0 +1,34 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"IhcBXE6EL-\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">HR Overview</span>\",\"col\":12}},{\"id\":\"GdHcos2-sv\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"HR Overview\",\"col\":12}}]",
+ "creation": "2026-08-18 09:43:38.048952",
+ "custom_blocks": [
+  {
+   "custom_block_name": "HR Overview",
+   "label": "HR Overview"
+  }
+ ],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 1,
+ "icon": "share-people",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "HR Overview",
+ "links": [],
+ "modified": "2026-08-18 09:44:16.646577",
+ "modified_by": "Administrator",
+ "module": "Jagadamba",
+ "name": "HR Overview",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "HR",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 36.0,
+ "shortcuts": [],
+ "title": "HR Overview"
+}

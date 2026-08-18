@@ -62,7 +62,7 @@ doctype_js = {
 fixtures = [
     {
         "dt": "Custom HTML Block",
-        "filters": [["name", "in", ["Production Dashboard", "Accounting Dashboard", "Sales Dashboard"]]],
+        "filters": [["name", "in", ["Production Dashboard", "Accounting Dashboard", "Sales Dashboard", "HR Overview"]]],
     },
 ]
 
