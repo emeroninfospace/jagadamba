@@ -164,23 +164,25 @@ JOB_CARD_STATUS_ORDER = [
 
 
 @frappe.whitelist()
-def get_production_dashboard_data(period="this_month", date_from=None, date_to=None):
+def get_production_dashboard_data(period="this_month", date_from=None, date_to=None, project=None):
+	project = project or None  # normalize empty string from the "All Projects" option
 	date_range = _resolve_period(period, date_from, date_to)
 
-	job_card_summary, job_card_board = get_job_card_data()
+	job_card_summary, job_card_board = get_job_card_data(project)
 
 	data = {
 		"period_label": date_range["label"],
-		"pipeline_summary": get_pipeline_summary(),
+		"project": project,
+		"pipeline_summary": get_pipeline_summary(project),
 		"vehicle_type_summary": get_vehicle_type_summary(),
 		"job_card_summary": job_card_summary,
 		"job_card_board": job_card_board,
-		"work_orders": get_work_order_data(),
+		"work_orders": get_work_order_data(project),
 		"ocs_board": get_ocs_board(),
 		"designing_board": get_designing_board(),
-		"overdue_job_cards": get_overdue_job_cards(),
+		"overdue_job_cards": get_overdue_job_cards(project),
 		"project_pipeline": get_project_pipeline(),
-		"operation_load": get_operation_load(),
+		"operation_load": get_operation_load(project),
 	}
 	return data
 
@@ -204,38 +206,46 @@ def _resolve_period(period, date_from, date_to):
 	return {"start": start, "end": end, "label": label}
 
 
-def get_pipeline_summary():
+def get_pipeline_summary(project=None):
 	def count(doctype, filters=None):
 		try:
 			return frappe.db.count(doctype, filters or {})
 		except Exception:
 			return 0
 
+	so_filters = {"docstatus": 1}
+	ocs_filters = {"docstatus": ["!=", 2], "status": ["not in", ["Cancelled"]]}
+	designing_filters = {"docstatus": ["!=", 2], "status": ["in", ["Draft", "Design In Progress", "Sent to Customer"]]}
+	wo_open_filters = {"docstatus": 1, "status": ["in", ["Not Started", "In Process"]]}
+	wo_completed_filters = {"docstatus": 1, "status": ["in", ["Completed", "Closed"]]}
+	jc_filters = {"docstatus": ["!=", 2], "status": ["not in", ["Completed", "Cancelled"]]}
+
+	if project:
+		so_filters["project"] = project
+		ocs_filters["project"] = project
+		designing_filters["project"] = project
+		wo_open_filters["project"] = project
+		wo_completed_filters["project"] = project
+		# Job Card has no project field of its own — filter via its Work Order.
+		jc_work_orders = frappe.db.get_all("Work Order", filters={"project": project}, pluck="name")
+		jc_filters["work_order"] = ["in", jc_work_orders or [""]]
+
 	return {
 		"leads": count("Lead"),
 		"quotations": count("Quotation", {"docstatus": ["!=", 2]}),
-		"sales_orders": count("Sales Order", {"docstatus": 1}),
-		"ocs_open": count(
-			"Order Confirmation Sheet",
-			{"docstatus": ["!=", 2], "status": ["not in", ["Cancelled"]]},
-		),
-		"designing_in_progress": count(
-			"Designing",
-			{"docstatus": ["!=", 2], "status": ["in", ["Draft", "Design In Progress", "Sent to Customer"]]},
-		),
+		"sales_orders": count("Sales Order", so_filters),
+		"ocs_open": count("Order Confirmation Sheet", ocs_filters),
+		"designing_in_progress": count("Designing", designing_filters),
 		"boms": count("BOM", {"docstatus": 1, "is_active": 1}),
-		"work_orders_open": count(
-			"Work Order",
-			{"docstatus": 1, "status": ["in", ["Not Started", "In Process"]]},
-		),
-		"job_cards_open": count(
-			"Job Card",
-			{"docstatus": ["!=", 2], "status": ["not in", ["Completed", "Cancelled"]]},
-		),
+		"work_orders_open": count("Work Order", wo_open_filters),
+		"work_orders_completed": count("Work Order", wo_completed_filters),
+		"job_cards_open": count("Job Card", jc_filters),
 	}
 
 
 def get_vehicle_type_summary():
+	# Sales Order has no custom_vehicle_type field of its own — vehicle type lives on
+	# Quotation, and Sales Order links back to it via custom_quotation.
 	return frappe.db.sql(
 		"""
 		SELECT
@@ -252,9 +262,15 @@ def get_vehicle_type_summary():
 	)
 
 
-def get_job_card_data():
+def get_job_card_data(project=None):
 	if not frappe.db.table_exists("Job Card"):
 		return {}, {}
+
+	conditions = ["jc.docstatus != 2"]
+	params = {}
+	if project:
+		conditions.append("wo.project = %(project)s")
+		params["project"] = project
 
 	rows = frappe.db.sql(
 		"""
@@ -267,10 +283,11 @@ def get_job_card_data():
 		FROM `tabJob Card` jc
 		LEFT JOIN `tabWork Order` wo ON wo.name = jc.work_order
 		LEFT JOIN `tabProject` p ON p.name = wo.project
-		WHERE jc.docstatus != 2
+		WHERE {conditions}
 		ORDER BY jc.expected_end_date ASC
 		LIMIT 300
-		""",
+		""".format(conditions=" AND ".join(conditions)),
+		params,
 		as_dict=True,
 	)
 
@@ -288,9 +305,15 @@ def get_job_card_data():
 	return summary, board
 
 
-def get_work_order_data():
+def get_work_order_data(project=None):
 	if not frappe.db.table_exists("Work Order"):
 		return []
+
+	conditions = ["wo.docstatus = 1"]
+	params = {}
+	if project:
+		conditions.append("wo.project = %(project)s")
+		params["project"] = project
 
 	rows = frappe.db.sql(
 		"""
@@ -300,10 +323,11 @@ def get_work_order_data():
 			wo.sales_order, wo.bom_no
 		FROM `tabWork Order` wo
 		LEFT JOIN `tabProject` p ON p.name = wo.project
-		WHERE wo.docstatus = 1
+		WHERE {conditions}
 		ORDER BY wo.planned_start_date DESC
 		LIMIT 100
-		""",
+		""".format(conditions=" AND ".join(conditions)),
+		params,
 		as_dict=True,
 	)
 
@@ -347,9 +371,20 @@ def get_designing_board():
 	return board
 
 
-def get_overdue_job_cards():
+def get_overdue_job_cards(project=None):
 	if not frappe.db.table_exists("Job Card"):
 		return []
+
+	conditions = [
+		"jc.docstatus != 2",
+		"jc.status NOT IN ('Completed', 'Cancelled')",
+		"jc.expected_end_date IS NOT NULL",
+		"jc.expected_end_date < %(today)s",
+	]
+	params = {"today": nowdate()}
+	if project:
+		conditions.append("wo.project = %(project)s")
+		params["project"] = project
 
 	return frappe.db.sql(
 		"""
@@ -358,25 +393,25 @@ def get_overdue_job_cards():
 			wo.production_item, wo.item_name AS wo_item_name, wo.project
 		FROM `tabJob Card` jc
 		LEFT JOIN `tabWork Order` wo ON wo.name = jc.work_order
-		WHERE jc.docstatus != 2
-			AND jc.status NOT IN ('Completed', 'Cancelled')
-			AND jc.expected_end_date IS NOT NULL
-			AND jc.expected_end_date < %s
+		WHERE {conditions}
 		ORDER BY jc.expected_end_date ASC
 		LIMIT 50
-		""",
-		(nowdate(),),
+		""".format(conditions=" AND ".join(conditions)),
+		params,
 		as_dict=True,
 	)
 
 
 def get_project_pipeline():
+	# Always returns the FULL list (unfiltered), regardless of the dashboard's
+	# selected project — this is what populates the project filter dropdown,
+	# and the client highlights the selected row rather than hiding the rest.
 	projects = frappe.db.get_all(
 		"Project",
 		filters={"status": ["!=", "Cancelled"]},
 		fields=["name", "project_name", "customer", "status"],
 		order_by="creation desc",
-		limit_page_length=50,
+		limit_page_length=100,
 	)
 
 	result = []
@@ -389,6 +424,7 @@ def get_project_pipeline():
 		vehicle_type = None
 		if so and so[1]:
 			vehicle_type = frappe.db.get_value("Quotation", so[1], "custom_vehicle_type")
+
 		ocs = None
 		if frappe.db.table_exists("Order Confirmation Sheet"):
 			ocs = frappe.db.get_value(
@@ -436,9 +472,15 @@ def get_project_pipeline():
 	return result
 
 
-def get_operation_load():
+def get_operation_load(project=None):
 	if not frappe.db.table_exists("Job Card"):
 		return []
+
+	conditions = ["jc.docstatus != 2", "jc.status NOT IN ('Completed', 'Cancelled')"]
+	params = {}
+	if project:
+		conditions.append("wo.project = %(project)s")
+		params["project"] = project
 
 	return frappe.db.sql(
 		"""
@@ -447,95 +489,12 @@ def get_operation_load():
 			COUNT(*) AS job_count,
 			SUM(jc.for_quantity) AS total_qty
 		FROM `tabJob Card` jc
-		WHERE jc.docstatus != 2
-			AND jc.status NOT IN ('Completed', 'Cancelled')
+		LEFT JOIN `tabWork Order` wo ON wo.name = jc.work_order
+		WHERE {conditions}
 		GROUP BY jc.operation, jc.workstation
 		ORDER BY job_count DESC
 		LIMIT 20
-		""",
+		""".format(conditions=" AND ".join(conditions)),
+		params,
 		as_dict=True,
 	)
-
-
-
-def validate_project_budget(doc, method=None):
-
-    if doc.doctype == "Material Request":
-        project_flag = "custom_applicable_on_material_request"
-
-    elif doc.doctype == "Purchase Order":
-        project_flag = "custom_applicable_on_purchase_order"
-
-    else:
-        return
-
-    project_amounts = {}
-
-    if doc.get("project"):
-        total_amount = 0
-
-        for item in doc.get("items", []):
-            total_amount += flt(item.get("amount"))
-
-        if total_amount:
-            project_amounts[doc.project] = total_amount
-
-    else:
-        for item in doc.get("items", []):
-            project = item.get("project")
-
-            if not project:
-                continue
-
-            amount = flt(item.get("amount"))
-
-            project_amounts[project] = (
-                project_amounts.get(project, 0) + amount
-            )
-
-    if not project_amounts:
-        return
-
-    for project_name, current_amount in project_amounts.items():
-
-        project = frappe.get_cached_doc("Project", project_name)
-        if not project.get(project_flag):
-            continue
-
-        estimated_cost = flt(project.get("estimated_costing"))
-
-
-        if current_amount > estimated_cost:
-
-            excess_amount = current_amount - estimated_cost
-
-            frappe.throw(
-                _(
-                    "{doctype} cannot be submitted for Project {project}. "
-                    "Estimated Cost: {estimated}. "
-                    "Document Amount: {amount}. "
-                    "Excess Amount: {excess}."
-                ).format(
-                    doctype=doc.doctype,
-                    project=frappe.bold(project_name),
-                    estimated=frappe.bold(
-                        frappe.format_value(
-                            estimated_cost,
-                            {"fieldtype": "Currency"}
-                        )
-                    ),
-                    amount=frappe.bold(
-                        frappe.format_value(
-                            current_amount,
-                            {"fieldtype": "Currency"}
-                        )
-                    ),
-                    excess=frappe.bold(
-                        frappe.format_value(
-                            excess_amount,
-                            {"fieldtype": "Currency"}
-                        )
-                    ),
-                ),
-                title=_("Project Budget Exceeded"),
-            )
