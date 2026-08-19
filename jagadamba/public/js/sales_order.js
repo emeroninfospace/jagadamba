@@ -66,7 +66,9 @@ frappe.ui.form.on("Sales Order", {
 					},
 					__("Create")
 				);
+			}
 
+			if (frm.doc.docstatus === 1) {
 				frm.add_custom_button(
 					__("Order Confirmation Sheet"),
 					() => {
