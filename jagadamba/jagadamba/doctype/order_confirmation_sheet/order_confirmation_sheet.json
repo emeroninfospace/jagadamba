@@ -8,13 +8,83 @@
   "naming_series",
   "sales_order",
   "customer",
-  "customer_name",
+  "job_card_no",
+  "model",
+  "status",
   "column_break_1",
   "date",
-  "project",
-  "vehicle_type",
+  "customer_name",
+  "rev_no",
+  "rev_date",
   "quotation",
-  "status",
+  "column_break_vjan",
+  "project",
+  "quantity",
+  "vehicle_type",
+  "applications",
+  "body_dimensions_section",
+  "length",
+  "column_break_lqyq",
+  "width",
+  "column_break_wapw",
+  "height",
+  "column_break_xapx",
+  "body_weight",
+  "chassis_section",
+  "chassis_vertical_plate",
+  "chassis_vertical_plate_remarks",
+  "column_break_bxpa",
+  "chassis_cross_members",
+  "chassis_cross_members_remarks",
+  "column_break_ymjs",
+  "chassis_bottom_plate",
+  "chassis_bottom_plate_remarks",
+  "tank_section",
+  "conical_sheet",
+  "conical_sheet_remarks",
+  "column_break_ypks",
+  "dish_end",
+  "dish_end_remarks",
+  "column_break_wfdo",
+  "operating_pressure",
+  "operating_pressure_remarks",
+  "pipe_line_section",
+  "top_man_hole",
+  "top_man_hole_remarks",
+  "compressor_pipe_line_detail",
+  "compressor_pipe_line_detail_remarks",
+  "column_break_byxe",
+  "bottom_delivery_reservoir",
+  "bottom_delivery_reservoir_remarks",
+  "delivery_pipe_line_detail",
+  "delivery_pipe_line_detail_remarks",
+  "specifications_section",
+  "compressor",
+  "compressor_remarks",
+  "suspension",
+  "suspension_remarks",
+  "braking_system",
+  "braking_system_remarks",
+  "king_pin",
+  "king_pin_remarks",
+  "column_break_rtcq",
+  "aeration_system",
+  "aeration_system_remarks",
+  "tyre_size",
+  "tyre_size_remarks",
+  "landing_leg",
+  "landing_leg_remarks",
+  "accessories",
+  "accessories_remarks",
+  "column_break_tjyh",
+  "axles",
+  "axles_remarks",
+  "wheel_rim",
+  "wheel_rim_remarks",
+  "electricals",
+  "electricals_remarks",
+  "painting",
+  "painting_remarks",
   "scope_section",
   "item_groups",
   "notes_section",
@@ -56,10 +126,9 @@
    "read_only": 1
   },
   {
-   "fieldname": "project",
-   "fieldtype": "Link",
-   "label": "Project",
-   "options": "Project"
+   "fieldname": "job_card_no",
+   "fieldtype": "Data",
+   "label": "Job Card No"
   },
   {
    "fieldname": "column_break_1",
@@ -74,12 +143,33 @@
    "reqd": 1
   },
   {
+   "fieldname": "rev_no",
+   "fieldtype": "Data",
+   "label": "Rev. No."
+  },
+  {
+   "fieldname": "rev_date",
+   "fieldtype": "Date",
+   "label": "Rev. Date"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  },
+  {
    "fetch_from": "quotation.custom_vehicle_type",
    "fieldname": "vehicle_type",
    "fieldtype": "Link",
-   "label": "Vehicle Type",
+   "label": "Vehicle Type (Prime Mover)",
    "options": "Vehicle Type",
    "read_only": 1
+  },
+  {
+   "fieldname": "model",
+   "fieldtype": "Data",
+   "label": "Model"
   },
   {
    "fetch_from": "sales_order.custom_quotation",
@@ -89,12 +179,287 @@
    "options": "Quotation"
   },
   {
+   "fieldname": "quantity",
+   "fieldtype": "Data",
+   "label": "Quantity"
+  },
+  {
    "default": "Draft",
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
    "options": "Draft\nSent to Design\nDesign Confirmed\nCancelled",
    "read_only": 1
+  },
+  {
+   "fieldname": "applications",
+   "fieldtype": "Small Text",
+   "label": "Applications"
+  },
+  {
+   "fieldname": "body_dimensions_section",
+   "fieldtype": "Section Break",
+   "label": "Body Dimensions"
+  },
+  {
+   "fieldname": "length",
+   "fieldtype": "Data",
+   "label": "Length"
+  },
+  {
+   "fieldname": "width",
+   "fieldtype": "Data",
+   "label": "Width"
+  },
+  {
+   "fieldname": "height",
+   "fieldtype": "Data",
+   "label": "Height"
+  },
+  {
+   "fieldname": "body_weight",
+   "fieldtype": "Data",
+   "label": "Body Weight (Kg Approx.)"
+  },
+  {
+   "fieldname": "chassis_section",
+   "fieldtype": "Section Break",
+   "label": "Chassis"
+  },
+  {
+   "fieldname": "chassis_vertical_plate",
+   "fieldtype": "Small Text",
+   "label": "Chassis Vertical Plate"
+  },
+  {
+   "fieldname": "chassis_vertical_plate_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "chassis_cross_members",
+   "fieldtype": "Small Text",
+   "label": "Chassis Cross Members"
+  },
+  {
+   "fieldname": "chassis_cross_members_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "chassis_bottom_plate",
+   "fieldtype": "Small Text",
+   "label": "Chassis Bottom Plate"
+  },
+  {
+   "fieldname": "chassis_bottom_plate_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "tank_section",
+   "fieldtype": "Section Break",
+   "label": "Tank Details"
+  },
+  {
+   "fieldname": "conical_sheet",
+   "fieldtype": "Small Text",
+   "label": "Conical Sheet"
+  },
+  {
+   "fieldname": "conical_sheet_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "dish_end",
+   "fieldtype": "Small Text",
+   "label": "Dish End"
+  },
+  {
+   "fieldname": "dish_end_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "operating_pressure",
+   "fieldtype": "Small Text",
+   "label": "Operating Pressure"
+  },
+  {
+   "fieldname": "operating_pressure_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "pipe_line_section",
+   "fieldtype": "Section Break",
+   "label": "Pipe Line Details"
+  },
+  {
+   "fieldname": "top_man_hole",
+   "fieldtype": "Small Text",
+   "label": "Top Man Hole"
+  },
+  {
+   "fieldname": "top_man_hole_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "bottom_delivery_reservoir",
+   "fieldtype": "Small Text",
+   "label": "Bottom Delivery Reservoir"
+  },
+  {
+   "fieldname": "bottom_delivery_reservoir_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "compressor_pipe_line_detail",
+   "fieldtype": "Small Text",
+   "label": "Compressor Pipe Line"
+  },
+  {
+   "fieldname": "compressor_pipe_line_detail_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "delivery_pipe_line_detail",
+   "fieldtype": "Small Text",
+   "label": "Delivery Pipe Line"
+  },
+  {
+   "fieldname": "delivery_pipe_line_detail_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "specifications_section",
+   "fieldtype": "Section Break",
+   "label": "Specifications"
+  },
+  {
+   "fieldname": "compressor",
+   "fieldtype": "Small Text",
+   "label": "Compressor"
+  },
+  {
+   "fieldname": "compressor_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "aeration_system",
+   "fieldtype": "Small Text",
+   "label": "Aeration System"
+  },
+  {
+   "fieldname": "aeration_system_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "axles",
+   "fieldtype": "Small Text",
+   "label": "Axles"
+  },
+  {
+   "fieldname": "axles_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "suspension",
+   "fieldtype": "Small Text",
+   "label": "Suspension"
+  },
+  {
+   "fieldname": "suspension_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "tyre_size",
+   "fieldtype": "Small Text",
+   "label": "Tyre Size"
+  },
+  {
+   "fieldname": "tyre_size_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "wheel_rim",
+   "fieldtype": "Small Text",
+   "label": "Wheel Rim"
+  },
+  {
+   "fieldname": "wheel_rim_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "braking_system",
+   "fieldtype": "Small Text",
+   "label": "Braking System"
+  },
+  {
+   "fieldname": "braking_system_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "landing_leg",
+   "fieldtype": "Small Text",
+   "label": "Landing Leg"
+  },
+  {
+   "fieldname": "landing_leg_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "electricals",
+   "fieldtype": "Small Text",
+   "label": "Electricals"
+  },
+  {
+   "fieldname": "electricals_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "king_pin",
+   "fieldtype": "Small Text",
+   "label": "King Pin"
+  },
+  {
+   "fieldname": "king_pin_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "accessories",
+   "fieldtype": "Small Text",
+   "label": "Accessories"
+  },
+  {
+   "fieldname": "accessories_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "painting",
+   "fieldtype": "Small Text",
+   "label": "Painting"
+  },
+  {
+   "fieldname": "painting_remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
   },
   {
    "fieldname": "scope_section",
@@ -110,12 +475,12 @@
   {
    "fieldname": "notes_section",
    "fieldtype": "Section Break",
-   "label": "Notes"
+   "label": "Comments"
   },
   {
    "fieldname": "scope_notes",
    "fieldtype": "Text Editor",
-   "label": "Scope Notes"
+   "label": "Comments"
   },
   {
    "fieldname": "special_requirements",
@@ -130,13 +495,57 @@
    "options": "Order Confirmation Sheet",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "column_break_lqyq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_wapw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_xapx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_vjan",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_bxpa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ymjs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ypks",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_wfdo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_byxe",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_rtcq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_tjyh",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-08-14 08:21:38.867339",
+ "modified": "2026-08-29 12:13:48.123935",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Order Confirmation Sheet",
