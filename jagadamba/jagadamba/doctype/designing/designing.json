@@ -76,7 +76,7 @@
    "fieldname": "vehicle_type",
    "fieldtype": "Link",
    "label": "Vehicle Type",
-   "options": "Vehicle Type"
+   "options": "Item"
   },
   {
    "fieldname": "item",
@@ -177,7 +177,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-08-14 13:56:09.841327",
+ "modified": "2026-08-31 17:31:30.168871",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Designing",

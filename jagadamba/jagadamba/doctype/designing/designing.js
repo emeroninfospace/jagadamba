@@ -4,6 +4,10 @@ frappe.ui.form.on("Designing", {
 			return { filters: { item_group: "Finished Items", disabled: 0 } };
 		});
 
+		frm.set_query("vehicle_type", function () {
+			return { filters: { custom_parent_item: 1, disabled: 0, item_group: "Finished Items" } };
+		});
+
 		if (frm.doc.docstatus !== 2) {
 			frm.add_custom_button(__("Fetch PO Items"), () => {
 				if (!frm.doc.project) {
