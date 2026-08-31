@@ -30,61 +30,8 @@
   "height",
   "column_break_xapx",
   "body_weight",
-  "chassis_section",
-  "chassis_vertical_plate",
-  "chassis_vertical_plate_remarks",
-  "column_break_bxpa",
-  "chassis_cross_members",
-  "chassis_cross_members_remarks",
-  "column_break_ymjs",
-  "chassis_bottom_plate",
-  "chassis_bottom_plate_remarks",
-  "tank_section",
-  "conical_sheet",
-  "conical_sheet_remarks",
-  "column_break_ypks",
-  "dish_end",
-  "dish_end_remarks",
-  "column_break_wfdo",
-  "operating_pressure",
-  "operating_pressure_remarks",
-  "pipe_line_section",
-  "top_man_hole",
-  "top_man_hole_remarks",
-  "compressor_pipe_line_detail",
-  "compressor_pipe_line_detail_remarks",
-  "column_break_byxe",
-  "bottom_delivery_reservoir",
-  "bottom_delivery_reservoir_remarks",
-  "delivery_pipe_line_detail",
-  "delivery_pipe_line_detail_remarks",
-  "specifications_section",
-  "compressor",
-  "compressor_remarks",
-  "suspension",
-  "suspension_remarks",
-  "braking_system",
-  "braking_system_remarks",
-  "king_pin",
-  "king_pin_remarks",
-  "column_break_rtcq",
-  "aeration_system",
-  "aeration_system_remarks",
-  "tyre_size",
-  "tyre_size_remarks",
-  "landing_leg",
-  "landing_leg_remarks",
-  "accessories",
-  "accessories_remarks",
-  "column_break_tjyh",
-  "axles",
-  "axles_remarks",
-  "wheel_rim",
-  "wheel_rim_remarks",
-  "electricals",
-  "electricals_remarks",
-  "painting",
-  "painting_remarks",
+  "manufacturing_specifications_section",
+  "specifications",
   "scope_section",
   "item_groups",
   "notes_section",
@@ -163,7 +110,7 @@
    "fieldname": "vehicle_type",
    "fieldtype": "Link",
    "label": "Vehicle Type (Prime Mover)",
-   "options": "Vehicle Type",
+   "options": "Item",
    "read_only": 1
   },
   {
@@ -222,244 +169,15 @@
    "label": "Body Weight (Kg Approx.)"
   },
   {
-   "fieldname": "chassis_section",
+   "fieldname": "manufacturing_specifications_section",
    "fieldtype": "Section Break",
-   "label": "Chassis"
+   "label": "Manufacturing Specifications"
   },
   {
-   "fieldname": "chassis_vertical_plate",
-   "fieldtype": "Small Text",
-   "label": "Chassis Vertical Plate"
-  },
-  {
-   "fieldname": "chassis_vertical_plate_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "chassis_cross_members",
-   "fieldtype": "Small Text",
-   "label": "Chassis Cross Members"
-  },
-  {
-   "fieldname": "chassis_cross_members_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "chassis_bottom_plate",
-   "fieldtype": "Small Text",
-   "label": "Chassis Bottom Plate"
-  },
-  {
-   "fieldname": "chassis_bottom_plate_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "tank_section",
-   "fieldtype": "Section Break",
-   "label": "Tank Details"
-  },
-  {
-   "fieldname": "conical_sheet",
-   "fieldtype": "Small Text",
-   "label": "Conical Sheet"
-  },
-  {
-   "fieldname": "conical_sheet_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "dish_end",
-   "fieldtype": "Small Text",
-   "label": "Dish End"
-  },
-  {
-   "fieldname": "dish_end_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "operating_pressure",
-   "fieldtype": "Small Text",
-   "label": "Operating Pressure"
-  },
-  {
-   "fieldname": "operating_pressure_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "pipe_line_section",
-   "fieldtype": "Section Break",
-   "label": "Pipe Line Details"
-  },
-  {
-   "fieldname": "top_man_hole",
-   "fieldtype": "Small Text",
-   "label": "Top Man Hole"
-  },
-  {
-   "fieldname": "top_man_hole_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "bottom_delivery_reservoir",
-   "fieldtype": "Small Text",
-   "label": "Bottom Delivery Reservoir"
-  },
-  {
-   "fieldname": "bottom_delivery_reservoir_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "compressor_pipe_line_detail",
-   "fieldtype": "Small Text",
-   "label": "Compressor Pipe Line"
-  },
-  {
-   "fieldname": "compressor_pipe_line_detail_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "delivery_pipe_line_detail",
-   "fieldtype": "Small Text",
-   "label": "Delivery Pipe Line"
-  },
-  {
-   "fieldname": "delivery_pipe_line_detail_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "specifications_section",
-   "fieldtype": "Section Break",
-   "label": "Specifications"
-  },
-  {
-   "fieldname": "compressor",
-   "fieldtype": "Small Text",
-   "label": "Compressor"
-  },
-  {
-   "fieldname": "compressor_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "aeration_system",
-   "fieldtype": "Small Text",
-   "label": "Aeration System"
-  },
-  {
-   "fieldname": "aeration_system_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "axles",
-   "fieldtype": "Small Text",
-   "label": "Axles"
-  },
-  {
-   "fieldname": "axles_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "suspension",
-   "fieldtype": "Small Text",
-   "label": "Suspension"
-  },
-  {
-   "fieldname": "suspension_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "tyre_size",
-   "fieldtype": "Small Text",
-   "label": "Tyre Size"
-  },
-  {
-   "fieldname": "tyre_size_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "wheel_rim",
-   "fieldtype": "Small Text",
-   "label": "Wheel Rim"
-  },
-  {
-   "fieldname": "wheel_rim_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "braking_system",
-   "fieldtype": "Small Text",
-   "label": "Braking System"
-  },
-  {
-   "fieldname": "braking_system_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "landing_leg",
-   "fieldtype": "Small Text",
-   "label": "Landing Leg"
-  },
-  {
-   "fieldname": "landing_leg_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "electricals",
-   "fieldtype": "Small Text",
-   "label": "Electricals"
-  },
-  {
-   "fieldname": "electricals_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "king_pin",
-   "fieldtype": "Small Text",
-   "label": "King Pin"
-  },
-  {
-   "fieldname": "king_pin_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "accessories",
-   "fieldtype": "Small Text",
-   "label": "Accessories"
-  },
-  {
-   "fieldname": "accessories_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "painting",
-   "fieldtype": "Small Text",
-   "label": "Painting"
-  },
-  {
-   "fieldname": "painting_remarks",
-   "fieldtype": "Data",
-   "label": "Remarks"
+   "fieldname": "specifications",
+   "fieldtype": "Table",
+   "label": "Manufacturing Specifications",
+   "options": "OCS Specification"
   },
   {
    "fieldname": "scope_section",
@@ -467,6 +185,7 @@
    "label": "Build Categories"
   },
   {
+   "depends_on": "eval:doc.custom_types == \"Oil & Gas\"",
    "fieldname": "item_groups",
    "fieldtype": "Table",
    "label": "Build Categories",
@@ -511,41 +230,13 @@
   {
    "fieldname": "column_break_vjan",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_bxpa",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_ymjs",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_ypks",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_wfdo",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_byxe",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_rtcq",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_tjyh",
-   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-08-29 12:13:48.123935",
+ "modified": "2026-08-31 12:17:34.418894",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Order Confirmation Sheet",

@@ -4,6 +4,15 @@ frappe.ui.form.on("Order Confirmation Sheet", {
 			return { filters: { custom_parent_item: 1, disabled: 0 } };
 		});
 
+		frm.set_query("item_code", "specifications", function (doc, cdt, cdn) {
+			let row = locals[cdt][cdn];
+			let filters = { disabled: 0 };
+			if (row.item_group) {
+				filters.item_group = row.item_group;
+			}
+			return { filters };
+		});
+
 		if (frm.doc.docstatus === 1) {
 			frm.add_custom_button(
 				__("Designing"),
