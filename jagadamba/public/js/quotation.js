@@ -3,6 +3,10 @@ frappe.ui.form.on("Quotation", {
 		frm.set_query("item_code", "items", function () {
 			return { filters: { custom_parent_item: 1, disabled: 0 } };
 		});
+
+		frm.set_query("custom_vehicle_type", function () {
+			return { filters: { custom_parent_item: 1, disabled: 0, item_group: "Finished Items" } };
+		});
 	},
 });
 
@@ -10,6 +14,10 @@ frappe.ui.form.on("Quotation Item", {
 	before_remove: function (frm, cdt, cdn) {
 		let row = locals[cdt][cdn];
 		if (!row.item_code) return;
+		let to_remove = (frm.doc.custom_item_groups || []).filter(
+			(i) => i.parent_item === row.item_code
+		);
+		to_remove.forEach((i) => frappe.model.clear_doc(i.doctype, i.name));
 		frm.doc.custom_item_groups = (frm.doc.custom_item_groups || []).filter(
 			(i) => i.parent_item !== row.item_code
 		);
@@ -19,10 +27,13 @@ frappe.ui.form.on("Quotation Item", {
 	item_code: function (frm, cdt, cdn) {
 		let row = locals[cdt][cdn];
 
-		// Remove entries whose parent_item is no longer in the items table
 		let current_parents = new Set(
 			(frm.doc.items || []).map((i) => i.item_code).filter(Boolean)
 		);
+		let stale = (frm.doc.custom_item_groups || []).filter(
+			(i) => i.parent_item && !current_parents.has(i.parent_item)
+		);
+		stale.forEach((i) => frappe.model.clear_doc(i.doctype, i.name));
 		frm.doc.custom_item_groups = (frm.doc.custom_item_groups || []).filter(
 			(i) => !i.parent_item || current_parents.has(i.parent_item)
 		);
@@ -49,6 +60,8 @@ frappe.ui.form.on("Quotation Item", {
 						child.item_code = item.item_code;
 						child.item_name = item.item_name;
 						child.uom = item.uom;
+						child.item_group = item.item_group;
+						child.description = item.description;
 						added++;
 					}
 				});

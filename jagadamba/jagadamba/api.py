@@ -125,7 +125,7 @@ def get_child_items_for_parent_items(parent_item_codes):
 
 		child_items = frappe.db.sql(
 			"""
-			SELECT item_code, item_name, stock_uom
+			SELECT item_code, item_name, stock_uom, item_group, description
 			FROM `tabItem`
 			WHERE item_group = %s
 			  AND IFNULL(custom_parent_item, 0) = 0
@@ -142,6 +142,8 @@ def get_child_items_for_parent_items(parent_item_codes):
 					"item_code": ci.item_code,
 					"item_name": ci.item_name,
 					"uom": ci.stock_uom,
+					"item_group": ci.item_group,
+					"description": ci.description,
 				}
 			)
 
