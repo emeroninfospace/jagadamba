@@ -127,6 +127,23 @@ frappe.ui.form.on("Sales Order", {
 	},
 });
 
+frappe.ui.form.on("Sales Order", {
+	before_submit: function (frm) {
+		if (!frm.doc.custom_item_groups || !frm.doc.custom_item_groups.length) {
+			frappe.validated = false;
+			frappe.confirm(
+				__(
+					"Build Categories table is empty. Purchase Orders require items from Build Categories to be created. Are you sure you want to submit?"
+				),
+				() => {
+					frappe.validated = true;
+					frm.save("Submit");
+				}
+			);
+		}
+	},
+});
+
 frappe.ui.form.on("Sales Order Item", {
 	before_remove: function (frm, cdt, cdn) {
 		let row = locals[cdt][cdn];
