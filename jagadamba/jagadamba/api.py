@@ -17,6 +17,7 @@ def make_purchase_order(sales_order):
 	po = frappe.new_doc("Purchase Order")
 	po.company = so.company
 	po.project = so.project
+	po.custom_types = so.custom_types
 	po.transaction_date = frappe.utils.today()
 	po.schedule_date = frappe.utils.today()
 

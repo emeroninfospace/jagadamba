@@ -44,12 +44,9 @@ app_license = "mit"
 
 # include js in doctype views
 doc_events = {
-    "Material Request": {
-        "before_submit": "jagadamba.jagadamba.api.validate_project_budget"
-    },
-
     "Purchase Order": {
-        "before_submit": "jagadamba.jagadamba.api.validate_project_budget"
+        "validate": "jagadamba.jagadamba.purchase_order_validations.validate_po",
+        "before_submit": "jagadamba.jagadamba.purchase_order_validations.before_submit_po",
     },
 }
 
