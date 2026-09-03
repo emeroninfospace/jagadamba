@@ -48,6 +48,12 @@ doc_events = {
         "validate": "jagadamba.jagadamba.purchase_order_validations.validate_po",
         "before_submit": "jagadamba.jagadamba.purchase_order_validations.before_submit_po",
     },
+    "Customer": {
+        "before_insert": "jagadamba.jagadamba.overrides.customer_overrides.before_insert",
+    },
+    "Quotation": {
+        "validate": "jagadamba.jagadamba.overrides.quotation_overrides.validate",
+    },
 }
 
 doctype_js = {
