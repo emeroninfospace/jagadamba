@@ -7,6 +7,35 @@ frappe.ui.form.on("Quotation", {
 		frm.set_query("custom_vehicle_type", function () {
 			return { filters: { custom_parent_item: 1, disabled: 0, item_group: "Finished Items" } };
 		});
+
+		// Filter enquiry_reference to show only Leads with an enquiry_number
+		frm.set_query("enquiry_reference", function () {
+			return { filters: { enquiry_number: ["!=", ""] } };
+		});
+	},
+
+	enquiry_reference: function (frm) {
+		if (!frm.doc.enquiry_reference) return;
+
+		frappe.call({
+			method: "jagadamba.jagadamba.overrides.quotation_overrides.get_enquiry_details",
+			args: { enquiry_reference: frm.doc.enquiry_reference },
+			callback: function (r) {
+				if (!r.message) return;
+				var d = r.message;
+
+				if (d.quotation_to && !frm.doc.party_name) {
+					frm.set_value("quotation_to", d.quotation_to);
+					frm.set_value("party_name", d.party_name);
+				}
+				if (d.expected_closing_date && !frm.doc.expected_closing_date) {
+					frm.set_value("expected_closing_date", d.required_completion_date);
+				}
+				if (d.person_responsible && !frm.doc.estimator) {
+					frm.set_value("estimator", d.person_responsible);
+				}
+			},
+		});
 	},
 });
 
