@@ -9,9 +9,6 @@ frappe.ui.form.on("Lead", {
 			frm.remove_custom_button("Add to Prospect", "Action");
 		}, 100);
 
-		if (frm.is_new()) {
-			frm.set_intro(__("Enquiry Number will be auto-generated on save."), "blue");
-		}
 	},
 
 	custom_customers: function (frm) {
