@@ -12,6 +12,27 @@ frappe.ui.form.on("Quotation", {
 		frm.set_query("enquiry_reference", function () {
 			return { filters: { enquiry_number: ["!=", ""] } };
 		});
+
+		// Log Revision Note button — visible on saved/submitted quotations
+		if (!frm.is_new()) {
+			frm.add_custom_button(__("Log Revision Note"), function () {
+				frappe.prompt(
+					{ fieldtype: "Small Text", fieldname: "note", label: __("Revision Note"), reqd: 1 },
+					function (values) {
+						frappe.call({
+							method: "jagadamba.jagadamba.overrides.quotation_overrides.log_revision_note",
+							args: { quotation: frm.doc.name, note: values.note },
+							callback: function () {
+								frm.reload_doc();
+								frappe.show_alert({ message: __("Revision note logged"), indicator: "green" });
+							},
+						});
+					},
+					__("Log Revision Note"),
+					__("Save")
+				);
+			}, __("Actions"));
+		}
 	},
 
 	enquiry_reference: function (frm) {
