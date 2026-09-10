@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"zxnEDeoz9I\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Sales Overview</span>\",\"col\":12}},{\"id\":\"X6nt697FOD\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Sales Dashboard\",\"col\":12}}]",
+ "content": "[{\"id\":\"X6nt697FOD\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Sales Dashboard\",\"col\":12}}]",
  "creation": "2026-08-17 14:40:21.844967",
  "custom_blocks": [
   {
@@ -18,7 +18,7 @@
  "is_hidden": 0,
  "label": "Sales Overview",
  "links": [],
- "modified": "2026-08-18 12:09:43.442066",
+ "modified": "2026-09-10 11:59:52.806538",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Sales Overview",

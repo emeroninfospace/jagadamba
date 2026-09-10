@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"s64TVTMiju\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Accounting Overview</span>\",\"col\":12}},{\"id\":\"0GmU88we91\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Accounting Dashboard\",\"col\":12}}]",
+ "content": "[{\"id\":\"0GmU88we91\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Accounting Dashboard\",\"col\":12}}]",
  "creation": "2026-08-15 13:06:07.752568",
  "custom_blocks": [
   {
@@ -18,7 +18,7 @@
  "is_hidden": 0,
  "label": "Accounting Overview",
  "links": [],
- "modified": "2026-08-18 12:09:43.410766",
+ "modified": "2026-09-10 11:59:38.183617",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Accounting Overview",

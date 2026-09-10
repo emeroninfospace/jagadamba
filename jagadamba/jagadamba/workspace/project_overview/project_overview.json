@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"tC23K8OA8_\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Project Overview</span>\",\"col\":12}},{\"id\":\"WKDtL4la4V\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Project Dashboard\",\"col\":12}}]",
+ "content": "[{\"id\":\"WKDtL4la4V\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Project Dashboard\",\"col\":12}}]",
  "creation": "2026-08-18 12:09:37.865611",
  "custom_blocks": [
   {
@@ -18,7 +18,7 @@
  "is_hidden": 0,
  "label": "Project Overview",
  "links": [],
- "modified": "2026-08-18 12:10:14.623027",
+ "modified": "2026-09-10 11:59:27.461702",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Project Overview",

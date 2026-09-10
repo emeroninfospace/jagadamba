@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"IhcBXE6EL-\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">HR Overview</span>\",\"col\":12}},{\"id\":\"GdHcos2-sv\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"HR Overview\",\"col\":12}}]",
+ "content": "[{\"id\":\"GdHcos2-sv\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"HR Overview\",\"col\":12}}]",
  "creation": "2026-08-18 09:43:38.048952",
  "custom_blocks": [
   {
@@ -18,7 +18,7 @@
  "is_hidden": 0,
  "label": "HR Overview",
  "links": [],
- "modified": "2026-08-18 12:09:44.810449",
+ "modified": "2026-09-10 12:00:08.628903",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "HR Overview",
