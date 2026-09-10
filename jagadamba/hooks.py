@@ -62,7 +62,8 @@ doctype_js = {
 	"Quotation": "public/js/quotation.js",
 	"Lead": "public/js/lead.js",
 	"Sales Order": "public/js/sales_order.js",
-    "Project": "public/js/project.js"
+	"Project": "public/js/project.js",
+	"BOM": "public/js/bom.js",
 }
 fixtures = [
     {

@@ -1,7 +1,38 @@
 import json
 import frappe
 from frappe import _
-from frappe.utils import flt
+from frappe.utils import flt, today
+
+
+@frappe.whitelist()
+def create_material_request_from_bom(bom):
+	bom_doc = frappe.get_doc("BOM", bom)
+
+	if not bom_doc.items:
+		frappe.throw(_("BOM {0} has no items to request.").format(bom))
+
+	mr = frappe.new_doc("Material Request")
+	mr.material_request_type = "Purchase"
+	mr.transaction_date = today()
+	mr.schedule_date = today()
+	mr.company = bom_doc.company
+
+	if bom_doc.project:
+		mr.project = bom_doc.project
+
+	for item in bom_doc.items:
+		uom = item.uom or item.stock_uom
+		mr.append("items", {
+			"item_code": item.item_code,
+			"item_name": item.item_name,
+			"description": item.description or item.item_name,
+			"qty": item.qty,
+			"uom": uom,
+			"stock_uom": item.stock_uom or uom,
+			"schedule_date": today(),
+		})
+
+	return mr
 
 
 @frappe.whitelist()
