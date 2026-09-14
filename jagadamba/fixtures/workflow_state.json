@@ -1,0 +1,83 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "ok-sign",
+  "modified": "2026-08-12 14:13:09.863851",
+  "name": "Approved",
+  "style": "Success",
+  "workflow_state_name": "Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-14 13:02:00.201299",
+  "name": "Draft",
+  "style": "",
+  "workflow_state_name": "Draft"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-14 13:02:11.521253",
+  "name": "Pending PM Approval",
+  "style": "",
+  "workflow_state_name": "Pending PM Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-14 13:02:45.120526",
+  "name": "Cancelled",
+  "style": "",
+  "workflow_state_name": "Cancelled"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-14 15:34:14.663460",
+  "name": "Initial Released",
+  "style": "",
+  "workflow_state_name": "Initial Released"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-14 15:34:24.657703",
+  "name": "Final Released",
+  "style": "",
+  "workflow_state_name": "Final Released"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "remove",
+  "modified": "2026-08-12 14:13:09.864897",
+  "name": "Rejected",
+  "style": "Danger",
+  "workflow_state_name": "Rejected"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-14 13:02:21.119643",
+  "name": "Pending Finance Approval",
+  "style": "",
+  "workflow_state_name": "Pending Finance Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-14 13:02:29.464755",
+  "name": "Pending Management Approval",
+  "style": "",
+  "workflow_state_name": "Pending Management Approval"
+ }
+]

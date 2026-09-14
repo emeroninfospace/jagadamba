@@ -49,7 +49,7 @@ def _fetch_customer_from_enquiry(doc):
 	lead = frappe.db.get_value(
 		"Lead",
 		doc.enquiry_reference,
-		["custom_customers", "lead_name", "company_name"],
+		["custom_customers", "lead_name", "company_name", "project_name"],
 		as_dict=True,
 	)
 	if not lead:
@@ -61,6 +61,9 @@ def _fetch_customer_from_enquiry(doc):
 	elif lead.company_name:
 		doc.quotation_to = "Customer"
 		doc.party_name = lead.company_name
+
+	if lead.project_name and not doc.custom_project:
+		doc.custom_project = lead.project_name
 
 
 @frappe.whitelist()
@@ -85,6 +88,7 @@ def get_enquiry_details(enquiry_reference):
 			"enquiry_number",
 			"person_responsible",
 			"required_completion_date",
+			"project_name",
 		],
 		as_dict=True,
 	)
@@ -95,6 +99,7 @@ def get_enquiry_details(enquiry_reference):
 		"enquiry_number": lead.enquiry_number,
 		"required_completion_date": lead.required_completion_date,
 		"person_responsible": lead.person_responsible,
+		"project_name": lead.project_name,
 	}
 
 	if lead.custom_customers:

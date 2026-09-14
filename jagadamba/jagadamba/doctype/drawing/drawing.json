@@ -1,0 +1,217 @@
+{
+ "actions": [],
+ "autoname": "naming_series:",
+ "creation": "2026-09-14 14:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "project",
+  "customer",
+  "customer_name",
+  "sales_order",
+  "project_budget",
+  "column_break_1",
+  "date",
+  "drawing_no",
+  "revision_no",
+  "workflow_state",
+  "item",
+  "bom",
+  "vehicle_type",
+  "ocs",
+  "drawing_files_section",
+  "drawing_attachments",
+  "drawing_notes",
+  "raw_materials_section",
+  "raw_materials",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "DRW-.YYYY.-.####",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "read_only": 1
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": "Sales Order",
+   "options": "Sales Order",
+   "read_only": 1
+  },
+  {
+   "fieldname": "project_budget",
+   "fieldtype": "Link",
+   "label": "Project Budget",
+   "options": "Project Budget",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Drawing Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "drawing_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Drawing No."
+  },
+  {
+   "fieldname": "revision_no",
+   "fieldtype": "Data",
+   "label": "Revision No."
+  },
+  {
+   "default": "Draft",
+   "fieldname": "workflow_state",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Draft\nInitial Released\nFinal Released\nCancelled",
+   "read_only": 1
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "bom",
+   "fieldtype": "Link",
+   "label": "BOM",
+   "options": "BOM",
+   "read_only": 1
+  },
+  {
+   "fieldname": "vehicle_type",
+   "fieldtype": "Link",
+   "label": "Vehicle Type",
+   "options": "Item"
+  },
+  {
+   "fieldname": "ocs",
+   "fieldtype": "Link",
+   "label": "Order Confirmation Sheet",
+   "options": "Order Confirmation Sheet"
+  },
+  {
+   "fieldname": "drawing_files_section",
+   "fieldtype": "Section Break",
+   "label": "Drawing Files"
+  },
+  {
+   "fieldname": "drawing_attachments",
+   "fieldtype": "Table",
+   "label": "Drawing Attachments",
+   "options": "Drawing Attachment"
+  },
+  {
+   "fieldname": "drawing_notes",
+   "fieldtype": "Text Editor",
+   "label": "Drawing Notes"
+  },
+  {
+   "fieldname": "raw_materials_section",
+   "fieldtype": "Section Break",
+   "label": "Raw Materials"
+  },
+  {
+   "fieldname": "raw_materials",
+   "fieldtype": "Table",
+   "label": "Raw Materials",
+   "options": "Drawing Raw Material"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Drawing",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-09-14 14:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Jagadamba",
+ "name": "Drawing",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Gray",
+   "title": "Draft"
+  },
+  {
+   "color": "Blue",
+   "title": "Initial Released"
+  },
+  {
+   "color": "Green",
+   "title": "Final Released"
+  },
+  {
+   "color": "Red",
+   "title": "Cancelled"
+  }
+ ],
+ "title_field": "project"
+}
