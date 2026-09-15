@@ -49,11 +49,14 @@ frappe.ui.form.on("Quotation", {
 					frm.set_value("quotation_to", d.quotation_to);
 					frm.set_value("party_name", d.party_name);
 				}
-				if (d.expected_closing_date && !frm.doc.expected_closing_date) {
+				if (d.required_completion_date && !frm.doc.expected_closing_date) {
 					frm.set_value("expected_closing_date", d.required_completion_date);
 				}
 				if (d.person_responsible && !frm.doc.estimator) {
 					frm.set_value("estimator", d.person_responsible);
+				}
+				if (d.project_name && !frm.doc.custom_project) {
+					frm.set_value("custom_project", d.project_name);
 				}
 			},
 		});

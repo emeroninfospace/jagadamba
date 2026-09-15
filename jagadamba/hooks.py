@@ -70,6 +70,22 @@ fixtures = [
         "dt": "Custom HTML Block",
         "filters": [["name", "in", ["Production Dashboard", "Accounting Dashboard", "Sales Dashboard", "HR Overview", "Project Dashboard"]]],
     },
+    {
+        "dt": "Role",
+        "filters": [["name", "in", ["Engineering Head", "Design Engineer", "Management", "Finance Manager", "Project Engineer"]]],
+    },
+    {
+        "dt": "Workflow State",
+        "filters": [["name", "in", ["Draft", "Final Released", "Initial Released", "Cancelled", "Approved", "Rejected", "Pending PM Approval", "Pending Finance Approval", "Pending Management Approval"]]],
+    },
+    {
+        "dt": "Workflow Action Master",
+        "filters": [["name", "in", ["Cancel", "Final Release", "Initial Release", "Revise", "Approve & Release", "Release", "Reject"]]],
+    },
+    {
+        "dt": "Workflow",
+        "filters": [["name", "in", ["Drawing Workflow", "Project Budget Approval"]]],
+    },
 ]
 
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}

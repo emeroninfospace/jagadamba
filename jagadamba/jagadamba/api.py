@@ -5,6 +5,100 @@ from frappe.utils import flt, today
 
 
 @frappe.whitelist()
+def create_drawing(project):
+	existing = frappe.db.get_value(
+		"Drawing",
+		{"project": project, "docstatus": ["!=", 2]},
+		"name",
+	)
+	if existing:
+		return {"existing": existing}
+
+	proj = frappe.db.get_value(
+		"Project", project, ["sales_order", "customer"], as_dict=True
+	)
+
+	drawing = frappe.new_doc("Drawing")
+	drawing.project = project
+
+	if proj:
+		drawing.sales_order = proj.sales_order
+		drawing.customer = proj.customer
+
+	if drawing.customer:
+		drawing.customer_name = frappe.db.get_value("Customer", drawing.customer, "customer_name") or ""
+
+	drawing.project_budget = frappe.db.get_value(
+		"Project Budget",
+		{"project": project, "docstatus": 1},
+		"name",
+	)
+
+	return drawing
+
+
+@frappe.whitelist()
+def create_bom_from_drawing(drawing):
+	doc = frappe.get_doc("Drawing", drawing)
+	if not doc.item:
+		frappe.throw("Please set the Item field on the Drawing before creating a BOM.")
+	if not doc.raw_materials:
+		frappe.throw("Please add raw materials to the Drawing before creating a BOM.")
+
+	bom = frappe.new_doc("BOM")
+	bom.item = doc.item
+	bom.project = doc.project
+	bom.quantity = 1
+
+	for rm in doc.raw_materials:
+		uom = rm.uom or frappe.db.get_value("Item", rm.item_code, "stock_uom") or "Nos"
+		bom.append("items", {
+			"item_code": rm.item_code,
+			"item_name": rm.item_name,
+			"qty": rm.qty or 1,
+			"uom": uom,
+			"stock_uom": uom,
+			"description": rm.description,
+		})
+
+	return bom
+
+
+@frappe.whitelist()
+def create_project_budget(project):
+	existing = frappe.db.get_value(
+		"Project Budget",
+		{"project": project, "docstatus": ["!=", 2]},
+		"name",
+	)
+	if existing:
+		return {"existing": existing}
+
+	proj = frappe.db.get_value(
+		"Project", project, ["sales_order", "customer"], as_dict=True
+	)
+
+	try:
+		from frappe.utils.data import get_fiscal_year
+		fiscal_year = get_fiscal_year(today())[0]
+	except Exception:
+		fiscal_year = None
+
+	pb = frappe.new_doc("Project Budget")
+	pb.project = project
+	pb.fiscal_year = fiscal_year
+
+	if proj:
+		pb.sales_order = proj.sales_order
+		pb.customer = proj.customer
+
+	if pb.customer:
+		pb.customer_name = frappe.db.get_value("Customer", pb.customer, "customer_name") or ""
+
+	return pb
+
+
+@frappe.whitelist()
 def create_material_request_from_bom(bom):
 	bom_doc = frappe.get_doc("BOM", bom)
 

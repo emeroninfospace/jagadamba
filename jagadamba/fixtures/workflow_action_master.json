@@ -1,0 +1,51 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-09-14 13:07:06.726405",
+  "name": "Release",
+  "workflow_action_name": "Release"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-09-14 13:10:41.400647",
+  "name": "Approve & Release",
+  "workflow_action_name": "Approve & Release"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-09-14 13:12:06.548721",
+  "name": "Revise",
+  "workflow_action_name": "Revise"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-09-14 15:35:12.225010",
+  "name": "Initial Release",
+  "workflow_action_name": "Initial Release"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-09-14 15:35:29.986308",
+  "name": "Final Release",
+  "workflow_action_name": "Final Release"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-09-14 15:36:11.674135",
+  "name": "Cancel",
+  "workflow_action_name": "Cancel"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-08-12 14:13:09.877375",
+  "name": "Reject",
+  "workflow_action_name": "Reject"
+ }
+]

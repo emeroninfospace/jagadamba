@@ -124,3 +124,17 @@ frappe.ui.form.on("Designing", {
 		});
 	},
 });
+
+frappe.ui.form.on("Designing Raw Material", {
+	item_code: function (frm, cdt, cdn) {
+		const row = locals[cdt][cdn];
+		if (!row.item_code) return;
+		frappe.db.get_value("Item", row.item_code, ["item_name", "stock_uom"], (r) => {
+			if (!r) return;
+			frappe.model.set_value(cdt, cdn, "item_name", r.item_name || "");
+			if (!row.uom) {
+				frappe.model.set_value(cdt, cdn, "uom", r.stock_uom || "");
+			}
+		});
+	},
+});
