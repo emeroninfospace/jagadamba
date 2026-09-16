@@ -48,6 +48,10 @@ doc_events = {
         "validate": "jagadamba.jagadamba.purchase_order_validations.validate_po",
         "before_submit": "jagadamba.jagadamba.purchase_order_validations.before_submit_po",
     },
+    "Work Order": {
+        "validate": "jagadamba.jagadamba.work_order_validations.validate_wo",
+        "before_submit": "jagadamba.jagadamba.work_order_validations.before_submit_wo",
+    },
     "Customer": {
         "before_insert": "jagadamba.jagadamba.overrides.customer_overrides.before_insert",
     },

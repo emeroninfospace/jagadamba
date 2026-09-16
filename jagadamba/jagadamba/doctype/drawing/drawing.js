@@ -1,5 +1,9 @@
 frappe.ui.form.on("Drawing", {
 	refresh(frm) {
+		frm.set_query("item", function () {
+			return { filters: { item_group: "Finished Items", disabled: 0 } };
+		});
+
 		if (frm.doc.docstatus === 1 && frm.doc.workflow_state === "Final Released" && !frm.doc.bom) {
 			frm.add_custom_button(__("BOM"), function () {
 				frappe.call({
@@ -59,7 +63,7 @@ frappe.ui.form.on("Drawing", {
 });
 
 frappe.ui.form.on("Drawing Raw Material", {
-	item_code(frm, cdt, cdn) {
+	item_code(_frm, cdt, cdn) {
 		const row = locals[cdt][cdn];
 		if (!row.item_code) return;
 		frappe.db.get_value("Item", row.item_code, ["item_name", "stock_uom"], (r) => {
