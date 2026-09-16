@@ -1,7 +1,7 @@
 {
  "actions": [],
  "autoname": "naming_series:",
- "creation": "2026-09-14 14:00:00.000000",
+ "creation": "2026-09-14 14:00:00",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -106,7 +106,7 @@
   {
    "fieldname": "item",
    "fieldtype": "Link",
-   "label": "Item",
+   "label": "Finished Item",
    "options": "Item"
   },
   {
@@ -169,7 +169,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-14 14:00:00.000000",
+ "modified": "2026-09-15 11:33:59.634015",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Drawing",
