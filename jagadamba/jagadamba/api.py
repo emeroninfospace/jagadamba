@@ -7,7 +7,7 @@ from frappe.utils import flt, today
 @frappe.whitelist()
 def create_drawing(project):
 	existing = frappe.db.get_value(
-		"Drawing",
+		"Documents",
 		{"project": project, "docstatus": ["!=", 2]},
 		"name",
 	)
@@ -18,7 +18,7 @@ def create_drawing(project):
 		"Project", project, ["sales_order", "customer"], as_dict=True
 	)
 
-	drawing = frappe.new_doc("Drawing")
+	drawing = frappe.new_doc("Documents")
 	drawing.project = project
 
 	if proj:
@@ -39,11 +39,11 @@ def create_drawing(project):
 
 @frappe.whitelist()
 def create_bom_from_drawing(drawing):
-	doc = frappe.get_doc("Drawing", drawing)
+	doc = frappe.get_doc("Documents", drawing)
 	if not doc.item:
-		frappe.throw("Please set the Item field on the Drawing before creating a BOM.")
+		frappe.throw("Please set the Item field on the Documents record before creating a BOM.")
 	if not doc.raw_materials:
-		frappe.throw("Please add raw materials to the Drawing before creating a BOM.")
+		frappe.throw("Please add raw materials to the Documents record before creating a BOM.")
 
 	bom = frappe.new_doc("BOM")
 	bom.item = doc.item
@@ -113,6 +113,7 @@ def create_material_request_from_bom(bom):
 
 	if bom_doc.project:
 		mr.project = bom_doc.project
+		mr.custom_types = frappe.db.get_value("Project", bom_doc.project, "custom_types") or ""
 
 	for item in bom_doc.items:
 		uom = item.uom or item.stock_uom
@@ -170,10 +171,14 @@ def create_project(project_name, customer=None, sales_order=None):
 		"doctype": "Project",
 		"project_name": project_name,
 		"customer": customer or "",
+		"sales_order": sales_order or "",
 	})
 
 	if sales_order:
 		sales_order_doc = frappe.get_doc("Sales Order", sales_order)
+
+		if sales_order_doc.custom_types:
+			project.custom_types = sales_order_doc.custom_types
 
 		for so_item in sales_order_doc.items:
 			project.append("custom_project_items", {

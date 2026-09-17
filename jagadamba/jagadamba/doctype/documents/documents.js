@@ -1,4 +1,4 @@
-frappe.ui.form.on("Drawing", {
+frappe.ui.form.on("Documents", {
 	refresh(frm) {
 		frm.set_query("item", function () {
 			return { filters: { item_group: "Finished Items", disabled: 0 } };
@@ -28,16 +28,30 @@ frappe.ui.form.on("Drawing", {
 			frm.set_value("customer", "");
 			frm.set_value("customer_name", "");
 			frm.set_value("project_budget", "");
+			frm.set_value("type", "");
+			frm.set_value("vehicle_type", "");
 			return;
 		}
 		frappe.db.get_value(
 			"Project",
 			frm.doc.project,
-			["sales_order", "customer"],
+			["sales_order", "customer", "custom_types"],
 			(r) => {
-				if (r) {
-					frm.set_value("sales_order", r.sales_order || "");
-					frm.set_value("customer", r.customer || "");
+				if (!r) return;
+				frm.set_value("sales_order", r.sales_order || "");
+				frm.set_value("customer", r.customer || "");
+				frm.set_value("type", r.custom_types || "");
+
+				if (r.sales_order) {
+					frappe.db.get_value("Sales Order", r.sales_order, "custom_quotation", (so) => {
+						if (so && so.custom_quotation) {
+							frappe.db.get_value("Quotation", so.custom_quotation, "custom_vehicle_type", (q) => {
+								if (q && q.custom_vehicle_type) {
+									frm.set_value("vehicle_type", q.custom_vehicle_type);
+								}
+							});
+						}
+					});
 				}
 			}
 		);
@@ -59,6 +73,12 @@ frappe.ui.form.on("Drawing", {
 		frappe.db.get_value("Customer", frm.doc.customer, "customer_name", (r) => {
 			frm.set_value("customer_name", r?.customer_name || "");
 		});
+	},
+});
+
+frappe.ui.form.on("Drawing Attachment", {
+	drawing_attachments_add(frm, cdt, cdn) {
+		frappe.model.set_value(cdt, cdn, "user", frappe.session.user);
 	},
 });
 

@@ -1,6 +1,6 @@
 frappe.ui.form.on("BOM", {
 	refresh: function (frm) {
-		if (frm.doc.docstatus === 1 && frm.doc.is_active) {
+		if (frm.doc.docstatus === 0 || (frm.doc.docstatus === 1 && frm.doc.is_active)) {
 			frm.add_custom_button(
 				__("Material Request"),
 				function () {
