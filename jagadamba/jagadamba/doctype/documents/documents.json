@@ -9,6 +9,7 @@
   "project",
   "customer",
   "customer_name",
+  "type",
   "sales_order",
   "project_budget",
   "column_break_1",
@@ -16,10 +17,9 @@
   "drawing_no",
   "revision_no",
   "workflow_state",
+  "vehicle_type",
   "item",
   "bom",
-  "vehicle_type",
-  "ocs",
   "drawing_files_section",
   "drawing_attachments",
   "drawing_notes",
@@ -123,12 +123,6 @@
    "options": "Item"
   },
   {
-   "fieldname": "ocs",
-   "fieldtype": "Link",
-   "label": "Order Confirmation Sheet",
-   "options": "Order Confirmation Sheet"
-  },
-  {
    "fieldname": "drawing_files_section",
    "fieldtype": "Section Break",
    "label": "Drawing Files"
@@ -160,19 +154,25 @@
    "fieldtype": "Link",
    "label": "Amended From",
    "no_copy": 1,
-   "options": "Drawing",
+   "options": "Documents",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Link",
+   "label": "Type",
+   "options": "Type"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-15 11:33:59.634015",
+ "modified": "2026-09-17 15:12:52.648309",
  "modified_by": "Administrator",
  "module": "Jagadamba",
- "name": "Drawing",
+ "name": "Documents",
  "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [

@@ -57,13 +57,12 @@ frappe.ui.form.on("Sales Order", {
 						};
 
 						if (frm.doc.custom_quotation) {
-							frappe.call({
-								method: "frappe.client.get",
-								args: { doctype: "Quotation", name: frm.doc.custom_quotation },
-								callback: function (r) {
-									show_dialog(r.message && r.message.custom_project ? r.message.custom_project : "");
-								},
-							});
+							frappe.db.get_value(
+								"Quotation",
+								frm.doc.custom_quotation,
+								"custom_project",
+								(r) => show_dialog(r && r.custom_project ? r.custom_project : "")
+							);
 						} else {
 							show_dialog("");
 						}

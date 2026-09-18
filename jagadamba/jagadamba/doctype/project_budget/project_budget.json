@@ -7,15 +7,19 @@
  "field_order": [
   "naming_series",
   "project",
+  "project_no",
   "sales_order",
+  "custom_types",
   "customer",
-  "customer_name",
   "column_break_1",
   "date",
   "fiscal_year",
+  "company",
   "workflow_state",
+  "customer_name",
   "section_break_wbs",
   "wbs_items",
+  "sub_wbs_items",
   "section_break_totals",
   "total_budget_amount",
   "section_break_a8bh",
@@ -39,11 +43,24 @@
    "reqd": 1
   },
   {
+   "fieldname": "project_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Project No."
+  },
+  {
    "fieldname": "sales_order",
    "fieldtype": "Link",
    "label": "Sales Order",
    "options": "Sales Order",
    "read_only": 1
+  },
+  {
+   "fetch_from": "project.custom_types",
+   "fieldname": "custom_types",
+   "fieldtype": "Link",
+   "label": "Type",
+   "options": "Type"
   },
   {
    "fieldname": "customer",
@@ -79,6 +96,12 @@
    "reqd": 1
   },
   {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
    "default": "Draft",
    "fieldname": "workflow_state",
    "fieldtype": "Select",
@@ -97,6 +120,13 @@
    "fieldtype": "Table",
    "label": "WBS Budget Lines",
    "options": "Project Budget WBS"
+  },
+  {
+   "fieldname": "sub_wbs_items",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "label": "Sub WBS Items",
+   "options": "Project Budget Sub WBS"
   },
   {
    "fieldname": "section_break_totals",
@@ -129,7 +159,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-14 12:01:31.521423",
+ "modified": "2026-09-17 14:56:15.671626",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Project Budget",
