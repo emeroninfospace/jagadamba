@@ -2,6 +2,19 @@ frappe.ui.form.on("Project", {
 	refresh(frm) {
 		update_estimated_costing(frm);
 
+		if (frm.doc.sales_order && (!frm.doc.custom_vehicle_type && !frm.doc.oil_gas_item)) {
+			frappe.db.get_value(
+				"Sales Order",
+				frm.doc.sales_order,
+				["custom_vehicle_type", "oil_gas_item"],
+				(r) => {
+					if (!r) return;
+					if (r.custom_vehicle_type) frm.set_value("custom_vehicle_type", r.custom_vehicle_type);
+					if (r.oil_gas_item) frm.set_value("oil_gas_item", r.oil_gas_item);
+				}
+			);
+		}
+
 		setTimeout(() => {
 			["Task", "Timesheet", "Issue", "Project Update", "Expense Claim"].forEach(dt => {
 				$(frm.wrapper).find(`.document-link[data-doctype="${dt}"]`).hide();
@@ -74,7 +87,18 @@ frappe.ui.form.on("Project", {
 			}, __("Create"));
 
 			frm.add_custom_button(__("BOM"), function () {
-				frappe.new_doc("BOM", { project: frm.doc.name });
+				frappe.call({
+					method: "jagadamba.jagadamba.api.create_bom_from_project",
+					args: { project: frm.doc.name },
+					freeze: true,
+					freeze_message: __("Creating BOM..."),
+					callback: function (r) {
+						if (r.message) {
+							var doc = frappe.model.sync(r.message);
+							frappe.set_route("Form", "BOM", doc[0].name);
+						}
+					},
+				});
 			}, __("Create"));
 		}
 	},

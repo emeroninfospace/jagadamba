@@ -26,10 +26,18 @@ frappe.ui.form.on("Project Budget", {
 		if (frm.doc.project && !frm.doc.project_no) {
 			frm.set_value("project_no", frm.doc.project);
 		}
-		if (frm.doc.project && !frm.doc.custom_types) {
-			frappe.db.get_value("Project", frm.doc.project, "custom_types", (r) => {
-				if (r && r.custom_types) frm.set_value("custom_types", r.custom_types);
-			});
+		if (frm.doc.project && (!frm.doc.custom_types || !frm.doc.custom_vehicle_type && !frm.doc.oil_gas_item)) {
+			frappe.db.get_value(
+				"Project",
+				frm.doc.project,
+				["custom_types", "custom_vehicle_type", "oil_gas_item"],
+				(r) => {
+					if (!r) return;
+					if (r.custom_types && !frm.doc.custom_types) frm.set_value("custom_types", r.custom_types);
+					if (r.custom_vehicle_type && !frm.doc.custom_vehicle_type) frm.set_value("custom_vehicle_type", r.custom_vehicle_type);
+					if (r.oil_gas_item && !frm.doc.oil_gas_item) frm.set_value("oil_gas_item", r.oil_gas_item);
+				}
+			);
 		}
 		update_total(frm);
 		setup_sub_wbs_button(frm);
@@ -48,12 +56,14 @@ frappe.ui.form.on("Project Budget", {
 		frappe.db.get_value(
 			"Project",
 			frm.doc.project,
-			["sales_order", "customer", "custom_types"],
+			["sales_order", "customer", "custom_types", "custom_vehicle_type", "oil_gas_item"],
 			(r) => {
 				if (r) {
 					frm.set_value("sales_order", r.sales_order || "");
 					frm.set_value("customer", r.customer || "");
 					frm.set_value("custom_types", r.custom_types || "");
+					if (r.custom_vehicle_type) frm.set_value("custom_vehicle_type", r.custom_vehicle_type);
+					if (r.oil_gas_item) frm.set_value("oil_gas_item", r.oil_gas_item);
 				}
 			}
 		);
@@ -74,17 +84,39 @@ frappe.ui.form.on("Project Budget WBS", {
 	wbs_items_add(frm) {
 		update_total(frm);
 	},
+	wbs_items_remove(frm) {
+		update_total(frm);
+	},
 	budget_amount(frm) {
 		update_total(frm);
 	},
-	wbs_items_remove(frm) {
-		update_total(frm);
+	purchase_order(frm, cdt, cdn) {
+		const row = locals[cdt][cdn];
+		if (!row.purchase_order) {
+			frappe.model.set_value(cdt, cdn, "po_amount", 0);
+			const sub_total = (frm.doc.sub_wbs_items || [])
+				.filter(s => s.parent_wbs_row === row.name)
+				.reduce((s, i) => s + flt(i.cost), 0);
+			frappe.model.set_value(cdt, cdn, "budget_amount", sub_total);
+			update_total(frm);
+			return;
+		}
+		frappe.db.get_value("Purchase Order", row.purchase_order, "grand_total", (r) => {
+			if (!r) return;
+			const po_amt = flt(r.grand_total);
+			const sub_total = (frm.doc.sub_wbs_items || [])
+				.filter(s => s.parent_wbs_row === row.name)
+				.reduce((s, i) => s + flt(i.cost), 0);
+			frappe.model.set_value(cdt, cdn, "po_amount", po_amt);
+			frappe.model.set_value(cdt, cdn, "budget_amount", po_amt + sub_total);
+			update_total(frm);
+		});
 	},
 });
 
 function setup_sub_wbs_button(frm) {
 	const grid = frm.fields_dict.wbs_items.grid;
-	const $btn = grid.add_custom_button(__("Sub WBS"), function () {
+	const $btn = grid.add_custom_button(__("Add Sub WBS"), function () {
 		const selected = grid.get_selected_children();
 		if (!selected || !selected.length) {
 			frappe.msgprint(__("Select a Main WBS row first (tick its checkbox)."));
@@ -140,6 +172,11 @@ function open_sub_wbs_dialog(frm, main_row) {
 						fieldtype: "Data",
 						hidden: 1,
 					},
+					{
+						fieldname: "main_wbs",
+						fieldtype: "Data",
+						hidden: 1,
+					},
 				],
 			},
 		],
@@ -147,21 +184,29 @@ function open_sub_wbs_dialog(frm, main_row) {
 		primary_action(values) {
 			const sub_items = values.sub_wbs_table || [];
 
+			// Remove existing rows for this parent using Frappe API
+			const to_remove = (frm.doc.sub_wbs_items || [])
+				.filter(s => s.parent_wbs_row === main_row.name);
+			to_remove.forEach(s => frappe.model.clear_doc("Project Budget Sub WBS", s.name));
+			frm.doc.sub_wbs_items = (frm.doc.sub_wbs_items || [])
+				.filter(s => s.parent_wbs_row !== main_row.name);
+
+			// Add new rows with proper Frappe model metadata so deletion works
 			sub_items.forEach((item, idx) => {
-				item.parent_wbs_row = main_row.name;
-				if (!item.wbs_element && main_row.wbs_element) {
-					item.wbs_element = `${main_row.wbs_element}-${String(idx + 1).padStart(2, "0")}`;
-				}
+				const child = frappe.model.add_child(frm.doc, "Project Budget Sub WBS", "sub_wbs_items");
+				child.parent_wbs_row = main_row.name;
+				child.main_wbs = main_row.description || main_row.wbs_element || "";
+				child.description = item.description;
+				child.cost = flt(item.cost);
+				child.wbs_element = item.wbs_element || (main_row.wbs_element
+					? `${main_row.wbs_element}-${String(idx + 1).padStart(2, "0")}`
+					: "");
 			});
 
-			frm.doc.sub_wbs_items = (frm.doc.sub_wbs_items || [])
-				.filter(s => s.parent_wbs_row !== main_row.name)
-				.concat(sub_items);
-
-			if (sub_items.length) {
-				const sub_total = sub_items.reduce((sum, i) => sum + flt(i.cost), 0);
-				frappe.model.set_value(main_row.doctype, main_row.name, "budget_amount", sub_total);
-			}
+			// Recalculate WBS row cost: PO amount + sub WBS total
+			const sub_total = sub_items.reduce((s, i) => s + flt(i.cost), 0);
+			const po_amt = flt(main_row.po_amount);
+			frappe.model.set_value(main_row.doctype, main_row.name, "budget_amount", po_amt + sub_total);
 
 			frm.refresh_field("sub_wbs_items");
 			update_total(frm);

@@ -80,15 +80,15 @@ fixtures = [
     },
     {
         "dt": "Workflow State",
-        "filters": [["name", "in", ["Draft", "Final Released", "Initial Released", "Cancelled", "Approved", "Rejected", "Pending PM Approval", "Pending Finance Approval", "Pending Management Approval"]]],
+        "filters": [["name", "in", ["Draft", "Final Released", "Initial Released", "Cancelled", "Approved", "Rejected", "Pending PM Approval", "Pending Finance Approval", "Pending Management Approval", "Pending First Release", "First Released", "Pending Second Release", "Second Released", "Pending Final Release"]]],
     },
     {
         "dt": "Workflow Action Master",
-        "filters": [["name", "in", ["Cancel", "Final Release", "Initial Release", "Revise", "Approve & Release", "Release", "Reject"]]],
+        "filters": [["name", "in", ["Cancel", "Final Release", "Initial Release", "Revise", "Approve & Release", "Release", "Reject", "Submit for First Release", "First Release", "Submit for Second Release", "Second Release", "Submit for Final Release"]]],
     },
     {
         "dt": "Workflow",
-        "filters": [["name", "in", ["Drawing Workflow", "Project Budget Approval"]]],
+        "filters": [["name", "in", ["Drawing Workflow", "Project Budget Approval", "BOM"]]],
     },
 ]
 

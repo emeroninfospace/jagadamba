@@ -18,13 +18,12 @@
   "revision_no",
   "workflow_state",
   "vehicle_type",
+  "oil_gas_item",
   "item",
   "bom",
   "drawing_files_section",
   "drawing_attachments",
   "drawing_notes",
-  "raw_materials_section",
-  "raw_materials",
   "amended_from"
  ],
  "fields": [
@@ -117,9 +116,21 @@
    "read_only": 1
   },
   {
+   "depends_on": "eval:doc.type!='Oil & Gas'",
+   "fetch_from": "project.custom_vehicle_type",
+   "fetch_if_empty": 1,
    "fieldname": "vehicle_type",
    "fieldtype": "Link",
    "label": "Vehicle Type",
+   "options": "Item"
+  },
+  {
+   "depends_on": "eval:doc.type=='Oil & Gas'",
+   "fetch_from": "project.oil_gas_item",
+   "fetch_if_empty": 1,
+   "fieldname": "oil_gas_item",
+   "fieldtype": "Link",
+   "label": "Oil & Gas Item",
    "options": "Item"
   },
   {
@@ -139,17 +150,6 @@
    "label": "Drawing Notes"
   },
   {
-   "fieldname": "raw_materials_section",
-   "fieldtype": "Section Break",
-   "label": "Raw Materials"
-  },
-  {
-   "fieldname": "raw_materials",
-   "fieldtype": "Table",
-   "label": "Raw Materials",
-   "options": "Drawing Raw Material"
-  },
-  {
    "fieldname": "amended_from",
    "fieldtype": "Link",
    "label": "Amended From",
@@ -159,6 +159,7 @@
    "read_only": 1
   },
   {
+   "fetch_from": "project.custom_types",
    "fieldname": "type",
    "fieldtype": "Link",
    "label": "Type",
@@ -169,7 +170,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-17 15:12:52.648309",
+ "modified": "2026-09-18 13:01:56.257999",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Documents",
