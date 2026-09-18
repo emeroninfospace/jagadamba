@@ -16,6 +16,8 @@
   "fiscal_year",
   "company",
   "workflow_state",
+  "custom_vehicle_type",
+  "oil_gas_item",
   "customer_name",
   "section_break_wbs",
   "wbs_items",
@@ -61,6 +63,24 @@
    "fieldtype": "Link",
    "label": "Type",
    "options": "Type"
+  },
+  {
+   "depends_on": "eval:doc.custom_types!='Oil & Gas'",
+   "fetch_from": "project.custom_vehicle_type",
+   "fetch_if_empty": 1,
+   "fieldname": "custom_vehicle_type",
+   "fieldtype": "Link",
+   "label": "Vehicle Type",
+   "options": "Item"
+  },
+  {
+   "depends_on": "eval:doc.custom_types=='Oil & Gas'",
+   "fetch_from": "project.oil_gas_item",
+   "fetch_if_empty": 1,
+   "fieldname": "oil_gas_item",
+   "fieldtype": "Link",
+   "label": "Oil & Gas Item",
+   "options": "Item"
   },
   {
    "fieldname": "customer",
@@ -122,9 +142,13 @@
    "options": "Project Budget WBS"
   },
   {
+   "fieldname": "section_break_sub_wbs",
+   "fieldtype": "Section Break",
+   "label": "Sub WBS Items"
+  },
+  {
    "fieldname": "sub_wbs_items",
    "fieldtype": "Table",
-   "hidden": 1,
    "label": "Sub WBS Items",
    "options": "Project Budget Sub WBS"
   },
@@ -159,7 +183,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-17 14:56:15.671626",
+ "modified": "2026-09-18 11:55:08.782116",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Project Budget",

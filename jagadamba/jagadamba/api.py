@@ -15,7 +15,9 @@ def create_drawing(project):
 		return {"existing": existing}
 
 	proj = frappe.db.get_value(
-		"Project", project, ["sales_order", "customer"], as_dict=True
+		"Project", project,
+		["sales_order", "customer", "custom_types", "custom_vehicle_type", "oil_gas_item"],
+		as_dict=True,
 	)
 
 	drawing = frappe.new_doc("Documents")
@@ -24,6 +26,15 @@ def create_drawing(project):
 	if proj:
 		drawing.sales_order = proj.sales_order
 		drawing.customer = proj.customer
+		if proj.custom_types:
+			drawing.type = proj.custom_types
+		if proj.custom_vehicle_type:
+			drawing.vehicle_type = proj.custom_vehicle_type
+		if proj.oil_gas_item:
+			drawing.oil_gas_item = proj.oil_gas_item
+		finished_item = proj.oil_gas_item or proj.custom_vehicle_type or ""
+		if finished_item:
+			drawing.item = finished_item
 
 	if drawing.customer:
 		drawing.customer_name = frappe.db.get_value("Customer", drawing.customer, "customer_name") or ""
@@ -42,24 +53,45 @@ def create_bom_from_drawing(drawing):
 	doc = frappe.get_doc("Documents", drawing)
 	if not doc.item:
 		frappe.throw("Please set the Item field on the Documents record before creating a BOM.")
-	if not doc.raw_materials:
-		frappe.throw("Please add raw materials to the Documents record before creating a BOM.")
 
 	bom = frappe.new_doc("BOM")
 	bom.item = doc.item
 	bom.project = doc.project
 	bom.quantity = 1
+	if doc.type:
+		bom.custom_types = doc.type
+	if doc.vehicle_type:
+		bom.custom_vehicle_type = doc.vehicle_type
+	if doc.oil_gas_item:
+		bom.oil_gas_item = doc.oil_gas_item
 
-	for rm in doc.raw_materials:
-		uom = rm.uom or frappe.db.get_value("Item", rm.item_code, "stock_uom") or "Nos"
-		bom.append("items", {
-			"item_code": rm.item_code,
-			"item_name": rm.item_name,
-			"qty": rm.qty or 1,
-			"uom": uom,
-			"stock_uom": uom,
-			"description": rm.description,
-		})
+	return bom
+
+
+@frappe.whitelist()
+def create_bom_from_project(project):
+	proj = frappe.db.get_value(
+		"Project", project,
+		["custom_types", "custom_vehicle_type", "oil_gas_item"],
+		as_dict=True,
+	)
+	if not proj:
+		frappe.throw("Project not found.")
+
+	finished_item = proj.oil_gas_item or proj.custom_vehicle_type or None
+	if not finished_item:
+		frappe.throw("Please set Vehicle Type or Oil & Gas Item on the Project before creating a BOM.")
+
+	bom = frappe.new_doc("BOM")
+	bom.item = finished_item
+	bom.project = project
+	bom.quantity = 1
+	if proj.custom_types:
+		bom.custom_types = proj.custom_types
+	if proj.custom_vehicle_type:
+		bom.custom_vehicle_type = proj.custom_vehicle_type
+	if proj.oil_gas_item:
+		bom.oil_gas_item = proj.oil_gas_item
 
 	return bom
 
@@ -75,7 +107,9 @@ def create_project_budget(project):
 		return {"existing": existing}
 
 	proj = frappe.db.get_value(
-		"Project", project, ["sales_order", "customer"], as_dict=True
+		"Project", project,
+		["sales_order", "customer", "custom_types", "custom_vehicle_type", "oil_gas_item"],
+		as_dict=True,
 	)
 
 	try:
@@ -91,6 +125,12 @@ def create_project_budget(project):
 	if proj:
 		pb.sales_order = proj.sales_order
 		pb.customer = proj.customer
+		if proj.custom_types:
+			pb.custom_types = proj.custom_types
+		if proj.custom_vehicle_type:
+			pb.custom_vehicle_type = proj.custom_vehicle_type
+		if proj.oil_gas_item:
+			pb.oil_gas_item = proj.oil_gas_item
 
 	if pb.customer:
 		pb.customer_name = frappe.db.get_value("Customer", pb.customer, "customer_name") or ""
@@ -179,6 +219,10 @@ def create_project(project_name, customer=None, sales_order=None):
 
 		if sales_order_doc.custom_types:
 			project.custom_types = sales_order_doc.custom_types
+		if sales_order_doc.custom_vehicle_type:
+			project.custom_vehicle_type = sales_order_doc.custom_vehicle_type
+		if sales_order_doc.oil_gas_item:
+			project.oil_gas_item = sales_order_doc.oil_gas_item
 
 		for so_item in sales_order_doc.items:
 			project.append("custom_project_items", {

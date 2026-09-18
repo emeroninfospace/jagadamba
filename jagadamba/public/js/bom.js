@@ -20,5 +20,32 @@ frappe.ui.form.on("BOM", {
 				__("Create")
 			);
 		}
+
+		if (!frm.is_new() && frm.doc.project && !frm.doc.item) {
+			frappe.db.get_value(
+				"Project",
+				frm.doc.project,
+				["custom_vehicle_type", "oil_gas_item"],
+				(r) => {
+					if (!r) return;
+					const finished_item = r.oil_gas_item || r.custom_vehicle_type || "";
+					if (finished_item) frm.set_value("item", finished_item);
+				}
+			);
+		}
+	},
+
+	project: function (frm) {
+		if (!frm.doc.project) return;
+		frappe.db.get_value(
+			"Project",
+			frm.doc.project,
+			["custom_vehicle_type", "oil_gas_item"],
+			(r) => {
+				if (!r) return;
+				const finished_item = r.oil_gas_item || r.custom_vehicle_type || "";
+				if (finished_item) frm.set_value("item", finished_item);
+			}
+		);
 	},
 });

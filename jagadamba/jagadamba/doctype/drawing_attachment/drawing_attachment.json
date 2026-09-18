@@ -8,7 +8,7 @@
   "file",
   "file_name",
   "description",
-  "user"
+  "role"
  ],
  "fields": [
   {
@@ -31,16 +31,16 @@
    "label": "Description"
   },
   {
-   "fieldname": "user",
+   "fieldname": "role",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "User",
-   "options": "User"
+   "label": "Role",
+   "options": "Role"
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2026-09-17 15:27:45.309101",
+ "modified": "2026-09-18 14:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Drawing Attachment",
