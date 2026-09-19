@@ -6,7 +6,6 @@ from frappe.utils import flt
 class ProjectBudget(Document):
 	def validate(self):
 		self._fetch_project_details()
-		self._sync_po_amounts()
 		self._rollup_wbs_costs()
 		self._sync_sub_wbs_main_label()
 		self._calculate_total()
@@ -39,22 +38,13 @@ class ProjectBudget(Document):
 		if self.customer:
 			self.customer_name = frappe.db.get_value("Customer", self.customer, "customer_name") or ""
 
-	def _sync_po_amounts(self):
-		"""Refresh po_amount from PO for every WBS row that has a PO linked."""
-		for row in (self.wbs_items or []):
-			if row.purchase_order:
-				po_total = frappe.db.get_value("Purchase Order", row.purchase_order, "grand_total") or 0
-				row.po_amount = flt(po_total)
-			else:
-				row.po_amount = 0
 
 	def _rollup_wbs_costs(self):
-		"""budget_amount = po_amount + sum of linked sub-WBS costs."""
 		for row in (self.wbs_items or []):
 			sub_items = [s for s in (self.sub_wbs_items or []) if s.parent_wbs_row == row.name]
 			sub_total = sum(flt(s.cost) for s in sub_items)
-			if sub_total or row.po_amount:
-				row.budget_amount = flt(row.po_amount) + sub_total
+			if sub_total:
+				row.budget_amount =  sub_total
 
 	def _sync_sub_wbs_main_label(self):
 		"""Keep main_wbs label on sub-WBS rows in sync with parent WBS description."""
