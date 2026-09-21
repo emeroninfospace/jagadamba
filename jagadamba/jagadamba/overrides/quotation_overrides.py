@@ -5,10 +5,16 @@ from frappe.utils import today, get_fullname
 
 def before_insert(doc, _method=None):
 	_auto_set_revision_number(doc)
+	_fix_quotation_to_from_lead(doc)
 
 
-def validate(doc, _method=None):
-	_fetch_customer_from_enquiry(doc)
+def _fix_quotation_to_from_lead(doc):
+	if doc.quotation_to != "Lead" or not doc.party_name:
+		return
+	customer = frappe.db.get_value("Lead", doc.party_name, "custom_customers")
+	if customer:
+		doc.quotation_to = "Customer"
+		doc.party_name = customer
 
 
 def on_submit(doc, _method=None):
@@ -39,33 +45,6 @@ def _append_revision_history(doc, auto=False, note=""):
 	doc.db_set("revision_history", new_value, update_modified=False)
 
 
-def _fetch_customer_from_enquiry(doc):
-	if not doc.enquiry_reference:
-		return
-
-	if doc.party_name:
-		return
-
-	lead = frappe.db.get_value(
-		"Lead",
-		doc.enquiry_reference,
-		["custom_customers", "lead_name", "company_name", "project_name"],
-		as_dict=True,
-	)
-	if not lead:
-		return
-
-	if lead.custom_customers:
-		doc.quotation_to = "Customer"
-		doc.party_name = lead.custom_customers
-	elif lead.company_name:
-		doc.quotation_to = "Customer"
-		doc.party_name = lead.company_name
-
-	if lead.project_name and not doc.custom_project:
-		doc.custom_project = lead.project_name
-
-
 @frappe.whitelist()
 def log_revision_note(quotation, note):
 	doc = frappe.get_doc("Quotation", quotation)
@@ -73,40 +52,3 @@ def log_revision_note(quotation, note):
 	return True
 
 
-@frappe.whitelist()
-def get_enquiry_details(enquiry_reference):
-	if not enquiry_reference:
-		return {}
-
-	lead = frappe.db.get_value(
-		"Lead",
-		enquiry_reference,
-		[
-			"custom_customers",
-			"company_name",
-			"lead_name",
-			"enquiry_number",
-			"person_responsible",
-			"required_completion_date",
-			"project_name",
-		],
-		as_dict=True,
-	)
-	if not lead:
-		return {}
-
-	result = {
-		"enquiry_number": lead.enquiry_number,
-		"required_completion_date": lead.required_completion_date,
-		"person_responsible": lead.person_responsible,
-		"project_name": lead.project_name,
-	}
-
-	if lead.custom_customers:
-		result["quotation_to"] = "Customer"
-		result["party_name"] = lead.custom_customers
-	elif lead.company_name:
-		result["quotation_to"] = "Customer"
-		result["party_name"] = lead.company_name
-
-	return result

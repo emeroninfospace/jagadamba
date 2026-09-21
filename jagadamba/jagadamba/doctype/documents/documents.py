@@ -1,24 +1,26 @@
 import frappe
 from frappe.model.document import Document
 
+ROLE_PRIORITY = ["Engineering Head", "Design Engineer", "Project Engineer", "Finance Manager", "Management"]
+
 
 class Documents(Document):
 	def onload(self):
-		if "System Manager" not in frappe.get_roles():
+		user_roles = set(frappe.get_roles())
+		if "System Manager" not in user_roles:
 			self.set("drawing_attachments", [
 				row for row in (self.drawing_attachments or [])
-				if not row.user or row.user == frappe.session.user
+				if not row.role or row.role in user_roles
 			])
 
 	def validate(self):
 		self._fetch_project_details()
-		self._set_attachment_users()
+		self._set_attachment_roles()
 		if not self.is_new():
-			self._preserve_other_users_attachments()
+			self._preserve_other_roles_attachments()
 
 	def before_submit(self):
-		if not self.raw_materials:
-			frappe.throw("Please add at least one raw material before submitting.")
+		pass
 
 	def on_cancel(self):
 		if self.bom:
@@ -55,14 +57,17 @@ class Documents(Document):
 			if quotation:
 				self.vehicle_type = frappe.db.get_value("Quotation", quotation, "custom_vehicle_type") or ""
 
-	def _set_attachment_users(self):
+	def _set_attachment_roles(self):
+		user_roles = set(frappe.get_roles())
+		primary_role = next((r for r in ROLE_PRIORITY if r in user_roles), "")
 		for row in (self.drawing_attachments or []):
-			if not row.user:
-				row.user = frappe.session.user
+			if not row.role:
+				row.role = primary_role
 
-	def _preserve_other_users_attachments(self):
+	def _preserve_other_roles_attachments(self):
 		if "System Manager" in frappe.get_roles():
 			return
+		user_roles = set(frappe.get_roles())
 		existing = frappe.get_doc(self.doctype, self.name)
-		other_rows = [r for r in existing.drawing_attachments if r.user != frappe.session.user]
+		other_rows = [r for r in existing.drawing_attachments if r.role and r.role not in user_roles]
 		self.drawing_attachments = other_rows + list(self.drawing_attachments or [])

@@ -57,7 +57,6 @@ doc_events = {
     },
     "Quotation": {
         "before_insert": "jagadamba.jagadamba.overrides.quotation_overrides.before_insert",
-        "validate": "jagadamba.jagadamba.overrides.quotation_overrides.validate",
         "on_submit": "jagadamba.jagadamba.overrides.quotation_overrides.on_submit",
     },
 }

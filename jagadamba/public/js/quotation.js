@@ -16,10 +16,16 @@ frappe.ui.form.on("Quotation", {
 			return { filters: { item_group: "Finished Items", disabled: 0 } };
 		});
 
-		// Filter enquiry_reference to show only Leads with an enquiry_number
-		frm.set_query("enquiry_reference", function () {
-			return { filters: { enquiry_number: ["!=", ""] } };
-		});
+		// When quotation is mapped from Lead via "Make Quotation", ERPNext pre-sets
+		// quotation_to="Lead". Switch to Customer if the lead has one linked.
+		if (frm.is_new() && frm.doc.quotation_to === "Lead" && frm.doc.party_name) {
+			frappe.db.get_value("Lead", frm.doc.party_name, "custom_customers", (r) => {
+				if (r && r.custom_customers) {
+					frm.set_value("quotation_to", "Customer");
+					frm.set_value("party_name", r.custom_customers);
+				}
+			});
+		}
 
 		// Log Revision Note button — visible on saved/submitted quotations
 		if (!frm.is_new()) {
@@ -48,32 +54,6 @@ frappe.ui.form.on("Quotation", {
 		frm.set_value("oil_gas_item", "");
 	},
 
-	enquiry_reference: function (frm) {
-		if (!frm.doc.enquiry_reference) return;
-
-		frappe.call({
-			method: "jagadamba.jagadamba.overrides.quotation_overrides.get_enquiry_details",
-			args: { enquiry_reference: frm.doc.enquiry_reference },
-			callback: function (r) {
-				if (!r.message) return;
-				var d = r.message;
-
-				if (d.quotation_to && !frm.doc.party_name) {
-					frm.set_value("quotation_to", d.quotation_to);
-					frm.set_value("party_name", d.party_name);
-				}
-				if (d.required_completion_date && !frm.doc.expected_closing_date) {
-					frm.set_value("expected_closing_date", d.required_completion_date);
-				}
-				if (d.person_responsible && !frm.doc.estimator) {
-					frm.set_value("estimator", d.person_responsible);
-				}
-				if (d.project_name && !frm.doc.custom_project) {
-					frm.set_value("custom_project", d.project_name);
-				}
-			},
-		});
-	},
 });
 
 // frappe.ui.form.on("Quotation Item", {
