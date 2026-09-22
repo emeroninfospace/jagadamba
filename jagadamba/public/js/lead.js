@@ -10,7 +10,7 @@ function set_vehicle_type_query(frm) {
 
 function set_oil_gas_item_query(frm) {
 	frm.set_query("oil_gas_item", function () {
-		return { filters: { item_group: "Finished Items", disabled: 0 } };
+		return { filters: { item_group: "Finished Items", disabled: 0, custom_types: "Oil & Gas" } };
 	});
 }
 

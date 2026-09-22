@@ -90,28 +90,6 @@ frappe.ui.form.on("Project Budget WBS", {
 	budget_amount(frm) {
 		update_total(frm);
 	},
-	purchase_order(frm, cdt, cdn) {
-		const row = locals[cdt][cdn];
-		if (!row.purchase_order) {
-			frappe.model.set_value(cdt, cdn, "po_amount", 0);
-			const sub_total = (frm.doc.sub_wbs_items || [])
-				.filter(s => s.parent_wbs_row === row.name)
-				.reduce((s, i) => s + flt(i.cost), 0);
-			frappe.model.set_value(cdt, cdn, "budget_amount", sub_total);
-			update_total(frm);
-			return;
-		}
-		frappe.db.get_value("Purchase Order", row.purchase_order, "grand_total", (r) => {
-			if (!r) return;
-			const po_amt = flt(r.grand_total);
-			const sub_total = (frm.doc.sub_wbs_items || [])
-				.filter(s => s.parent_wbs_row === row.name)
-				.reduce((s, i) => s + flt(i.cost), 0);
-			frappe.model.set_value(cdt, cdn, "po_amount", po_amt);
-			frappe.model.set_value(cdt, cdn, "budget_amount", po_amt + sub_total);
-			update_total(frm);
-		});
-	},
 });
 
 function setup_sub_wbs_button(frm) {
@@ -203,10 +181,9 @@ function open_sub_wbs_dialog(frm, main_row) {
 					: "");
 			});
 
-			// Recalculate WBS row cost: PO amount + sub WBS total
+			// Recalculate WBS row cost from sub WBS total
 			const sub_total = sub_items.reduce((s, i) => s + flt(i.cost), 0);
-			const po_amt = flt(main_row.po_amount);
-			frappe.model.set_value(main_row.doctype, main_row.name, "budget_amount", po_amt + sub_total);
+			if (sub_total) frappe.model.set_value(main_row.doctype, main_row.name, "budget_amount", sub_total);
 
 			frm.refresh_field("sub_wbs_items");
 			update_total(frm);

@@ -1,7 +1,17 @@
 frappe.ui.form.on("Documents", {
 	refresh(frm) {
 		frm.set_query("item", function () {
-			return { filters: { item_group: "Finished Items", disabled: 0 } };
+			let filters = { item_group: "Finished Items", disabled: 0 };
+			if (frm.doc.type) filters.custom_types = frm.doc.type;
+			return { filters: filters };
+		});
+		frm.set_query("vehicle_type", function () {
+			let filters = { item_group: "Finished Items", disabled: 0, custom_parent_item: 1 };
+			if (frm.doc.type && frm.doc.type !== "Oil & Gas") filters.custom_types = frm.doc.type;
+			return { filters: filters };
+		});
+		frm.set_query("oil_gas_item", function () {
+			return { filters: { item_group: "Finished Items", disabled: 0, custom_types: "Oil & Gas" } };
 		});
 
 		if (!frm.is_new() && frm.doc.project) {
