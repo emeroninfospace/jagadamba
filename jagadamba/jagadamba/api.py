@@ -206,6 +206,8 @@ def make_purchase_order(sales_order):
 
 @frappe.whitelist()
 def create_project(project_name, customer=None, sales_order=None):
+	frappe.log_error(title="create_project START", message=f"args: project_name={project_name}, sales_order={sales_order}")
+
 	project = frappe.new_doc("Project")
 	project.project_name = project_name
 	project.customer = customer or ""
@@ -234,8 +236,8 @@ def create_project(project_name, customer=None, sales_order=None):
 	project.insert(ignore_permissions=True)
 
 	frappe.log_error(
-		title="create_project debug",
-		message=f"sales_order={sales_order}, so_fields={so_fields}, project={project.name}"
+		title="create_project END",
+		message=f"project={project.name}, so_fields={so_fields}"
 	)
 
 	if so_fields:
