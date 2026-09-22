@@ -2,6 +2,42 @@
  {
   "docstatus": 0,
   "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-18 13:11:31.774443",
+  "name": "First Released",
+  "style": "",
+  "workflow_state_name": "First Released"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-18 13:11:39.790912",
+  "name": "Pending Second Release",
+  "style": "",
+  "workflow_state_name": "Pending Second Release"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-18 13:11:57.660997",
+  "name": "Second Released",
+  "style": "",
+  "workflow_state_name": "Second Released"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-18 13:12:07.444127",
+  "name": "Pending Final Release",
+  "style": "",
+  "workflow_state_name": "Pending Final Release"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
   "icon": "ok-sign",
   "modified": "2026-08-12 14:13:09.863851",
   "name": "Approved",
@@ -79,5 +115,14 @@
   "name": "Pending Management Approval",
   "style": "",
   "workflow_state_name": "Pending Management Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-18 13:11:16.709323",
+  "name": "Pending First Release",
+  "style": "",
+  "workflow_state_name": "Pending First Release"
  }
 ]

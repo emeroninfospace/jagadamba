@@ -1,5 +1,11 @@
 frappe.ui.form.on("BOM", {
 	refresh: function (frm) {
+		frm.set_query("item", function () {
+			let filters = { item_group: "Finished Items", disabled: 0 };
+			if (frm.doc.custom_types) filters.custom_types = frm.doc.custom_types;
+			return { filters: filters };
+		});
+
 		if (frm.doc.docstatus === 0 || (frm.doc.docstatus === 1 && frm.doc.is_active)) {
 			frm.add_custom_button(
 				__("Material Request"),

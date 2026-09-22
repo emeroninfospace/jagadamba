@@ -13,7 +13,7 @@ frappe.ui.form.on("Sales Order", {
 		});
 
 		frm.set_query("oil_gas_item", function () {
-			return { filters: { item_group: "Finished Items", disabled: 0 } };
+			return { filters: { item_group: "Finished Items", disabled: 0, custom_types: "Oil & Gas" } };
 		});
 
 		setTimeout(() => {
