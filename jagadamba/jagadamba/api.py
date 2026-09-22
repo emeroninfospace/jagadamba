@@ -233,6 +233,11 @@ def create_project(project_name, customer=None, sales_order=None):
 
 	project.insert(ignore_permissions=True)
 
+	frappe.log_error(
+		title="create_project debug",
+		message=f"sales_order={sales_order}, so_fields={so_fields}, project={project.name}"
+	)
+
 	if so_fields:
 		frappe.db.set_value("Project", project.name, so_fields)
 
