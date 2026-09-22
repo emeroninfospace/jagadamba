@@ -210,16 +210,11 @@ def create_project(project_name, customer=None, sales_order=None):
 	project.project_name = project_name
 	project.customer = customer or ""
 
+	so_fields = {}
 	if sales_order:
 		sales_order_doc = frappe.get_doc("Sales Order", sales_order)
 
 		project.sales_order = sales_order
-		if sales_order_doc.custom_types:
-			project.custom_types = sales_order_doc.custom_types
-		if sales_order_doc.custom_vehicle_type:
-			project.custom_vehicle_type = sales_order_doc.custom_vehicle_type
-		if sales_order_doc.oil_gas_item:
-			project.oil_gas_item = sales_order_doc.oil_gas_item
 
 		for so_item in sales_order_doc.items:
 			project.append("custom_project_items", {
@@ -229,15 +224,20 @@ def create_project(project_name, customer=None, sales_order=None):
 				"estimated_amount": 0,
 			})
 
+		if sales_order_doc.custom_types:
+			so_fields["custom_types"] = sales_order_doc.custom_types
+		if sales_order_doc.custom_vehicle_type:
+			so_fields["custom_vehicle_type"] = sales_order_doc.custom_vehicle_type
+		if sales_order_doc.oil_gas_item:
+			so_fields["oil_gas_item"] = sales_order_doc.oil_gas_item
+
 	project.insert(ignore_permissions=True)
 
+	if so_fields:
+		frappe.db.set_value("Project", project.name, so_fields)
+
 	if sales_order:
-		frappe.db.set_value(
-			"Sales Order",
-			sales_order,
-			"project",
-			project.name
-		)
+		frappe.db.set_value("Sales Order", sales_order, "project", project.name)
 
 	return project.name
 

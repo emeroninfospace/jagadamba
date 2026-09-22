@@ -2,15 +2,18 @@ frappe.ui.form.on("Project", {
 	refresh(frm) {
 		update_estimated_costing(frm);
 
-		if (frm.doc.sales_order && (!frm.doc.custom_vehicle_type && !frm.doc.oil_gas_item)) {
+		if (frm.doc.sales_order && (!frm.doc.custom_types || !frm.doc.custom_vehicle_type && !frm.doc.oil_gas_item)) {
 			frappe.db.get_value(
 				"Sales Order",
 				frm.doc.sales_order,
-				["custom_vehicle_type", "oil_gas_item"],
+				["custom_types", "custom_vehicle_type", "oil_gas_item"],
 				(r) => {
 					if (!r) return;
-					if (r.custom_vehicle_type) frm.set_value("custom_vehicle_type", r.custom_vehicle_type);
-					if (r.oil_gas_item) frm.set_value("oil_gas_item", r.oil_gas_item);
+					let changed = false;
+					if (!frm.doc.custom_types && r.custom_types) { frm.set_value("custom_types", r.custom_types); changed = true; }
+					if (!frm.doc.custom_vehicle_type && r.custom_vehicle_type) { frm.set_value("custom_vehicle_type", r.custom_vehicle_type); changed = true; }
+					if (!frm.doc.oil_gas_item && r.oil_gas_item) { frm.set_value("oil_gas_item", r.oil_gas_item); changed = true; }
+					if (changed) frm.save();
 				}
 			);
 		}
