@@ -130,7 +130,7 @@
    "fetch_if_empty": 1,
    "fieldname": "oil_gas_item",
    "fieldtype": "Link",
-   "label": "Oil & Gas Item",
+   "label": "Finished Item",
    "options": "Item"
   },
   {
