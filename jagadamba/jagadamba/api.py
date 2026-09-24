@@ -152,7 +152,11 @@ def create_material_request_from_bom(bom):
 
 	if bom_doc.project:
 		mr.project = bom_doc.project
-		mr.custom_types = frappe.db.get_value("Project", bom_doc.project, "custom_types") or ""
+		proj = frappe.db.get_value("Project", bom_doc.project,
+			["custom_types", "custom_vehicle_type", "oil_gas_item"], as_dict=True) or {}
+		mr.custom_types = proj.get("custom_types") or ""
+		mr.custom_vehicle_type = proj.get("custom_vehicle_type") or ""
+		mr.oil_gas_item = proj.get("oil_gas_item") or ""
 
 	for item in bom_doc.items:
 		uom = item.uom or item.stock_uom
@@ -164,6 +168,7 @@ def create_material_request_from_bom(bom):
 			"uom": uom,
 			"stock_uom": item.stock_uom or uom,
 			"schedule_date": today(),
+			"project": bom_doc.project or "",
 		})
 
 	return mr
@@ -182,7 +187,9 @@ def make_purchase_order(sales_order):
 	po = frappe.new_doc("Purchase Order")
 	po.company = so.company
 	po.project = so.project
-	po.custom_types = so.custom_types
+	po.custom_types = so.custom_types or ""
+	po.custom_vehicle_type = so.custom_vehicle_type or ""
+	po.oil_gas_item = so.oil_gas_item or ""
 	po.transaction_date = frappe.utils.today()
 	po.schedule_date = frappe.utils.today()
 

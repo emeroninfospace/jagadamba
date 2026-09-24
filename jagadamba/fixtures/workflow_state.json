@@ -124,5 +124,32 @@
   "name": "Pending First Release",
   "style": "",
   "workflow_state_name": "Pending First Release"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-24 10:00:00.000000",
+  "name": "Pending Third Release",
+  "style": "",
+  "workflow_state_name": "Pending Third Release"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-24 10:00:00.000000",
+  "name": "Third Released",
+  "style": "",
+  "workflow_state_name": "Third Released"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-24 10:00:00.000000",
+  "name": "Pending Fourth Release",
+  "style": "",
+  "workflow_state_name": "Pending Fourth Release"
  }
 ]

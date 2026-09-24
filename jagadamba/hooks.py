@@ -67,6 +67,14 @@ doctype_js = {
 	"Sales Order": "public/js/sales_order.js",
 	"Project": "public/js/project.js",
 	"BOM": "public/js/bom.js",
+	"Material Request": "public/js/material_request.js",
+	"Purchase Order": "public/js/purchase_order.js",
+	"Work Order": "public/js/work_order.js",
+	"Purchase Receipt": "public/js/purchase_receipt.js",
+	"Job Card": "public/js/job_card.js",
+	"Stock Entry": "public/js/stock_entry.js",
+	"Sales Invoice": "public/js/sales_invoice.js",
+	"Purchase Invoice": "public/js/purchase_invoice.js",
 }
 fixtures = [
     {
@@ -75,19 +83,19 @@ fixtures = [
     },
     {
         "dt": "Role",
-        "filters": [["name", "in", ["Engineering Head", "Design Engineer", "Management", "Finance Manager", "Project Engineer"]]],
+        "filters": [["name", "in", ["Engineering Head", "Design Engineer", "Management", "Finance Manager", "Project Engineer", "Procurement Engineer"]]],
     },
     {
         "dt": "Workflow State",
-        "filters": [["name", "in", ["Draft", "Final Released", "Initial Released", "Cancelled", "Approved", "Rejected", "Pending PM Approval", "Pending Finance Approval", "Pending Management Approval", "Pending First Release", "First Released", "Pending Second Release", "Second Released", "Pending Final Release"]]],
+        "filters": [["name", "in", ["Draft", "Final Released", "Initial Released", "Cancelled", "Approved", "Rejected", "Pending PM Approval", "Pending Finance Approval", "Pending Management Approval", "Pending First Release", "First Released", "Pending Second Release", "Second Released", "Pending Third Release", "Third Released", "Pending Fourth Release", "Pending Final Release"]]],
     },
     {
         "dt": "Workflow Action Master",
-        "filters": [["name", "in", ["Cancel", "Final Release", "Initial Release", "Revise", "Approve & Release", "Release", "Reject", "Submit for First Release", "First Release", "Submit for Second Release", "Second Release", "Submit for Final Release"]]],
+        "filters": [["name", "in", ["Cancel", "Final Release", "Initial Release", "Revise", "Approve & Release", "Release", "Reject", "Submit for First Release", "First Release", "Submit for Second Release", "Second Release", "Submit for Third Release", "Third Release", "Submit for Fourth Release", "Submit for Final Release"]]],
     },
     {
         "dt": "Workflow",
-        "filters": [["name", "in", ["Drawing Workflow", "Project Budget Approval", "BOM"]]],
+        "filters": [["name", "in", ["Drawing Workflow", "Project Budget Approval", "BOM", "Material Request Approval", "Purchase Order Approval"]]],
     },
 ]
 
