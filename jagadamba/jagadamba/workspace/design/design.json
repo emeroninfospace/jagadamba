@@ -1,0 +1,129 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"OkRS7vRrK9\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Design</span>\",\"col\":12}},{\"id\":\"Vn94NICTFP\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Draft Documents\",\"col\":4}},{\"id\":\"pUF8q-7GBm\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Documents First Release\",\"col\":4}},{\"id\":\"zHfcxcTknu\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Documents Final Release\",\"col\":4}},{\"id\":\"KJ7TbAtmz7\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"BOMs Pending Approval\",\"col\":4}},{\"id\":\"2WbxFuyJNe\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Rejected Documents\",\"col\":4}},{\"id\":\"0g90V78eYl\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"9kasQq4Wal\",\"type\":\"card\",\"data\":{\"card_name\":\"BOM\",\"col\":4}},{\"id\":\"rlvz7FPEV-\",\"type\":\"card\",\"data\":{\"card_name\":\"Design Work\",\"col\":4}}]",
+ "creation": "2026-09-25 14:37:38.811139",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 1,
+ "icon": "edit-fill",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Design",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Design Work",
+   "link_count": 2,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Documents",
+   "link_count": 0,
+   "link_to": "Documents",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Designing",
+   "link_count": 0,
+   "link_to": "Designing",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "BOM",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "BOM",
+   "link_count": 0,
+   "link_to": "BOM",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Item",
+   "link_count": 0,
+   "link_to": "Item",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Workstation",
+   "link_count": 0,
+   "link_to": "Workstation",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Routing",
+   "link_count": 0,
+   "link_to": "Routing",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-09-25 15:33:06.566322",
+ "modified_by": "Administrator",
+ "module": "Jagadamba",
+ "name": "Design",
+ "number_cards": [
+  {
+   "label": "Draft Documents",
+   "number_card_name": "Draft Documents"
+  },
+  {
+   "label": "Documents First Release",
+   "number_card_name": "Documents First Release"
+  },
+  {
+   "label": "Documents Final Release",
+   "number_card_name": "Documents Final Release"
+  },
+  {
+   "label": "BOMs Pending Approval",
+   "number_card_name": "BOMs Pending Approval"
+  },
+  {
+   "label": "Rejected Documents",
+   "number_card_name": "Rejected Documents"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 6.0,
+ "shortcuts": [],
+ "title": "Design"
+}
