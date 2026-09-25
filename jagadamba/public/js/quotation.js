@@ -16,6 +16,13 @@ frappe.ui.form.on("Quotation", {
 			return { filters: { item_group: "Finished Items", disabled: 0, custom_types: "Oil & Gas" } };
 		});
 
+		frm.set_query("item_code", "custom_additional_items", function (doc, cdt, cdn) {
+			const row = locals[cdt][cdn];
+			const filters = { disabled: 0 };
+			if (row.item_group) filters.item_group = row.item_group;
+			return { filters: filters };
+		});
+
 		// When quotation is mapped from Lead via "Make Quotation", ERPNext pre-sets
 		// quotation_to="Lead". Switch to Customer if the lead has one linked.
 		if (frm.is_new() && frm.doc.quotation_to === "Lead" && frm.doc.party_name) {
@@ -54,6 +61,17 @@ frappe.ui.form.on("Quotation", {
 		frm.set_value("oil_gas_item", "");
 	},
 
+});
+
+frappe.ui.form.on("Quotation Additional Item", {
+	item_group(frm, cdt, cdn) {
+		const row = locals[cdt][cdn];
+		if (row.item_code) {
+			frappe.model.set_value(cdt, cdn, "item_code", "");
+			frappe.model.set_value(cdt, cdn, "item_name", "");
+			frappe.model.set_value(cdt, cdn, "description", "");
+		}
+	},
 });
 
 // frappe.ui.form.on("Quotation Item", {

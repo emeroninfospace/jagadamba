@@ -58,6 +58,31 @@ doc_events = {
     "Quotation": {
         "before_insert": "jagadamba.jagadamba.overrides.quotation_overrides.before_insert",
         "on_submit": "jagadamba.jagadamba.overrides.quotation_overrides.on_submit",
+        "validate": "jagadamba.jagadamba.utils.set_cost_center_from_type",
+    },
+    "Sales Order": {
+        "validate": "jagadamba.jagadamba.utils.set_cost_center_from_type",
+    },
+    "Project": {
+        "validate": "jagadamba.jagadamba.utils.set_cost_center_from_type",
+    },
+    "Material Request": {
+        "validate": "jagadamba.jagadamba.utils.set_cost_center_from_type",
+    },
+    "Purchase Order": {
+        "validate": "jagadamba.jagadamba.utils.set_cost_center_from_type",
+    },
+    "Purchase Receipt": {
+        "validate": "jagadamba.jagadamba.utils.set_cost_center_from_type",
+    },
+    "Sales Invoice": {
+        "validate": "jagadamba.jagadamba.utils.set_cost_center_from_type",
+    },
+    "Purchase Invoice": {
+        "validate": "jagadamba.jagadamba.utils.set_cost_center_from_type",
+    },
+    "Stock Entry": {
+        "validate": "jagadamba.jagadamba.utils.set_cost_center_from_type",
     },
 }
 
@@ -83,7 +108,7 @@ fixtures = [
     },
     {
         "dt": "Role",
-        "filters": [["name", "in", ["Engineering Head", "Design Engineer", "Management", "Finance Manager", "Project Engineer", "Procurement Engineer"]]],
+        "filters": [["name", "in", ["Engineering Head", "Design Engineer", "Management", "Finance Manager", "Project Engineer", "Procurement Engineer", "Sales Executive", "Stores User", "Quality Engineer", "Production Engineer"]]],
     },
     {
         "dt": "Workflow State",

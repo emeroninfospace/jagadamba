@@ -109,6 +109,17 @@ frappe.ui.form.on("Project", {
 	validate(frm) {
 		update_estimated_costing(frm);
 	},
+
+	custom_types(frm) {
+		if (!frm.doc.custom_types) return;
+		frappe.call({
+			method: "jagadamba.jagadamba.utils.get_cost_center",
+			args: { type_name: frm.doc.custom_types },
+			callback: (r) => {
+				if (r.message) frm.set_value("cost_center", r.message);
+			},
+		});
+	},
 });
 
 
