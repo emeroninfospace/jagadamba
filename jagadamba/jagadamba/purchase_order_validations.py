@@ -44,7 +44,15 @@ def before_submit_po(doc, method=None):
 
     budget_issue = _get_budget_exceeded_message(doc)
     if budget_issue:
-        errors.append(budget_issue)
+        if "Accounts User" in frappe.get_roles():
+            frappe.msgprint(
+                budget_issue
+                + "<br><b>Submitted with budget override (Accounts User).</b>",
+                title="Budget Exceeded — Override Applied",
+                indicator="orange",
+            )
+        else:
+            errors.append(budget_issue)
 
     if errors:
         frappe.throw("<br>".join(errors), title="Cannot Submit Purchase Order")

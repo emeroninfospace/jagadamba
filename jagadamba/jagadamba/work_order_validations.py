@@ -10,8 +10,18 @@ def validate_wo(doc, method=None):
 
 def before_submit_wo(doc, method=None):
     error = _get_production_budget_exceeded_message(doc)
-    if error:
-        frappe.throw(error, title="Cannot Submit Work Order")
+    if not error:
+        return
+
+    if "Accounts User" in frappe.get_roles():
+        frappe.msgprint(
+            error + "<br><b>Submitted with budget override (Accounts User).</b>",
+            title="Budget Exceeded — Override Applied",
+            indicator="orange",
+        )
+        return
+
+    frappe.throw(error, title="Cannot Submit Work Order")
 
 
 def _get_production_budget_exceeded_message(doc):
