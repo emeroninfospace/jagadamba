@@ -44,14 +44,14 @@ app_include_js = "/assets/jagadamba/js/desk.js"
 
 # include js in doctype views
 doc_events = {
-    # "Purchase Order": {
-    #     "validate": "jagadamba.jagadamba.purchase_order_validations.validate_po",
-    #     "before_submit": "jagadamba.jagadamba.purchase_order_validations.before_submit_po",
-    # },
-    # "Work Order": {
-    #     "validate": "jagadamba.jagadamba.work_order_validations.validate_wo",
-    #     "before_submit": "jagadamba.jagadamba.work_order_validations.before_submit_wo",
-    # },
+    "Purchase Order": {
+        "validate": "jagadamba.jagadamba.purchase_order_validations.validate_po",
+        "before_submit": "jagadamba.jagadamba.purchase_order_validations.before_submit_po",
+    },
+    "Work Order": {
+        "validate": "jagadamba.jagadamba.work_order_validations.validate_wo",
+        "before_submit": "jagadamba.jagadamba.work_order_validations.before_submit_wo",
+    },
     "Customer": {
         "before_insert": "jagadamba.jagadamba.overrides.customer_overrides.before_insert",
     },

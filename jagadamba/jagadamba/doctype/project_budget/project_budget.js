@@ -41,6 +41,7 @@ frappe.ui.form.on("Project Budget", {
 		}
 		update_total(frm);
 		setup_sub_wbs_button(frm);
+		refresh_actual_totals(frm);
 	},
 
 	project(frm) {
@@ -205,4 +206,20 @@ function update_total(frm) {
 		total += flt(row.budget_amount);
 	});
 	frm.set_value("total_budget_amount", total);
+}
+
+function refresh_actual_totals(frm) {
+	if (frm.is_new() || !frm.doc.project) return;
+	frappe.call({
+		method: "jagadamba.jagadamba.doctype.project_budget.project_budget.get_actual_totals",
+		args: { project: frm.doc.project },
+		callback(r) {
+			if (!r || !r.message) return;
+			// Update displayed values without marking the form dirty
+			frm.doc.total_purchase_order_amount = flt(r.message.total_purchase_order_amount);
+			frm.doc.total_sales_order_amount = flt(r.message.total_sales_order_amount);
+			frm.refresh_field("total_purchase_order_amount");
+			frm.refresh_field("total_sales_order_amount");
+		},
+	});
 }

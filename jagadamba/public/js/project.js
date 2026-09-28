@@ -22,13 +22,24 @@ frappe.ui.form.on("Project", {
 			["Task", "Timesheet", "Issue", "Project Update", "Expense Claim"].forEach(dt => {
 				$(frm.wrapper).find(`.document-link[data-doctype="${dt}"]`).hide();
 			});
-			const hide_groups = ["Purchase", "Manufacture"];
+			const hide_groups = ["Manufacture"];
+			let $sales_group, $purchase_group;
 			$(frm.wrapper).find(".transactions .col-md-4").each(function () {
 				const label = $(this).find(".form-link-title span").text().trim();
+				if (label === "Sales") $sales_group = $(this);
+				if (label === "Purchase") $purchase_group = $(this);
 				if (hide_groups.includes(label) || $(this).find(".document-link:visible").length === 0) {
 					$(this).hide();
 				}
 			});
+
+			// Move Purchase next to Sales so the row lays out as Material | Sales | Purchase
+			if ($sales_group && $sales_group.length && $purchase_group && $purchase_group.length) {
+				$purchase_group.detach().insertAfter($sales_group);
+			}
+
+			add_custom_project_connections(frm);
+
 			if (frm.dashboard && frm.dashboard.links_area) {
 				frm.dashboard.links_area.collapse(true);
 			}
@@ -136,6 +147,60 @@ frappe.ui.form.on("Project Items", {
 		update_estimated_costing(frm);
 	},
 });
+
+
+function add_custom_project_connections(frm) {
+	if (!frm.doc.name || frm.is_new()) return;
+
+	const $form_documents = $(frm.wrapper).find(".transactions .form-documents");
+	if (!$form_documents.length) return;
+	if ($form_documents.find(".project-custom-links").length) return;
+
+	const doctypes = ["Project Budget", "Documents"];
+
+	const links_html = doctypes.map(dt => `
+		<div class="document-link" data-doctype="${frappe.utils.escape_html(dt)}">
+			<div class="document-link-badge" data-doctype="${frappe.utils.escape_html(dt)}">
+				<span class="count hidden"></span>
+				<a class="badge-link">${__(dt)}</a>
+			</div>
+			<button class="btn btn-new btn-secondary btn-xs icon-btn" data-doctype="${frappe.utils.escape_html(dt)}" title="${__("Create new")}">
+				<svg class="icon icon-sm"><use href="#icon-add"></use></svg>
+			</button>
+		</div>
+	`).join("");
+
+	const $group = $(`
+		<div class="row project-custom-links">
+			<div class="col-md-4">
+				<div class="form-link-title">
+					<span>${__("Project")}</span>
+				</div>
+				${links_html}
+			</div>
+		</div>
+	`);
+
+	$form_documents.append($group);
+
+	doctypes.forEach(dt => {
+		const $link = $group.find(`.document-link[data-doctype="${dt}"]`);
+
+		frappe.db.count(dt, { filters: { project: frm.doc.name } }).then(count => {
+			const $count = $link.find(".count");
+			$count.text(count || 0).removeClass("hidden");
+		});
+
+		$link.find(".badge-link").on("click", () => {
+			frappe.set_route("List", dt, { project: frm.doc.name });
+		});
+
+		$link.find(".btn-new").on("click", (e) => {
+			e.stopPropagation();
+			frappe.new_doc(dt, { project: frm.doc.name });
+		});
+	});
+}
 
 
 function update_estimated_costing(frm) {

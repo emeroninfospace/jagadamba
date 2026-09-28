@@ -9,6 +9,7 @@ class ProjectBudget(Document):
 		self._rollup_wbs_costs()
 		self._sync_sub_wbs_main_label()
 		self._calculate_total()
+		self._calculate_actual_totals()
 
 	def before_submit(self):
 		if not self.wbs_items:
@@ -55,3 +56,46 @@ class ProjectBudget(Document):
 
 	def _calculate_total(self):
 		self.total_budget_amount = sum(flt(row.budget_amount) for row in (self.wbs_items or []))
+
+	def _calculate_actual_totals(self):
+		po_total, so_total = _get_project_actual_totals(self.project)
+		self.total_purchase_order_amount = po_total
+		self.total_sales_order_amount = so_total
+
+
+def _get_project_actual_totals(project):
+	if not project:
+		return 0.0, 0.0
+
+	po_total = flt(
+		frappe.db.sql(
+			"""
+			SELECT IFNULL(SUM(grand_total), 0)
+			FROM `tabPurchase Order`
+			WHERE project = %s AND docstatus = 1
+			""",
+			project,
+		)[0][0]
+	)
+
+	so_total = flt(
+		frappe.db.sql(
+			"""
+			SELECT IFNULL(SUM(grand_total), 0)
+			FROM `tabSales Order`
+			WHERE project = %s AND docstatus = 1
+			""",
+			project,
+		)[0][0]
+	)
+
+	return po_total, so_total
+
+
+@frappe.whitelist()
+def get_actual_totals(project):
+	po_total, so_total = _get_project_actual_totals(project)
+	return {
+		"total_purchase_order_amount": po_total,
+		"total_sales_order_amount": so_total,
+	}

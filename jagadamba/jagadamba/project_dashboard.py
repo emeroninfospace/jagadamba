@@ -1,6 +1,9 @@
 import frappe
 from frappe.utils import flt
 
+# Project Budget docstatus filter: < 2 = Draft + Submitted, = 1 = Submitted only
+PB_DOCSTATUS_COND = "pb.docstatus < 2"
+
 
 @frappe.whitelist()
 def get_project_dashboard_data(company=None, status=None):
@@ -16,6 +19,7 @@ def get_project_dashboard_data(company=None, status=None):
 		"status_breakdown": get_status_breakdown(projects),
 		"item_variance": item_variance,
 		"over_budget_projects": get_over_budget_projects(projects),
+		"wbs_lines": get_wbs_lines(company, status),
 	}
 	return data
 
@@ -55,6 +59,8 @@ def get_projects(company, status=None):
 		as_dict=True,
 	)
 
+	wbs_map = get_wbs_totals([p.name for p in rows])
+
 	for p in rows:
 		p["variance_amount"] = flt(p.actual_items_total) - flt(p.estimated_items_total)
 		p["variance_pct"] = (
@@ -63,6 +69,87 @@ def get_projects(company, status=None):
 			else 0
 		)
 		p["vehicle_type"] = _get_vehicle_type(p.sales_order)
+
+		wbs = wbs_map.get(p.name) or {}
+		p["wbs_budget_total"] = flt(wbs.get("wbs_budget_total"))
+		p["wbs_line_count"] = wbs.get("wbs_line_count") or 0
+		p["wbs_utilisation_pct"] = (
+			round(flt(p.actual_items_total) / p["wbs_budget_total"] * 100, 1)
+			if p["wbs_budget_total"]
+			else 0
+		)
+
+	return rows
+
+
+def get_wbs_totals(project_names):
+	if not project_names:
+		return {}
+
+	rows = frappe.db.sql(
+		"""
+		SELECT
+			pb.project,
+			IFNULL(SUM(w.budget_amount), 0) AS wbs_budget_total,
+			COUNT(w.name) AS wbs_line_count
+		FROM `tabProject Budget WBS` w
+		JOIN `tabProject Budget` pb ON pb.name = w.parent
+		WHERE w.parenttype = 'Project Budget'
+			AND w.parentfield = 'wbs_items'
+			AND {pb_cond}
+			AND pb.project IN %(projects)s
+		GROUP BY pb.project
+		""".format(pb_cond=PB_DOCSTATUS_COND),
+		{"projects": tuple(project_names)},
+		as_dict=True,
+	)
+	return {r.project: r for r in rows}
+
+
+def get_wbs_lines(company, status=None, limit=15):
+	conditions = [PB_DOCSTATUS_COND, "p.status != 'Cancelled'"]
+	params = {"limit": limit}
+	if company:
+		conditions.append("p.company = %(company)s")
+		params["company"] = company
+	if status:
+		conditions.append("p.status = %(status)s")
+		params["status"] = status
+
+	rows = frappe.db.sql(
+		"""
+		SELECT
+			w.name AS wbs_row,
+			w.parent AS project_budget,
+			pb.project,
+			p.project_name,
+			w.wbs_element,
+			w.description,
+			IFNULL(w.budget_amount, 0) AS budget_amount,
+			IFNULL(s.sub_total, 0) AS sub_wbs_total,
+			IFNULL(s.sub_count, 0) AS sub_wbs_count
+		FROM `tabProject Budget WBS` w
+		JOIN `tabProject Budget` pb
+			ON pb.name = w.parent
+			AND w.parenttype = 'Project Budget'
+			AND w.parentfield = 'wbs_items'
+		JOIN `tabProject` p ON p.name = pb.project
+		LEFT JOIN (
+			SELECT parent_wbs_row, SUM(cost) AS sub_total, COUNT(name) AS sub_count
+			FROM `tabProject Budget Sub WBS`
+			WHERE parenttype = 'Project Budget'
+			GROUP BY parent_wbs_row
+		) s ON s.parent_wbs_row = w.name
+		WHERE {conditions}
+		ORDER BY w.budget_amount DESC
+		LIMIT %(limit)s
+		""".format(conditions=" AND ".join(conditions)),
+		params,
+		as_dict=True,
+	)
+
+	for r in rows:
+		r["unallocated"] = flt(r.budget_amount) - flt(r.sub_wbs_total)
 
 	return rows
 
@@ -88,6 +175,9 @@ def get_kpis(projects):
 
 	over_budget_count = len([p for p in projects if flt(p.variance_amount) > 0])
 
+	total_wbs_budget = sum(flt(p.get("wbs_budget_total")) for p in projects)
+	wbs_utilisation_pct = round(total_actual / total_wbs_budget * 100, 1) if total_wbs_budget else 0
+
 	return {
 		"total_projects": total,
 		"active_projects": active,
@@ -97,6 +187,8 @@ def get_kpis(projects):
 		"overall_variance": overall_variance,
 		"overall_variance_pct": overall_variance_pct,
 		"over_budget_count": over_budget_count,
+		"total_wbs_budget": total_wbs_budget,
+		"wbs_utilisation_pct": wbs_utilisation_pct,
 	}
 
 
@@ -163,6 +255,19 @@ def get_project_detail(project):
 
 	proj["items"] = items
 	proj["vehicle_type"] = _get_vehicle_type(proj.sales_order)
+
+	proj["wbs_lines"] = frappe.db.sql(
+		"""
+		SELECT w.name AS wbs_row, w.parent AS project_budget, w.wbs_element,
+			w.description, IFNULL(w.budget_amount, 0) AS budget_amount
+		FROM `tabProject Budget WBS` w
+		JOIN `tabProject Budget` pb ON pb.name = w.parent
+		WHERE w.parenttype = 'Project Budget' AND {pb_cond} AND pb.project = %s
+		ORDER BY w.parent, w.idx
+		""".format(pb_cond=PB_DOCSTATUS_COND),
+		(project,),
+		as_dict=True,
+	)
 	return proj
 
 

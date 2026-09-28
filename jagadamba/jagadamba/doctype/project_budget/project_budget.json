@@ -24,6 +24,10 @@
   "sub_wbs_items",
   "section_break_totals",
   "total_budget_amount",
+  "column_break_totals",
+  "total_purchase_order_amount",
+  "column_break_umed",
+  "total_sales_order_amount",
   "section_break_a8bh",
   "amended_from"
  ],
@@ -142,11 +146,6 @@
    "options": "Project Budget WBS"
   },
   {
-   "fieldname": "section_break_sub_wbs",
-   "fieldtype": "Section Break",
-   "label": "Sub WBS Items"
-  },
-  {
    "fieldname": "sub_wbs_items",
    "fieldtype": "Table",
    "label": "Sub WBS Items",
@@ -158,10 +157,29 @@
    "label": "Totals"
   },
   {
+   "description": "Sum of budget amounts across all WBS Budget Lines for this project.",
    "fieldname": "total_budget_amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Total Budget Amount",
+   "read_only": 1
+  },
+  {
+   "description": "Sum of grand totals of submitted Purchase Orders linked to this project.",
+   "fieldname": "total_purchase_order_amount",
+   "fieldtype": "Currency",
+   "label": "Total Purchase Order Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_totals",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Sum of grand totals of submitted Sales Orders linked to this project.",
+   "fieldname": "total_sales_order_amount",
+   "fieldtype": "Currency",
+   "label": "Total Sales Order Amount",
    "read_only": 1
   },
   {
@@ -177,13 +195,17 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "column_break_umed",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-18 11:55:08.782116",
+ "modified": "2026-09-28 12:37:41.945282",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Project Budget",
