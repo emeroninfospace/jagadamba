@@ -21,7 +21,6 @@ frappe.ui.form.on("Lead", {
 
 		setTimeout(() => {
 			frm.remove_custom_button("Prospect", "Create");
-			frm.remove_custom_button("Opportunity", "Create");
 			frm.remove_custom_button("Add to Prospect", "Action");
 		}, 100);
 	},
