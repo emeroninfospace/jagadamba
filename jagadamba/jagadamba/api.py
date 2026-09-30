@@ -177,12 +177,9 @@ def create_material_request_from_bom(bom):
 @frappe.whitelist()
 def make_purchase_order(sales_order):
 	so = frappe.get_doc("Sales Order", sales_order)
-	child_items = so.custom_item_groups
 
-	if not child_items:
-		frappe.throw(
-			"No items found in Build Categories. Please select parent items in the Sales Order first."
-		)
+	if not so.items:
+		frappe.throw("Sales Order has no items to procure.")
 
 	po = frappe.new_doc("Purchase Order")
 	po.company = so.company
@@ -193,17 +190,18 @@ def make_purchase_order(sales_order):
 	po.transaction_date = frappe.utils.today()
 	po.schedule_date = frappe.utils.today()
 
-	for ci in child_items:
-		uom = ci.uom or frappe.db.get_value("Item", ci.item_code, "stock_uom") or "Nos"
+	for si in so.items:
+		uom = si.uom or frappe.db.get_value("Item", si.item_code, "stock_uom") or "Nos"
 		po.append(
 			"items",
 			{
-				"item_code": ci.item_code,
-				"item_name": ci.item_name,
-				"qty": 1,
+				"item_code": si.item_code,
+				"item_name": si.item_name,
+				"qty": si.qty or 1,
+				"rate": si.rate,
 				"uom": uom,
-				"stock_uom": uom,
-				"conversion_factor": 1,
+				"stock_uom": si.stock_uom or uom,
+				"conversion_factor": si.conversion_factor or 1,
 				"schedule_date": frappe.utils.today(),
 			},
 		)
