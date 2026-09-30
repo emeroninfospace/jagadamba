@@ -45,7 +45,10 @@ app_include_js = "/assets/jagadamba/js/desk.js"
 # include js in doctype views
 doc_events = {
     "Purchase Order": {
-        "validate": "jagadamba.jagadamba.purchase_order_validations.validate_po",
+        "validate": [
+            "jagadamba.jagadamba.purchase_order_validations.validate_po",
+            "jagadamba.jagadamba.utils.set_cost_center_from_type",
+        ],
         "before_submit": "jagadamba.jagadamba.purchase_order_validations.before_submit_po",
     },
     "Work Order": {
@@ -54,6 +57,9 @@ doc_events = {
     },
     "Customer": {
         "before_insert": "jagadamba.jagadamba.overrides.customer_overrides.before_insert",
+    },
+    "Opportunity": {
+        "before_insert": "jagadamba.jagadamba.overrides.opportunity_overrides.before_insert",
     },
     "Quotation": {
         "before_insert": "jagadamba.jagadamba.overrides.quotation_overrides.before_insert",
@@ -67,9 +73,6 @@ doc_events = {
         "validate": "jagadamba.jagadamba.utils.set_cost_center_from_type",
     },
     "Material Request": {
-        "validate": "jagadamba.jagadamba.utils.set_cost_center_from_type",
-    },
-    "Purchase Order": {
         "validate": "jagadamba.jagadamba.utils.set_cost_center_from_type",
     },
     "Purchase Receipt": {
@@ -89,6 +92,7 @@ doc_events = {
 doctype_js = {
 	"Quotation": "public/js/quotation.js",
 	"Lead": "public/js/lead.js",
+	"Opportunity": "public/js/opportunity.js",
 	"Sales Order": "public/js/sales_order.js",
 	"Project": "public/js/project.js",
 	"BOM": "public/js/bom.js",
