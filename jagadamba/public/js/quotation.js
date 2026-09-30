@@ -23,8 +23,6 @@ frappe.ui.form.on("Quotation", {
 			return { filters: filters };
 		});
 
-		// When quotation is mapped from Lead via "Make Quotation", ERPNext pre-sets
-		// quotation_to="Lead". Switch to Customer if the lead has one linked.
 		if (frm.is_new() && frm.doc.quotation_to === "Lead" && frm.doc.party_name) {
 			frappe.db.get_value("Lead", frm.doc.party_name, "custom_customers", (r) => {
 				if (r && r.custom_customers) {
@@ -34,7 +32,27 @@ frappe.ui.form.on("Quotation", {
 			});
 		}
 
-		// Log Revision Note button — visible on saved/submitted quotations
+
+		if (frm.is_new() && frm.doc.opportunity) {
+			frappe.db.get_value(
+				"Opportunity",
+				frm.doc.opportunity,
+				["custom_types", "custom_vehicle_type", "custom_finished_item"],
+				(r) => {
+					if (!r) return;
+					if (!frm.doc.custom_types && r.custom_types) {
+						frm.set_value("custom_types", r.custom_types);
+					}
+					if (!frm.doc.custom_vehicle_type && r.custom_vehicle_type) {
+						frm.set_value("custom_vehicle_type", r.custom_vehicle_type);
+					}
+					if (!frm.doc.oil_gas_item && r.custom_finished_item) {
+						frm.set_value("oil_gas_item", r.custom_finished_item);
+					}
+				}
+			);
+		}
+
 		if (!frm.is_new()) {
 			frm.add_custom_button(__("Log Revision Note"), function () {
 				frappe.prompt(

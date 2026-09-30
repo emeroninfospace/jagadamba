@@ -6,6 +6,31 @@ from frappe.utils import today, get_fullname
 def before_insert(doc, _method=None):
 	_auto_set_revision_number(doc)
 	_fix_quotation_to_from_lead(doc)
+	_copy_type_fields_from_opportunity(doc)
+
+
+def _copy_type_fields_from_opportunity(doc):
+	"""When a Quotation is created from an Opportunity, carry Type / Vehicle Type
+	/ Finished Item across if they aren't already set on the Quotation."""
+	if not doc.get("opportunity"):
+		return
+
+	opp = frappe.db.get_value(
+		"Opportunity",
+		doc.opportunity,
+		["custom_types", "custom_vehicle_type", "custom_finished_item"],
+		as_dict=True,
+	)
+	if not opp:
+		return
+
+	if not doc.get("custom_types") and opp.custom_types:
+		doc.custom_types = opp.custom_types
+	if not doc.get("custom_vehicle_type") and opp.custom_vehicle_type:
+		doc.custom_vehicle_type = opp.custom_vehicle_type
+	# Opportunity uses `custom_finished_item`; Quotation uses `oil_gas_item`.
+	if not doc.get("oil_gas_item") and opp.custom_finished_item:
+		doc.oil_gas_item = opp.custom_finished_item
 
 
 def _fix_quotation_to_from_lead(doc):
