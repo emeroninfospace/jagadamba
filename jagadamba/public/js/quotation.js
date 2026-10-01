@@ -33,6 +33,8 @@ frappe.ui.form.on("Quotation", {
 		}
 
 
+		recalc_oil_gas_pricing(frm);
+
 		if (frm.is_new() && frm.doc.opportunity) {
 			frappe.db.get_value(
 				"Opportunity",
@@ -77,9 +79,36 @@ frappe.ui.form.on("Quotation", {
 	custom_types: function (frm) {
 		frm.set_value("custom_vehicle_type", "");
 		frm.set_value("oil_gas_item", "");
+		recalc_oil_gas_pricing(frm);
 	},
 
+	custom_sale_value_without_tax(frm) { recalc_oil_gas_pricing(frm); },
+	custom_vat_percent(frm) { recalc_oil_gas_pricing(frm); },
+	custom_tax_percent(frm) { recalc_oil_gas_pricing(frm); },
+	net_total(frm) { recalc_oil_gas_pricing(frm); },
+
 });
+
+function recalc_oil_gas_pricing(frm) {
+	if (frm.doc.custom_types !== "Oil & Gas") {
+		return;
+	}
+	const net_total = flt(frm.doc.net_total);
+	const sale_value = flt(frm.doc.custom_sale_value_without_tax);
+	const vat_pct = flt(frm.doc.custom_vat_percent);
+	const tax_pct = flt(frm.doc.custom_tax_percent);
+
+	const vat_amount = sale_value * vat_pct / 100;
+	// Tax compounds on (Sale Value + VAT), matching the reference calculation.
+	const tax_amount = (sale_value + vat_amount) * tax_pct / 100;
+	const total_quoted = sale_value + vat_amount + tax_amount;
+	const net_profit = sale_value - net_total;
+
+	frm.set_value("custom_vat_amount", vat_amount);
+	frm.set_value("custom_tax_amount", tax_amount);
+	frm.set_value("custom_total_quoted_value", total_quoted);
+	frm.set_value("custom_net_profit", net_profit);
+}
 
 frappe.ui.form.on("Quotation Additional Item", {
 	item_group(frm, cdt, cdn) {

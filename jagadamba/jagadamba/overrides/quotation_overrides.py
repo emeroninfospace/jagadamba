@@ -1,12 +1,36 @@
 import re
 import frappe
-from frappe.utils import today, get_fullname
+from frappe.utils import today, get_fullname, flt
 
 
 def before_insert(doc, _method=None):
 	_auto_set_revision_number(doc)
 	_fix_quotation_to_from_lead(doc)
 	_copy_type_fields_from_opportunity(doc)
+
+
+def validate(doc, _method=None):
+	_calculate_oil_gas_pricing(doc)
+
+
+def _calculate_oil_gas_pricing(doc):
+	"""For Oil & Gas quotations, derive VAT, Tax and Total Quoted from the
+	user-entered Sale Value. Tax compounds on (Sale Value + VAT)."""
+	if (doc.get("custom_types") or "") != "Oil & Gas":
+		return
+
+	sale_value = flt(doc.get("custom_sale_value_without_tax"))
+	vat_pct = flt(doc.get("custom_vat_percent"))
+	tax_pct = flt(doc.get("custom_tax_percent"))
+	net_total = flt(doc.get("net_total"))
+
+	vat_amount = sale_value * vat_pct / 100
+	tax_amount = (sale_value + vat_amount) * tax_pct / 100
+
+	doc.custom_vat_amount = vat_amount
+	doc.custom_tax_amount = tax_amount
+	doc.custom_total_quoted_value = sale_value + vat_amount + tax_amount
+	doc.custom_net_profit = sale_value - net_total
 
 
 def _copy_type_fields_from_opportunity(doc):
