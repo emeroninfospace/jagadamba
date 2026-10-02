@@ -77,7 +77,7 @@
    "columns": 0,
    "creation": "2026-09-23 10:00:00",
    "default": null,
-   "depends_on": "eval:doc.custom_types!='Oil & Gas'",
+   "depends_on": "eval:doc.custom_types=='Trailers'",
    "description": null,
    "docstatus": 0,
    "dt": "Job Card",
@@ -163,7 +163,7 @@
    "insert_after": "custom_vehicle_type",
    "is_system_generated": 0,
    "is_virtual": 0,
-   "label": "Finished Item",
+   "label": "Job Item",
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
@@ -196,6 +196,29 @@
  "custom_perms": [],
  "doctype": "Job Card",
  "links": [],
- "property_setters": [],
+ "property_setters": [
+  {
+   "_assign": null,
+   "_comments": null,
+   "_liked_by": null,
+   "_user_tags": null,
+   "creation": "2026-10-01 13:00:00",
+   "default_value": null,
+   "doc_type": "Job Card",
+   "docstatus": 0,
+   "doctype_or_field": "DocField",
+   "field_name": "custom_types",
+   "is_system_generated": 0,
+   "modified": "2026-10-01 13:00:00",
+   "modified_by": "Administrator",
+   "module": null,
+   "name": "Job Card-custom_types-only_select",
+   "owner": "Administrator",
+   "property": "only_select",
+   "property_type": "Check",
+   "row_name": null,
+   "value": "1"
+  }
+ ],
  "sync_on_migrate": 1
 }

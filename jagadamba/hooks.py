@@ -173,7 +173,7 @@ fixtures = [
 # ------------
 
 # before_install = "jagadamba.install.before_install"
-# after_install = "jagadamba.install.after_install"
+after_install = "jagadamba.install.after_install"
 
 # Uninstallation
 # ------------
