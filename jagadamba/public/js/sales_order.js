@@ -12,15 +12,24 @@ frappe.ui.form.on("Sales Order", {
 		}
 
 		frm.set_query("custom_vehicle_type", function () {
-			let filters = { custom_parent_item: 1, disabled: 0, item_group: "Finished Items" };
-			if (frm.doc.custom_types && frm.doc.custom_types !== "Oil & Gas") {
-				filters.custom_types = frm.doc.custom_types;
-			}
+			const filters = { disabled: 0, item_group: "Finished Items" };
+			if (frm.doc.custom_types) filters.custom_types = frm.doc.custom_types;
+			if (frm.doc.company) filters.custom_company = frm.doc.company;
 			return { filters: filters };
 		});
 
 		frm.set_query("oil_gas_item", function () {
-			return { filters: { item_group: "Finished Items", disabled: 0, custom_types: "Oil & Gas" } };
+			const filters = { item_group: "Finished Items", disabled: 0, custom_types: "Oil & Gas" };
+			if (frm.doc.company) filters.custom_company = frm.doc.company;
+			return { filters: filters };
+		});
+
+		// Items table — restrict by the selected Type and Company
+		frm.set_query("item_code", "items", function () {
+			const filters = { disabled: 0 };
+			if (frm.doc.custom_types) filters.custom_types = frm.doc.custom_types;
+			if (frm.doc.company) filters.custom_company = frm.doc.company;
+			return { filters: filters };
 		});
 
 		setTimeout(() => {
@@ -142,14 +151,28 @@ frappe.ui.form.on("Sales Order", {
 });
 
 frappe.ui.form.on("Sales Order", {
+	refresh(frm) {
+		recalc_oil_gas_pricing(frm);
+	},
+
 	custom_quotation(frm) {
 		if (!frm.doc.custom_quotation) return;
 		frappe.db.get_value("Quotation", frm.doc.custom_quotation,
-			["custom_types", "custom_vehicle_type", "oil_gas_item"], (r) => {
+			["custom_types", "custom_vehicle_type", "oil_gas_item",
+			 "custom_sale_value_without_tax", "custom_vat_percent", "custom_tax_percent"], (r) => {
 				if (!r) return;
 				if (r.custom_types) frm.set_value("custom_types", r.custom_types);
 				if (r.custom_vehicle_type) frm.set_value("custom_vehicle_type", r.custom_vehicle_type);
 				if (r.oil_gas_item) frm.set_value("oil_gas_item", r.oil_gas_item);
+				if (r.custom_sale_value_without_tax && !frm.doc.custom_sale_value_without_tax) {
+					frm.set_value("custom_sale_value_without_tax", r.custom_sale_value_without_tax);
+				}
+				if (r.custom_vat_percent && !frm.doc.custom_vat_percent) {
+					frm.set_value("custom_vat_percent", r.custom_vat_percent);
+				}
+				if (r.custom_tax_percent && !frm.doc.custom_tax_percent) {
+					frm.set_value("custom_tax_percent", r.custom_tax_percent);
+				}
 			}
 		);
 	},
@@ -157,87 +180,31 @@ frappe.ui.form.on("Sales Order", {
 	custom_types: function (frm) {
 		frm.set_value("custom_vehicle_type", "");
 		frm.set_value("oil_gas_item", "");
+		recalc_oil_gas_pricing(frm);
 	},
 
-	// before_submit: function (frm) {
-	// 	if (!frm.doc.custom_item_groups || !frm.doc.custom_item_groups.length) {
-	// 		frappe.validated = false;
-	// 		frappe.confirm(
-	// 			__(
-	// 				"Build Categories table is empty. Purchase Orders require items from Build Categories to be created. Are you sure you want to submit?"
-	// 			),
-	// 			() => {
-	// 				frappe.validated = true;
-	// 				frm.save("Submit");
-	// 			}
-	// 		);
-	// 	}
-	// },
+	custom_sale_value_without_tax(frm) { recalc_oil_gas_pricing(frm); },
+	custom_vat_percent(frm) { recalc_oil_gas_pricing(frm); },
+	custom_tax_percent(frm) { recalc_oil_gas_pricing(frm); },
+	net_total(frm) { recalc_oil_gas_pricing(frm); },
+
 });
 
-// frappe.ui.form.on("Sales Order Item", {
-// 	before_remove: function (frm, cdt, cdn) {
-// 		let row = locals[cdt][cdn];
-// 		if (!row.item_code) return;
-// 		let to_remove = (frm.doc.custom_item_groups || []).filter(
-// 			(i) => i.parent_item === row.item_code
-// 		);
-// 		to_remove.forEach((i) => frappe.model.clear_doc(i.doctype, i.name));
-// 		frm.doc.custom_item_groups = (frm.doc.custom_item_groups || []).filter(
-// 			(i) => i.parent_item !== row.item_code
-// 		);
-// 		frm.refresh_field("custom_item_groups");
-// 	},
-//
-// 	item_code: function (frm, cdt, cdn) {
-// 		let row = locals[cdt][cdn];
-//
-// 		let current_parents = new Set(
-// 			(frm.doc.items || []).map((i) => i.item_code).filter(Boolean)
-// 		);
-// 		let stale = (frm.doc.custom_item_groups || []).filter(
-// 			(i) => i.parent_item && !current_parents.has(i.parent_item)
-// 		);
-// 		stale.forEach((i) => frappe.model.clear_doc(i.doctype, i.name));
-// 		frm.doc.custom_item_groups = (frm.doc.custom_item_groups || []).filter(
-// 			(i) => !i.parent_item || current_parents.has(i.parent_item)
-// 		);
-// 		frm.refresh_field("custom_item_groups");
-//
-// 		if (!row.item_code) return;
-//
-// 		frappe.dom.freeze(__("Fetching build category items..."));
-// 		frappe.call({
-// 			method: "jagadamba.jagadamba.api.get_child_items_for_parent_items",
-// 			args: { parent_item_codes: JSON.stringify([row.item_code]) },
-// 			callback: function (r) {
-// 				frappe.dom.unfreeze();
-// 				if (!r.message || !r.message.length) return;
-//
-// 				let added = 0;
-// 				r.message.forEach((item) => {
-// 					let exists = (frm.doc.custom_item_groups || []).some(
-// 						(i) => i.item_code === item.item_code
-// 					);
-// 					if (!exists) {
-// 						let child = frm.add_child("custom_item_groups");
-// 						child.parent_item = item.parent_item;
-// 						child.item_code = item.item_code;
-// 						child.item_name = item.item_name;
-// 						child.uom = item.uom;
-// 						child.item_group = item.item_group;
-// 						child.description = item.description;
-// 						added++;
-// 					}
-// 				});
-// 				frm.refresh_field("custom_item_groups");
-// 				if (added) {
-// 					frappe.show_alert({
-// 						message: __("{0} item(s) added to Build Categories", [added]),
-// 						indicator: "green",
-// 					});
-// 				}
-// 			},
-// 		});
-// 	},
-// });
+function recalc_oil_gas_pricing(frm) {
+	if (frm.doc.custom_types !== "Oil & Gas") return;
+	const net_total = flt(frm.doc.net_total);
+	const sale_value = flt(frm.doc.custom_sale_value_without_tax);
+	const vat_pct = flt(frm.doc.custom_vat_percent);
+	const tax_pct = flt(frm.doc.custom_tax_percent);
+
+	const vat_amount = sale_value * vat_pct / 100;
+	const tax_amount = (sale_value + vat_amount) * tax_pct / 100;
+	const total_quoted = sale_value + vat_amount + tax_amount;
+	const net_profit = sale_value - net_total;
+
+	frm.set_value("custom_vat_amount", vat_amount);
+	frm.set_value("custom_tax_amount", tax_amount);
+	frm.set_value("custom_total_quoted_value", total_quoted);
+	frm.set_value("custom_net_profit", net_profit);
+}
+

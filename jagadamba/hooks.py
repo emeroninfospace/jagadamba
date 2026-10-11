@@ -64,10 +64,16 @@ doc_events = {
     "Quotation": {
         "before_insert": "jagadamba.jagadamba.overrides.quotation_overrides.before_insert",
         "on_submit": "jagadamba.jagadamba.overrides.quotation_overrides.on_submit",
-        "validate": "jagadamba.jagadamba.utils.set_cost_center_from_type",
+        "validate": [
+            "jagadamba.jagadamba.utils.set_cost_center_from_type",
+            "jagadamba.jagadamba.overrides.quotation_overrides.validate",
+        ],
     },
     "Sales Order": {
-        "validate": "jagadamba.jagadamba.utils.set_cost_center_from_type",
+        "validate": [
+            "jagadamba.jagadamba.utils.set_cost_center_from_type",
+            "jagadamba.jagadamba.overrides.sales_order_overrides.validate",
+        ],
     },
     "Project": {
         "validate": "jagadamba.jagadamba.utils.set_cost_center_from_type",
@@ -167,7 +173,7 @@ fixtures = [
 # ------------
 
 # before_install = "jagadamba.install.before_install"
-# after_install = "jagadamba.install.after_install"
+after_install = "jagadamba.install.after_install"
 
 # Uninstallation
 # ------------

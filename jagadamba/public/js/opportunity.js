@@ -1,16 +1,17 @@
 function set_vehicle_type_query(frm) {
 	frm.set_query("custom_vehicle_type", function () {
-		const filters = { custom_parent_item: 1, disabled: 0, item_group: "Finished Items" };
-		if (frm.doc.custom_types && frm.doc.custom_types !== "Oil & Gas") {
-			filters.custom_types = frm.doc.custom_types;
-		}
+		const filters = { disabled: 0, item_group: "Finished Items" };
+		if (frm.doc.custom_types) filters.custom_types = frm.doc.custom_types;
+		if (frm.doc.company) filters.custom_company = frm.doc.company;
 		return { filters: filters };
 	});
 }
 
 function set_finished_item_query(frm) {
 	frm.set_query("custom_finished_item", function () {
-		return { filters: { item_group: "Finished Items", disabled: 0, custom_types: "Oil & Gas" } };
+		const filters = { item_group: "Finished Items", disabled: 0, custom_types: "Oil & Gas" };
+		if (frm.doc.company) filters.custom_company = frm.doc.company;
+		return { filters: filters };
 	});
 }
 
