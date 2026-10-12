@@ -1,6 +1,23 @@
 {
- "charts": [],
- "content": "[{\"id\":\"CtTlkJCrRt\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Jagadamba</span>\",\"col\":12}},{\"id\":\"8XmIeg2zeK\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lead\",\"col\":3}},{\"id\":\"5bVTKjK1yY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotation\",\"col\":3}},{\"id\":\"CEvQX32EkE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Order\",\"col\":3}},{\"id\":\"eh1gbipoXC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project\",\"col\":3}},{\"id\":\"nDjj7Kj9lx\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Order Confirmation Sheet\",\"col\":3}},{\"id\":\"ylrFUkPfux\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Designing\",\"col\":3}},{\"id\":\"ayYvFs6oCn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Purchase Order\",\"col\":3}},{\"id\":\"2TgKipjfih\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"4Rwe82xwE1\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"e79qVMqMiM\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\",\"col\":4}},{\"id\":\"sd_qMcWWJq\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}},{\"id\":\"V8XNA_Tlmu\",\"type\":\"spacer\",\"data\":{\"col\":12}}]",
+ "charts": [
+  {
+   "chart_name": "Sales Orders by Status",
+   "label": "Sales Orders by Status"
+  },
+  {
+   "chart_name": "Work Orders by Status",
+   "label": "Work Orders by Status"
+  },
+  {
+   "chart_name": "Purchase Orders by Status",
+   "label": "Purchase Orders by Status"
+  },
+  {
+   "chart_name": "Profit and Loss",
+   "label": "Profit and Loss"
+  }
+ ],
+ "content": "[{\"id\": \"eKYoA5gmWW\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Jagadamba</b></span>\", \"col\": 12}}, {\"id\": \"fDuDiHYeQ3\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Active Customers\", \"col\": 3}}, {\"id\": \"0w2efS7hQ4\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Sales Orders to Deliver\", \"col\": 3}}, {\"id\": \"f9zprVxkU0\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Active Projects\", \"col\": 3}}, {\"id\": \"AUv9orL9ie\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Active Work Orders\", \"col\": 3}}, {\"id\": \"CRC7MVEoM3\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Draft Purchase Orders\", \"col\": 3}}, {\"id\": \"jwW1zHDVoT\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Stock Value\", \"col\": 3}}, {\"id\": \"WZHgp4rQHJ\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Outgoing Bills\", \"col\": 3}}, {\"id\": \"ZjeFsu3rsH\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Incoming Bills\", \"col\": 3}}, {\"id\": \"zYhtKup5rf\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Sales Orders by Status\", \"col\": 6}}, {\"id\": \"L1IzJclojw\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Work Orders by Status\", \"col\": 6}}, {\"id\": \"AHBIykSOiQ\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Purchase Orders by Status\", \"col\": 6}}, {\"id\": \"SjLaJ4Tu3M\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Profit and Loss\", \"col\": 6}}, {\"id\": \"3GiuVQlsbI\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"RpvSLNGcEx\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"hExRqRYOe7\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Lead\", \"col\": 3}}, {\"id\": \"o3KhQ44rUo\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quotation\", \"col\": 3}}, {\"id\": \"kll8VsQHLb\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Sales Order\", \"col\": 3}}, {\"id\": \"PdmJOESnF8\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Order Confirmation Sheet\", \"col\": 3}}, {\"id\": \"9qAH9VAu3o\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Designing\", \"col\": 3}}, {\"id\": \"ETFa26fzk5\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Project\", \"col\": 3}}, {\"id\": \"MvkN6mm5pO\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Work Order\", \"col\": 3}}, {\"id\": \"hNUfMubK1R\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Purchase Order\", \"col\": 3}}, {\"id\": \"xbTsFB5aSo\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quality Inspection\", \"col\": 3}}, {\"id\": \"9TIeWvtgCr\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Delivery Note\", \"col\": 3}}, {\"id\": \"uQIkMMpF5f\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Sales Invoice\", \"col\": 3}}, {\"id\": \"KLbtcioHH7\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Item\", \"col\": 3}}, {\"id\": \"LG0gMSa94c\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"N5tLs097j5\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\", \"col\": 12}}, {\"id\": \"e79qVMqMiM\", \"type\": \"card\", \"data\": {\"card_name\": \"Operations\", \"col\": 4}}, {\"id\": \"sd_qMcWWJq\", \"type\": \"card\", \"data\": {\"card_name\": \"Masters\", \"col\": 4}}]",
  "creation": "2026-08-13 15:14:52.787263",
  "custom_blocks": [],
  "docstatus": 0,
@@ -152,11 +169,44 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-12 17:30:00.000000",
+ "modified": "2026-10-12 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Jagadamba",
- "number_cards": [],
+ "number_cards": [
+  {
+   "label": "Active Customers",
+   "number_card_name": "Active Customers"
+  },
+  {
+   "label": "Sales Orders to Deliver",
+   "number_card_name": "Sales Orders to Deliver"
+  },
+  {
+   "label": "Active Projects",
+   "number_card_name": "Active Projects"
+  },
+  {
+   "label": "Active Work Orders",
+   "number_card_name": "Active Work Orders"
+  },
+  {
+   "label": "Draft Purchase Orders",
+   "number_card_name": "Draft Purchase Orders"
+  },
+  {
+   "label": "Total Stock Value",
+   "number_card_name": "Total Stock Value"
+  },
+  {
+   "label": "Total Outgoing Bills",
+   "number_card_name": "Total Outgoing Bills"
+  },
+  {
+   "label": "Total Incoming Bills",
+   "number_card_name": "Total Incoming Bills"
+  }
+ ],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
@@ -172,7 +222,7 @@
  "sequence_id": 2.0,
  "shortcuts": [
   {
-   "color": "Grey",
+   "color": "Blue",
    "doc_view": "List",
    "label": "Lead",
    "link_to": "Lead",
@@ -180,7 +230,7 @@
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Green",
    "doc_view": "List",
    "label": "Quotation",
    "link_to": "Quotation",
@@ -188,7 +238,7 @@
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Orange",
    "doc_view": "List",
    "label": "Sales Order",
    "link_to": "Sales Order",
@@ -196,7 +246,7 @@
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Purple",
    "doc_view": "List",
    "label": "Order Confirmation Sheet",
    "link_to": "Order Confirmation Sheet",
@@ -204,7 +254,7 @@
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Cyan",
    "doc_view": "List",
    "label": "Designing",
    "link_to": "Designing",
@@ -212,7 +262,23 @@
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Pink",
+   "doc_view": "List",
+   "label": "Project",
+   "link_to": "Project",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "label": "Work Order",
+   "link_to": "Work Order",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
    "doc_view": "List",
    "label": "Purchase Order",
    "link_to": "Purchase Order",
@@ -222,13 +288,29 @@
   {
    "color": "Grey",
    "doc_view": "List",
-   "label": "Project",
-   "link_to": "Project",
+   "label": "Quality Inspection",
+   "link_to": "Quality Inspection",
    "stats_filter": "[]",
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Blue",
+   "doc_view": "List",
+   "label": "Delivery Note",
+   "link_to": "Delivery Note",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "Sales Invoice",
+   "link_to": "Sales Invoice",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
    "doc_view": "List",
    "label": "Item",
    "link_to": "Item",

@@ -1,6 +1,15 @@
 {
- "charts": [],
- "content": "[{\"id\": \"5398e9a9c7\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"630e063a29\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Maintenance Schedule\", \"col\": 3}}, {\"id\": \"63f472f334\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Maintenance Visit\", \"col\": 3}}, {\"id\": \"e501be75e4\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Warranty Claim\", \"col\": 3}}, {\"id\": \"573888f58b\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Asset Repair\", \"col\": 3}}, {\"id\": \"b68cb8fc28\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Asset Maintenance\", \"col\": 3}}, {\"id\": \"191e2f91ea\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Documents, Reports & Masters</b></span>\", \"col\": 12}}, {\"id\": \"4733438415\", \"type\": \"card\", \"data\": {\"card_name\": \"Maintenance\", \"col\": 4}}, {\"id\": \"881e040fdc\", \"type\": \"card\", \"data\": {\"card_name\": \"Assets\", \"col\": 4}}, {\"id\": \"ec8c0b3ac5\", \"type\": \"card\", \"data\": {\"card_name\": \"Maintenance Reports\", \"col\": 4}}]",
+ "charts": [
+  {
+   "chart_name": "Maintenance Visits",
+   "label": "Maintenance Visits"
+  },
+  {
+   "chart_name": "Asset Value Analytics",
+   "label": "Asset Value Analytics"
+  }
+ ],
+ "content": "[{\"id\": \"TeHKhgW60W\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Maintenance Desk</b></span>\", \"col\": 12}}, {\"id\": \"XDbSM6jczF\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Open Warranty Claims\", \"col\": 3}}, {\"id\": \"vj6R6IJvCd\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Pending Asset Repairs\", \"col\": 3}}, {\"id\": \"7gr6cm5Vzn\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Assets\", \"col\": 3}}, {\"id\": \"1q2HHuEusQ\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Asset Value\", \"col\": 3}}, {\"id\": \"fv6jrxWqq3\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Maintenance Visits\", \"col\": 6}}, {\"id\": \"sQuP8uUfbH\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Asset Value Analytics\", \"col\": 6}}, {\"id\": \"pqzAsRnGdf\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"3ne72D7HFw\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"z2TtQRGsds\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Maintenance Schedule\", \"col\": 3}}, {\"id\": \"yz8EwakXqH\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Maintenance Visit\", \"col\": 3}}, {\"id\": \"9DUBYjX36u\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Warranty Claim\", \"col\": 3}}, {\"id\": \"hLIpLGbZiR\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Asset Repair\", \"col\": 3}}, {\"id\": \"0NZuS0yXhV\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Asset Maintenance\", \"col\": 3}}, {\"id\": \"tzmw4amJbx\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Asset Maintenance Log\", \"col\": 3}}, {\"id\": \"MqdRcUaKPY\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Asset\", \"col\": 3}}, {\"id\": \"NnD45YXCmJ\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Serial No\", \"col\": 3}}, {\"id\": \"cQALufG0Gr\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Maintenance Schedules\", \"col\": 3}}, {\"id\": \"qq0PH4TK8N\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Fixed Asset Register\", \"col\": 3}}, {\"id\": \"MwglQGp9Di\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"M45v2XbrPX\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\", \"col\": 12}}, {\"id\": \"4733438415\", \"type\": \"card\", \"data\": {\"card_name\": \"Maintenance\", \"col\": 4}}, {\"id\": \"881e040fdc\", \"type\": \"card\", \"data\": {\"card_name\": \"Assets\", \"col\": 4}}, {\"id\": \"ec8c0b3ac5\", \"type\": \"card\", \"data\": {\"card_name\": \"Maintenance Reports\", \"col\": 4}}]",
  "creation": "2026-10-12 10:00:00",
  "custom_blocks": [],
  "docstatus": 0,
@@ -215,11 +224,28 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-12 17:30:00.000000",
+ "modified": "2026-10-12 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Maintenance Desk",
- "number_cards": [],
+ "number_cards": [
+  {
+   "label": "Open Warranty Claims",
+   "number_card_name": "Open Warranty Claims"
+  },
+  {
+   "label": "Pending Asset Repairs",
+   "number_card_name": "Pending Asset Repairs"
+  },
+  {
+   "label": "Total Assets",
+   "number_card_name": "Total Assets"
+  },
+  {
+   "label": "Asset Value",
+   "number_card_name": "Asset Value"
+  }
+ ],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
@@ -243,53 +269,83 @@
   {
    "color": "Blue",
    "doc_view": "List",
-   "doctype": "Workspace Shortcut",
-   "idx": 1,
    "label": "Maintenance Schedule",
    "link_to": "Maintenance Schedule",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
    "color": "Green",
    "doc_view": "List",
-   "doctype": "Workspace Shortcut",
    "format": "{} Draft",
-   "idx": 2,
    "label": "Maintenance Visit",
    "link_to": "Maintenance Visit",
-   "stats_filter": "{\"docstatus\": 0}",
+   "stats_filter": "[[\"Maintenance Visit\", \"docstatus\", \"=\", 0, false]]",
    "type": "DocType"
   },
   {
    "color": "Orange",
    "doc_view": "List",
-   "doctype": "Workspace Shortcut",
    "format": "{} Open",
-   "idx": 3,
    "label": "Warranty Claim",
    "link_to": "Warranty Claim",
-   "stats_filter": "{\"status\": [\"in\", [\"Open\", \"Work In Progress\"]]}",
+   "stats_filter": "[[\"Warranty Claim\", \"status\", \"=\", \"Open\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "doc_view": "List",
+   "format": "{} Pending",
+   "label": "Asset Repair",
+   "link_to": "Asset Repair",
+   "stats_filter": "[[\"Asset Repair\", \"repair_status\", \"=\", \"Pending\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "List",
+   "label": "Asset Maintenance",
+   "link_to": "Asset Maintenance",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "label": "Asset Maintenance Log",
+   "link_to": "Asset Maintenance Log",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "label": "Asset",
+   "link_to": "Asset",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
    "color": "Red",
    "doc_view": "List",
-   "doctype": "Workspace Shortcut",
-   "format": "{} Pending",
-   "idx": 4,
-   "label": "Asset Repair",
-   "link_to": "Asset Repair",
-   "stats_filter": "{\"repair_status\": \"Pending\"}",
+   "label": "Serial No",
+   "link_to": "Serial No",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
    "color": "Grey",
-   "doc_view": "List",
-   "doctype": "Workspace Shortcut",
-   "idx": 5,
-   "label": "Asset Maintenance",
-   "link_to": "Asset Maintenance",
-   "type": "DocType"
+   "label": "Maintenance Schedules",
+   "link_to": "Maintenance Schedules",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Blue",
+   "label": "Fixed Asset Register",
+   "link_to": "Fixed Asset Register",
+   "stats_filter": "[]",
+   "type": "Report"
   }
  ],
  "title": "Maintenance Desk"

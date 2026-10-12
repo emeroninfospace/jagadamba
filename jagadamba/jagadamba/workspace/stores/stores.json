@@ -1,6 +1,23 @@
 {
- "charts": [],
- "content": "[{\"id\":\"MTM_FajoE6\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Stores</span>\",\"col\":12}},{\"id\":\"3ZofNVWnhj\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Stock Value\",\"col\":4}},{\"id\":\"2AeuQjEyej\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Active Items\",\"col\":4}},{\"id\":\"5jH_7C4P76\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Warehouses\",\"col\":4}},{\"id\":\"gDdyPm-Us8\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"XqtbUdyV_l\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"GRN\",\"col\":3}},{\"id\":\"YImIbhXpAL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Entry\",\"col\":3}},{\"id\":\"YKmDKALOE-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"qppGSdOGZB\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Warehouse\",\"col\":3}},{\"id\":\"Cu0UQ8zh5L\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"73KgRrP42l\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}},{\"id\":\"BbmpOHnyr-\",\"type\":\"card\",\"data\":{\"card_name\":\"Store Operations\",\"col\":4}},{\"id\":\"G5r5RplZes\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
+ "charts": [
+  {
+   "chart_name": "Warehouse wise Stock Value",
+   "label": "Warehouse wise Stock Value"
+  },
+  {
+   "chart_name": "Item Shortage Summary",
+   "label": "Item Shortage Summary"
+  },
+  {
+   "chart_name": "Purchase Receipt Trends",
+   "label": "Purchase Receipt Trends"
+  },
+  {
+   "chart_name": "Delivery Trends",
+   "label": "Delivery Trends"
+  }
+ ],
+ "content": "[{\"id\": \"awreK1doWk\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Stores</b></span>\", \"col\": 12}}, {\"id\": \"zCuemf9tcn\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Stock Value\", \"col\": 3}}, {\"id\": \"0pTC5KSFwW\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Active Items\", \"col\": 3}}, {\"id\": \"Jr6Mc22IRZ\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Warehouses\", \"col\": 3}}, {\"id\": \"mU92tOa8rL\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Purchase Orders to Receive\", \"col\": 3}}, {\"id\": \"G3bqL9CovW\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Material Request Pending Action\", \"col\": 3}}, {\"id\": \"0Nw9n3O3x7\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Sales Orders to Deliver\", \"col\": 3}}, {\"id\": \"h2xF9e6CMN\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Warehouse wise Stock Value\", \"col\": 6}}, {\"id\": \"JkPYKTfsPu\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Item Shortage Summary\", \"col\": 6}}, {\"id\": \"cFj4cUUu8D\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Purchase Receipt Trends\", \"col\": 6}}, {\"id\": \"MKfFV8ljTx\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Delivery Trends\", \"col\": 6}}, {\"id\": \"R78mkko8u1\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"ek80NZgrEo\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"gb9hxJa8Vk\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Item\", \"col\": 3}}, {\"id\": \"v4PEYIeQIe\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Warehouse\", \"col\": 3}}, {\"id\": \"8sozpLRKdA\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Stock Entry\", \"col\": 3}}, {\"id\": \"0FZr8k1HLb\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Purchase Receipt\", \"col\": 3}}, {\"id\": \"D0IYOnejpF\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Delivery Note\", \"col\": 3}}, {\"id\": \"DCxpYkhYjL\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Material Request\", \"col\": 3}}, {\"id\": \"0SaqSEvkVj\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Stock Reconciliation\", \"col\": 3}}, {\"id\": \"8i5P720KEX\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Batch\", \"col\": 3}}, {\"id\": \"cfbHVicHOp\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Serial No\", \"col\": 3}}, {\"id\": \"LqU6qJZpoF\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Stock Ledger\", \"col\": 3}}, {\"id\": \"ZswYVzF15M\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Stock Balance\", \"col\": 3}}, {\"id\": \"FPzMGLGeKY\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Stock Projected Qty\", \"col\": 3}}, {\"id\": \"TNGouF38wP\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"VJhHBekF8B\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\", \"col\": 12}}, {\"id\": \"73KgRrP42l\", \"type\": \"card\", \"data\": {\"card_name\": \"Masters\", \"col\": 4}}, {\"id\": \"BbmpOHnyr-\", \"type\": \"card\", \"data\": {\"card_name\": \"Store Operations\", \"col\": 4}}, {\"id\": \"G5r5RplZes\", \"type\": \"card\", \"data\": {\"card_name\": \"Reports\", \"col\": 4}}]",
  "creation": "2026-09-25 15:25:10.063350",
  "custom_blocks": [],
  "docstatus": 0,
@@ -131,7 +148,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-12 17:30:00.000000",
+ "modified": "2026-10-12 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Stores",
@@ -147,6 +164,18 @@
   {
    "label": "Total Warehouses",
    "number_card_name": "Total Warehouses"
+  },
+  {
+   "label": "Purchase Orders to Receive",
+   "number_card_name": "Purchase Orders to Receive"
+  },
+  {
+   "label": "Material Request Pending Action",
+   "number_card_name": "Material Request Pending Action"
+  },
+  {
+   "label": "Sales Orders to Deliver",
+   "number_card_name": "Sales Orders to Deliver"
   }
  ],
  "owner": "Administrator",
@@ -167,23 +196,7 @@
  "sequence_id": 43.0,
  "shortcuts": [
   {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "GRN",
-   "link_to": "Purchase Receipt",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Stock Entry",
-   "link_to": "Stock Entry",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
+   "color": "Blue",
    "doc_view": "List",
    "label": "Item",
    "link_to": "Item",
@@ -191,12 +204,93 @@
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Green",
    "doc_view": "List",
    "label": "Warehouse",
    "link_to": "Warehouse",
    "stats_filter": "[]",
    "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Stock Entry",
+   "link_to": "Stock Entry",
+   "stats_filter": "[[\"Stock Entry\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Purchase Receipt",
+   "link_to": "Purchase Receipt",
+   "stats_filter": "[[\"Purchase Receipt\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Delivery Note",
+   "link_to": "Delivery Note",
+   "stats_filter": "[[\"Delivery Note\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "format": "{} Pending",
+   "label": "Material Request",
+   "link_to": "Material Request",
+   "stats_filter": "[[\"Material Request\", \"status\", \"=\", \"Pending\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "label": "Stock Reconciliation",
+   "link_to": "Stock Reconciliation",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "label": "Batch",
+   "link_to": "Batch",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Serial No",
+   "link_to": "Serial No",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "label": "Stock Ledger",
+   "link_to": "Stock Ledger",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Green",
+   "label": "Stock Balance",
+   "link_to": "Stock Balance",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Orange",
+   "label": "Stock Projected Qty",
+   "link_to": "Stock Projected Qty",
+   "stats_filter": "[]",
+   "type": "Report"
   }
  ],
  "title": "Stores"

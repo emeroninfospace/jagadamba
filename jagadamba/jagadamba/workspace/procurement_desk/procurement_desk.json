@@ -1,11 +1,23 @@
 {
  "charts": [
   {
-   "chart_name": "Purchase Order Analysis",
-   "label": "Purchase Order Analysis"
+   "chart_name": "Purchase Orders by Status",
+   "label": "Purchase Orders by Status"
+  },
+  {
+   "chart_name": "Material Requests by Status",
+   "label": "Material Requests by Status"
+  },
+  {
+   "chart_name": "Purchase Order Trends",
+   "label": "Purchase Order Trends"
+  },
+  {
+   "chart_name": "Top Suppliers",
+   "label": "Top Suppliers"
   }
  ],
- "content": "[{\"id\":\"eUFNNU-i89\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Procurement Desk</span>\",\"col\":12}},{\"id\":\"igRS0wUH5P\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Material Request Pending \",\"col\":4}},{\"id\":\"NL-U7fRjh3\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Draft Purchase Orders\",\"col\":4}},{\"id\":\"0Mv1FYOyZh\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Purchase Order First Release Pending\",\"col\":4}},{\"id\":\"1j7UVI5JyN\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"l5MxcTfFqo\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Material Request\",\"col\":3}},{\"id\":\"iev07AnrXi\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Purchase Order\",\"col\":3}},{\"id\":\"Ok5OFE_kiE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier Quotation\",\"col\":3}},{\"id\":\"R9lEpoivkZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier\",\"col\":3}},{\"id\":\"gB1a-CP0BO\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"F9BXY20-Kz\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\",\"col\":4}},{\"id\":\"G4B_tP5bMu\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"177jj_Eoug\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}},{\"id\":\"VtwntAtd2n\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Purchase Order Analysis\",\"col\":12}}]",
+ "content": "[{\"id\": \"S98ZVoeeAI\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Procurement Desk</b></span>\", \"col\": 12}}, {\"id\": \"Y8YjA0Ciwq\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Material Request Pending Action\", \"col\": 3}}, {\"id\": \"WTJNyw6dNw\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Draft Purchase Orders\", \"col\": 3}}, {\"id\": \"Prh7pocNsG\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"POs Pending First Release\", \"col\": 3}}, {\"id\": \"BBIyMcFZqw\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Purchase Orders to Receive\", \"col\": 3}}, {\"id\": \"EdKUtlrjsZ\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Purchase Orders to Bill\", \"col\": 3}}, {\"id\": \"YJNmpioexe\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Active Suppliers\", \"col\": 3}}, {\"id\": \"ZUxmic5vTS\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Annual Purchase\", \"col\": 3}}, {\"id\": \"0zWgCPpGQb\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Purchase Orders by Status\", \"col\": 6}}, {\"id\": \"ht8mY7RR06\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Material Requests by Status\", \"col\": 6}}, {\"id\": \"wLHT3kfGwo\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Purchase Order Trends\", \"col\": 6}}, {\"id\": \"QYVGfjw1h0\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Top Suppliers\", \"col\": 6}}, {\"id\": \"c7zEIaVjrT\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"fTdRYh9Mqf\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"SqghHsKbHX\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Material Request\", \"col\": 3}}, {\"id\": \"AZ0II3tkQE\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Request for Quotation\", \"col\": 3}}, {\"id\": \"hIyVTTbx6U\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Supplier Quotation\", \"col\": 3}}, {\"id\": \"BPaAPJAzGh\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Purchase Order\", \"col\": 3}}, {\"id\": \"eGQO0gm0pZ\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Purchase Receipt\", \"col\": 3}}, {\"id\": \"3J6DXq7LEe\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Purchase Invoice\", \"col\": 3}}, {\"id\": \"C3p3xycOoN\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Supplier\", \"col\": 3}}, {\"id\": \"EGuL40oNjm\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Item\", \"col\": 3}}, {\"id\": \"Br05UXPrBV\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Price List\", \"col\": 3}}, {\"id\": \"bVY0w0exml\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Purchase Analytics\", \"col\": 3}}, {\"id\": \"NTEqGsokYy\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Procurement Tracker\", \"col\": 3}}, {\"id\": \"IZHfhsRihc\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"yGroDTWuVz\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\", \"col\": 12}}, {\"id\": \"F9BXY20-Kz\", \"type\": \"card\", \"data\": {\"card_name\": \"Operations\", \"col\": 4}}, {\"id\": \"G4B_tP5bMu\", \"type\": \"card\", \"data\": {\"card_name\": \"Reports\", \"col\": 4}}, {\"id\": \"177jj_Eoug\", \"type\": \"card\", \"data\": {\"card_name\": \"Masters\", \"col\": 4}}]",
  "creation": "2026-09-25 14:49:28.214858",
  "custom_blocks": [],
  "docstatus": 0,
@@ -126,13 +138,13 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-12 17:30:00.000000",
+ "modified": "2026-10-12 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Procurement Desk",
  "number_cards": [
   {
-   "label": "Material Request Pending ",
+   "label": "Material Request Pending Action",
    "number_card_name": "Material Request Pending Action"
   },
   {
@@ -140,8 +152,24 @@
    "number_card_name": "Draft Purchase Orders"
   },
   {
-   "label": "Purchase Order First Release Pending",
+   "label": "POs Pending First Release",
    "number_card_name": "POs Pending First Release"
+  },
+  {
+   "label": "Purchase Orders to Receive",
+   "number_card_name": "Purchase Orders to Receive"
+  },
+  {
+   "label": "Purchase Orders to Bill",
+   "number_card_name": "Purchase Orders to Bill"
+  },
+  {
+   "label": "Active Suppliers",
+   "number_card_name": "Active Suppliers"
+  },
+  {
+   "label": "Annual Purchase",
+   "number_card_name": "Annual Purchase"
   }
  ],
  "owner": "Administrator",
@@ -162,23 +190,24 @@
  "sequence_id": 9.0,
  "shortcuts": [
   {
-   "color": "Grey",
+   "color": "Blue",
    "doc_view": "List",
+   "format": "{} Pending",
    "label": "Material Request",
    "link_to": "Material Request",
-   "stats_filter": "[]",
+   "stats_filter": "[[\"Material Request\", \"status\", \"=\", \"Pending\", false]]",
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Green",
    "doc_view": "List",
-   "label": "Purchase Order",
-   "link_to": "Purchase Order",
+   "label": "Request for Quotation",
+   "link_to": "Request for Quotation",
    "stats_filter": "[]",
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Orange",
    "doc_view": "List",
    "label": "Supplier Quotation",
    "link_to": "Supplier Quotation",
@@ -186,12 +215,68 @@
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Purple",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Purchase Order",
+   "link_to": "Purchase Order",
+   "stats_filter": "[[\"Purchase Order\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "List",
+   "label": "Purchase Receipt",
+   "link_to": "Purchase Receipt",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Purchase Invoice",
+   "link_to": "Purchase Invoice",
+   "stats_filter": "[[\"Purchase Invoice\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
    "doc_view": "List",
    "label": "Supplier",
    "link_to": "Supplier",
    "stats_filter": "[]",
    "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "label": "Item",
+   "link_to": "Item",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Price List",
+   "link_to": "Price List",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "label": "Purchase Analytics",
+   "link_to": "Purchase Analytics",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Green",
+   "label": "Procurement Tracker",
+   "link_to": "Procurement Tracker",
+   "stats_filter": "[]",
+   "type": "Report"
   }
  ],
  "title": "Procurement Desk"

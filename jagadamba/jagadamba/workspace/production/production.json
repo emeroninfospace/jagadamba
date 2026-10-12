@@ -1,11 +1,23 @@
 {
  "charts": [
   {
+   "chart_name": "Work Orders by Status",
+   "label": "Work Orders by Status"
+  },
+  {
    "chart_name": "Work Order Analysis",
    "label": "Work Order Analysis"
+  },
+  {
+   "chart_name": "Produced Quantity",
+   "label": "Produced Quantity"
+  },
+  {
+   "chart_name": "Job Card Analysis",
+   "label": "Job Card Analysis"
   }
  ],
- "content": "[{\"id\":\"ePs-EEr4Cj\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Production</span>\",\"col\":12}},{\"id\":\"KCgKS3w_lz\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Active Work Orders\",\"col\":4}},{\"id\":\"p0p4XOYEky\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Open Work Orders\",\"col\":4}},{\"id\":\"sqAGwwmpqv\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Monthly Total Work Order\",\"col\":4}},{\"id\":\"_ERxCC2FzF\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Monthly Completed Work Order\",\"col\":4}},{\"id\":\"M8NVMFPJb3\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Job Cards In Progress\",\"col\":4}},{\"id\":\"ZPWfvbUfbS\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Completed Job Cards\",\"col\":4}},{\"id\":\"MduN0K4Xpn\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"CGpGGb1E3n\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Work Order\",\"col\":3}},{\"id\":\"Jui9MAJZJ2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Job Card\",\"col\":3}},{\"id\":\"DMAd51sweD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Production Plan\",\"col\":3}},{\"id\":\"QugLs4rKKU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"BOM\",\"col\":3}},{\"id\":\"vbOUyhTd2O\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"jlJBodyquq\",\"type\":\"card\",\"data\":{\"card_name\":\"Production\",\"col\":3}},{\"id\":\"K3Gx-Q0umj\",\"type\":\"card\",\"data\":{\"card_name\":\"Planning\",\"col\":3}},{\"id\":\"QTRHwz8-60\",\"type\":\"card\",\"data\":{\"card_name\":\"Setup\",\"col\":3}},{\"id\":\"SgX9ZpZL_a\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":3}},{\"id\":\"FvwyC-TLgm\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"ledZ12KNke\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Work Order Analysis\",\"col\":12}}]",
+ "content": "[{\"id\": \"Xw7Vj30k1e\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Production</b></span>\", \"col\": 12}}, {\"id\": \"efHGxz9IMW\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Active Work Orders\", \"col\": 3}}, {\"id\": \"XYzhc8M1sM\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Open Work Orders\", \"col\": 3}}, {\"id\": \"bLuTXzZQ70\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Monthly Total Work Order\", \"col\": 3}}, {\"id\": \"0b8RXreiPI\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Monthly Completed Work Order\", \"col\": 3}}, {\"id\": \"DoojNIJJPa\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Ongoing Job Card\", \"col\": 3}}, {\"id\": \"fPwB9irvP9\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Job Cards In Progress\", \"col\": 3}}, {\"id\": \"42uRoDj9kC\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Monthly Quality Inspection\", \"col\": 3}}, {\"id\": \"BL6HBiGApq\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Material Request Pending Action\", \"col\": 3}}, {\"id\": \"D540Zrzb3h\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Work Orders by Status\", \"col\": 6}}, {\"id\": \"cZXQ8RtJNx\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Work Order Analysis\", \"col\": 6}}, {\"id\": \"lkFgNQovnP\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Produced Quantity\", \"col\": 6}}, {\"id\": \"If3JSOztwN\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Job Card Analysis\", \"col\": 6}}, {\"id\": \"Hsiy6LpXyl\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"IFGr0VmaDJ\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"xtl7YtXoSc\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Work Order\", \"col\": 3}}, {\"id\": \"N7CxRCVdrj\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Job Card\", \"col\": 3}}, {\"id\": \"Y98msAwPy9\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Production Plan\", \"col\": 3}}, {\"id\": \"syQ9PuAtcw\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"BOM\", \"col\": 3}}, {\"id\": \"IuZimScLA2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Material Request\", \"col\": 3}}, {\"id\": \"keZFskMO7d\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Stock Entry\", \"col\": 3}}, {\"id\": \"nIZmh45K8q\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Workstation\", \"col\": 3}}, {\"id\": \"iWTQI1xmtV\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Operation\", \"col\": 3}}, {\"id\": \"XbxmrLKz4S\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Routing\", \"col\": 3}}, {\"id\": \"BrUF1Uumy1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quality Inspection\", \"col\": 3}}, {\"id\": \"kL6I7rbeY2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Production Planning Report\", \"col\": 3}}, {\"id\": \"difPkmesWn\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Work Order Summary\", \"col\": 3}}, {\"id\": \"QrpLicnbSs\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"UAy7cBeRIM\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\", \"col\": 12}}, {\"id\": \"jlJBodyquq\", \"type\": \"card\", \"data\": {\"card_name\": \"Production\", \"col\": 3}}, {\"id\": \"K3Gx-Q0umj\", \"type\": \"card\", \"data\": {\"card_name\": \"Planning\", \"col\": 3}}, {\"id\": \"QTRHwz8-60\", \"type\": \"card\", \"data\": {\"card_name\": \"Setup\", \"col\": 3}}, {\"id\": \"SgX9ZpZL_a\", \"type\": \"card\", \"data\": {\"card_name\": \"Reports\", \"col\": 3}}]",
  "creation": "2026-09-25 15:32:54.022506",
  "custom_blocks": [],
  "docstatus": 0,
@@ -175,7 +187,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-12 17:30:00.000000",
+ "modified": "2026-10-12 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Production",
@@ -183,10 +195,6 @@
   {
    "label": "Active Work Orders",
    "number_card_name": "Active Work Orders"
-  },
-  {
-   "label": "Completed Job Cards",
-   "number_card_name": "Ongoing Job Card"
   },
   {
    "label": "Open Work Orders",
@@ -201,8 +209,20 @@
    "number_card_name": "Monthly Completed Work Order"
   },
   {
+   "label": "Ongoing Job Card",
+   "number_card_name": "Ongoing Job Card"
+  },
+  {
    "label": "Job Cards In Progress",
    "number_card_name": "Job Cards In Progress"
+  },
+  {
+   "label": "Monthly Quality Inspection",
+   "number_card_name": "Monthly Quality Inspection"
+  },
+  {
+   "label": "Material Request Pending Action",
+   "number_card_name": "Material Request Pending Action"
   }
  ],
  "owner": "Administrator",
@@ -223,23 +243,25 @@
  "sequence_id": 10.0,
  "shortcuts": [
   {
-   "color": "Grey",
+   "color": "Blue",
    "doc_view": "List",
+   "format": "{} In Process",
    "label": "Work Order",
    "link_to": "Work Order",
-   "stats_filter": "[]",
+   "stats_filter": "[[\"Work Order\", \"status\", \"=\", \"In Process\", false]]",
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Green",
    "doc_view": "List",
+   "format": "{} In Progress",
    "label": "Job Card",
    "link_to": "Job Card",
-   "stats_filter": "[]",
+   "stats_filter": "[[\"Job Card\", \"status\", \"=\", \"Work In Progress\", false]]",
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Orange",
    "doc_view": "List",
    "label": "Production Plan",
    "link_to": "Production Plan",
@@ -247,12 +269,76 @@
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Purple",
    "doc_view": "List",
    "label": "BOM",
    "link_to": "BOM",
    "stats_filter": "[]",
    "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Material Request",
+   "link_to": "Material Request",
+   "stats_filter": "[[\"Material Request\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Stock Entry",
+   "link_to": "Stock Entry",
+   "stats_filter": "[[\"Stock Entry\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "label": "Workstation",
+   "link_to": "Workstation",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "label": "Operation",
+   "link_to": "Operation",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Routing",
+   "link_to": "Routing",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "label": "Quality Inspection",
+   "link_to": "Quality Inspection",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "label": "Production Planning Report",
+   "link_to": "Production Planning Report",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Orange",
+   "label": "Work Order Summary",
+   "link_to": "Work Order Summary",
+   "stats_filter": "[]",
+   "type": "Report"
   }
  ],
  "title": "Production"

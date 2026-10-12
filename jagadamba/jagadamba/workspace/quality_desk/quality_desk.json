@@ -1,6 +1,15 @@
 {
- "charts": [],
- "content": "[{\"id\": \"143d14083c\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"5fa82b63db\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quality Inspection\", \"col\": 3}}, {\"id\": \"627b49199b\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Non Conformance\", \"col\": 3}}, {\"id\": \"632400aa0f\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Job Card\", \"col\": 3}}, {\"id\": \"6a1452328d\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Work Order\", \"col\": 3}}, {\"id\": \"d5cc201ade\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quality Procedure\", \"col\": 3}}, {\"id\": \"e98fbf3038\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Documents, Reports & Masters</b></span>\", \"col\": 12}}, {\"id\": \"eab2518b4e\", \"type\": \"card\", \"data\": {\"card_name\": \"Inspection\", \"col\": 4}}, {\"id\": \"eae943ccd9\", \"type\": \"card\", \"data\": {\"card_name\": \"Quality Management\", \"col\": 4}}, {\"id\": \"3753a0859c\", \"type\": \"card\", \"data\": {\"card_name\": \"Quality Reports\", \"col\": 4}}]",
+ "charts": [
+  {
+   "chart_name": "Quality Inspection Analysis",
+   "label": "Quality Inspection Analysis"
+  },
+  {
+   "chart_name": "Non Conformance by Status",
+   "label": "Non Conformance by Status"
+  }
+ ],
+ "content": "[{\"id\": \"hoti7ijcem\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quality Desk</b></span>\", \"col\": 12}}, {\"id\": \"jYmP1difHi\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Monthly Quality Inspection\", \"col\": 3}}, {\"id\": \"1iqSmCeSv2\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Rejected Inspections\", \"col\": 3}}, {\"id\": \"4eYJYrBKjw\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Open Non Conformance\", \"col\": 3}}, {\"id\": \"QokyahfYUr\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Ongoing Job Card\", \"col\": 3}}, {\"id\": \"GkskaoddLh\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Quality Inspection Analysis\", \"col\": 6}}, {\"id\": \"Oeug1Zyc0D\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Non Conformance by Status\", \"col\": 6}}, {\"id\": \"j71KilkdTJ\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"vl5pi4pfcN\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"MgFyRMRHuU\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quality Inspection\", \"col\": 3}}, {\"id\": \"FptFD7BYE4\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Non Conformance\", \"col\": 3}}, {\"id\": \"sSETLsiOYl\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quality Inspection Template\", \"col\": 3}}, {\"id\": \"gOxFAXVT51\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quality Goal\", \"col\": 3}}, {\"id\": \"TkcFBc2aD3\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quality Review\", \"col\": 3}}, {\"id\": \"EsVplRJw0m\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quality Procedure\", \"col\": 3}}, {\"id\": \"gjDVSFfy0Z\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quality Action\", \"col\": 3}}, {\"id\": \"D6dQshiVct\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Job Card\", \"col\": 3}}, {\"id\": \"NaRkCnxIlS\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Work Order\", \"col\": 3}}, {\"id\": \"xu7mJ5sgyp\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Purchase Receipt\", \"col\": 3}}, {\"id\": \"GrUOL3r4jY\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quality Inspection Summary\", \"col\": 3}}, {\"id\": \"SIRS4mYBk7\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"Ngm8QTtypy\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\", \"col\": 12}}, {\"id\": \"eab2518b4e\", \"type\": \"card\", \"data\": {\"card_name\": \"Inspection\", \"col\": 4}}, {\"id\": \"eae943ccd9\", \"type\": \"card\", \"data\": {\"card_name\": \"Quality Management\", \"col\": 4}}, {\"id\": \"3753a0859c\", \"type\": \"card\", \"data\": {\"card_name\": \"Quality Reports\", \"col\": 4}}]",
  "creation": "2026-10-12 10:00:00",
  "custom_blocks": [],
  "docstatus": 0,
@@ -191,11 +200,28 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-12 17:30:00.000000",
+ "modified": "2026-10-12 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Quality Desk",
- "number_cards": [],
+ "number_cards": [
+  {
+   "label": "Monthly Quality Inspection",
+   "number_card_name": "Monthly Quality Inspection"
+  },
+  {
+   "label": "Rejected Inspections",
+   "number_card_name": "Rejected Inspections"
+  },
+  {
+   "label": "Open Non Conformance",
+   "number_card_name": "Open Non Conformance"
+  },
+  {
+   "label": "Ongoing Job Card",
+   "number_card_name": "Ongoing Job Card"
+  }
+ ],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
@@ -214,57 +240,93 @@
  "sequence_id": 12.0,
  "shortcuts": [
   {
-   "color": "Green",
+   "color": "Blue",
    "doc_view": "List",
-   "doctype": "Workspace Shortcut",
    "format": "{} Draft",
-   "idx": 1,
    "label": "Quality Inspection",
    "link_to": "Quality Inspection",
-   "stats_filter": "{\"docstatus\": 0}",
+   "stats_filter": "[[\"Quality Inspection\", \"docstatus\", \"=\", 0, false]]",
    "type": "DocType"
   },
   {
-   "color": "Red",
+   "color": "Green",
    "doc_view": "List",
-   "doctype": "Workspace Shortcut",
    "format": "{} Open",
-   "idx": 2,
    "label": "Non Conformance",
    "link_to": "Non Conformance",
-   "stats_filter": "{\"status\": \"Open\"}",
-   "type": "DocType"
-  },
-  {
-   "color": "Yellow",
-   "doc_view": "List",
-   "doctype": "Workspace Shortcut",
-   "format": "{} Open",
-   "idx": 3,
-   "label": "Job Card",
-   "link_to": "Job Card",
-   "stats_filter": "{\"status\": [\"in\", [\"Open\", \"Work In Progress\"]]}",
+   "stats_filter": "[[\"Non Conformance\", \"status\", \"=\", \"Open\", false]]",
    "type": "DocType"
   },
   {
    "color": "Orange",
    "doc_view": "List",
-   "doctype": "Workspace Shortcut",
-   "format": "{} Active",
-   "idx": 4,
-   "label": "Work Order",
-   "link_to": "Work Order",
-   "stats_filter": "{\"status\": [\"in\", [\"Not Started\", \"In Process\"]]}",
+   "label": "Quality Inspection Template",
+   "link_to": "Quality Inspection Template",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "doc_view": "List",
+   "label": "Quality Goal",
+   "link_to": "Quality Goal",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "List",
+   "label": "Quality Review",
+   "link_to": "Quality Review",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "label": "Quality Procedure",
+   "link_to": "Quality Procedure",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "label": "Quality Action",
+   "link_to": "Quality Action",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "label": "Job Card",
+   "link_to": "Job Card",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
    "color": "Grey",
    "doc_view": "List",
-   "doctype": "Workspace Shortcut",
-   "idx": 5,
-   "label": "Quality Procedure",
-   "link_to": "Quality Procedure",
+   "label": "Work Order",
+   "link_to": "Work Order",
+   "stats_filter": "[]",
    "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "label": "Purchase Receipt",
+   "link_to": "Purchase Receipt",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "label": "Quality Inspection Summary",
+   "link_to": "Quality Inspection Summary",
+   "stats_filter": "[]",
+   "type": "Report"
   }
  ],
  "title": "Quality Desk"

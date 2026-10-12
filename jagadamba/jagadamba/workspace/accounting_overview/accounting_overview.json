@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"0GmU88we91\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Accounting Dashboard\",\"col\":12}}]",
+ "content": "[{\"id\": \"QJW8bK9S8d\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Accounting Overview</b></span>\", \"col\": 12}}, {\"id\": \"0GmU88we91\", \"type\": \"custom_block\", \"data\": {\"custom_block_name\": \"Accounting Dashboard\", \"col\": 12}}, {\"id\": \"nlgrigPIUU\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"QnYII8qyfj\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"lyK4PSAgV1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Sales Invoice\", \"col\": 3}}, {\"id\": \"fFhgf8gAuJ\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Purchase Invoice\", \"col\": 3}}, {\"id\": \"7luxH3U2XV\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Payment Entry\", \"col\": 3}}, {\"id\": \"G535e42gaV\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Journal Entry\", \"col\": 3}}, {\"id\": \"ApDG5NpnwV\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Account\", \"col\": 3}}, {\"id\": \"7R4aeRVAmT\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Cost Center\", \"col\": 3}}, {\"id\": \"NXvQUq3Dzd\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Project Budget\", \"col\": 3}}, {\"id\": \"wAJb6JqjuS\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"General Ledger\", \"col\": 3}}, {\"id\": \"qAYWsXVRjk\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Accounts Receivable\", \"col\": 3}}, {\"id\": \"8W64AEWeB9\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Accounts Payable\", \"col\": 3}}, {\"id\": \"ikQOCMDNNk\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Profit and Loss Statement\", \"col\": 3}}, {\"id\": \"PaBqeZac05\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Balance Sheet\", \"col\": 3}}]",
  "creation": "2026-08-15 13:06:07.752568",
  "custom_blocks": [
   {
@@ -18,7 +18,7 @@
  "is_hidden": 0,
  "label": "Accounting Overview",
  "links": [],
- "modified": "2026-10-12 17:30:00.000000",
+ "modified": "2026-10-12 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Accounting Overview",
@@ -39,6 +39,102 @@
   }
  ],
  "sequence_id": 5.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "format": "{} Overdue",
+   "label": "Sales Invoice",
+   "link_to": "Sales Invoice",
+   "stats_filter": "[[\"Sales Invoice\", \"status\", \"=\", \"Overdue\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "format": "{} Overdue",
+   "label": "Purchase Invoice",
+   "link_to": "Purchase Invoice",
+   "stats_filter": "[[\"Purchase Invoice\", \"status\", \"=\", \"Overdue\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Payment Entry",
+   "link_to": "Payment Entry",
+   "stats_filter": "[[\"Payment Entry\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Journal Entry",
+   "link_to": "Journal Entry",
+   "stats_filter": "[[\"Journal Entry\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "List",
+   "label": "Account",
+   "link_to": "Account",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "label": "Cost Center",
+   "link_to": "Cost Center",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "label": "Project Budget",
+   "link_to": "Project Budget",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "label": "General Ledger",
+   "link_to": "General Ledger",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "label": "Accounts Receivable",
+   "link_to": "Accounts Receivable",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Blue",
+   "label": "Accounts Payable",
+   "link_to": "Accounts Payable",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Green",
+   "label": "Profit and Loss Statement",
+   "link_to": "Profit and Loss Statement",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Orange",
+   "label": "Balance Sheet",
+   "link_to": "Balance Sheet",
+   "stats_filter": "[]",
+   "type": "Report"
+  }
+ ],
  "title": "Accounting Overview"
 }
