@@ -69,16 +69,13 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 		assert.equal(pending.length,1);resolveNext({custom_types:'Trading'});await Promise.all([a,b]);
 		assert.equal(frm.writes.length,1);
 	});
-	await test('quotation selection copies zero and supersedes refresh',async()=>{
-		const frm=form('Sales Order',{custom_quotation:'Q1',custom_types:'Oil & Gas',custom_vat_percent:5,custom_tax_percent:2,custom_sale_value_without_tax:100});
+	await test('quotation selection copies type and item, not pricing',async()=>{
+		const frm=form('Sales Order',{custom_quotation:'Q1',custom_types:'Oil & Gas',custom_vat_percent:5});
 		const task=handlers['Sales Order.custom_quotation'][0](frm);
 		const refresh=flow.copy_from_source(frm,{doctype:'Quotation',link_field:'custom_quotation',fields:{custom_types:'custom_types'}});
-		assert.equal(pending.length,1);resolveNext({custom_types:'Oil & Gas',custom_vehicle_type:'',oil_gas_item:'PIPE',custom_sale_value_without_tax:0,custom_vat_percent:0,custom_tax_percent:0});await Promise.all([task,refresh]);
-		assert.equal(frm.doc.custom_vat_percent,0);assert.equal(frm.doc.custom_sale_value_without_tax,0);assert.equal(frm.doc.oil_gas_item,'PIPE');
-	});
-	await test('edited pricing survives a pending mapping',async()=>{
-		const frm=form('Sales Order',{custom_quotation:'Q1',custom_vat_percent:5});const task=handlers['Sales Order.custom_quotation'][0](frm);
-		frm.doc.custom_vat_percent=7;resolveNext({custom_types:'Oil & Gas',custom_vat_percent:0});await task;assert.equal(frm.doc.custom_vat_percent,7);
+		assert.equal(pending.length,1);assert.deepEqual([...pending[0].args[2]].sort(),['custom_types','custom_vehicle_type','oil_gas_item']);
+		resolveNext({custom_types:'Oil & Gas',custom_vehicle_type:'',oil_gas_item:'PIPE'});await Promise.all([task,refresh]);
+		assert.equal(frm.doc.oil_gas_item,'PIPE');assert.equal(frm.doc.custom_vat_percent,5);
 	});
 	await test('submitted documents are never recalculated or mapped',async()=>{
 		const frm=form('Sales Order',{docstatus:1,custom_types:'Oil & Gas',custom_quotation:'Q1',custom_total_quoted_value:88});
@@ -108,24 +105,19 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 		const frm=form('Quotation',{custom_types:'Oil & Gas',custom_vat_amount:0.12,custom_sale_value_without_tax:2.33,custom_vat_percent:5},false);
 		await handlers['Quotation.refresh'][0](frm);assert.equal(frm.writes.length,0);
 	});
-	await test('estimation example uses row cost rather than sales net total',async()=>{
-		const frm=form('Quotation',{custom_enable_estimation:1,custom_types:'Fabrication',custom_estimation_cost_source:'Estimation',
-			custom_sale_value_without_tax:85750,custom_vat_percent:5,custom_tax_percent:10,net_total:999999,
-			custom_estimation_items:[[10,5000],[1,1000],[1000,20],[1,10000],[10,250],[7.5,100]].map(([qty,rate])=>({qty,rate}))});
+	await test('sales order requirement example uses net total as cost',async()=>{
+		const frm=form('Sales Order',{custom_enable_estimation:1,custom_estimation_cost_source:'Estimation',
+			custom_sale_value_without_tax:85750,custom_vat_percent:5,custom_tax_percent:10,net_total:84250});
 		await flow.recalculate(frm);
+		assert.equal(frm.doc.custom_estimation_cost_source,'Document Net Total');
 		assert.equal(frm.doc.custom_total_estimated_value,84250);assert.equal(frm.doc.custom_net_profit,1500);
 		assert.equal(frm.doc.custom_vat_amount,4287.5);assert.equal(frm.doc.custom_tax_amount,9003.75);
 		assert.equal(frm.doc.custom_total_quoted_value,99041.25);
-		frm.doc.custom_estimation_items=[];
-		await handlers['Quotation Estimation Item.custom_estimation_items_remove'][0](frm);
-		assert.equal(frm.doc.custom_total_estimated_value,0);assert.equal(frm.doc.custom_net_profit,85750);
 	});
-	await test('selectable tax base and row rounding',async()=>{
-		const frm=form('Quotation',{custom_enable_estimation:1,custom_estimation_cost_source:'Estimation',
-			custom_sale_value_without_tax:100,custom_vat_percent:5,custom_tax_percent:10,custom_tax_basis:'Sale Value',
-			custom_estimation_items:[{qty:3,rate:0.3333},{qty:1,rate:0}]});
-		await flow.recalculate(frm);assert.equal(frm.doc.custom_tax_amount,10);
-		assert.equal(frm.doc.custom_total_quoted_value,115);assert.equal(frm.doc.custom_total_estimated_value,1);
+	await test('selectable tax base',async()=>{
+		const frm=form('Sales Order',{custom_enable_estimation:1,net_total:1,
+			custom_sale_value_without_tax:100,custom_vat_percent:5,custom_tax_percent:10,custom_tax_basis:'Sale Value'});
+		await flow.recalculate(frm);assert.equal(frm.doc.custom_tax_amount,10);assert.equal(frm.doc.custom_total_quoted_value,115);
 	});
 	await test('configuration works with a renamed type and no fixed item group',async()=>{
 		const original=context.frappe.call;
@@ -149,20 +141,11 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 			assert.equal(frm.doc.custom_enable_estimation,0);assert.equal(frm.doc.custom_show_additional_items,1);
 		} finally {context.frappe.call=original;}
 	});
-	await test('type switching retains stored cost rows and additional items',async()=>{
-		const frm=form('Quotation',{custom_types:'Oil & Gas',custom_estimation_items:[{qty:2,rate:100}],custom_additional_items:[{item_code:'AXLE'}]},false);
+	await test('type switching keeps additional items',async()=>{
+		const frm=form('Quotation',{custom_types:'Oil & Gas',custom_additional_items:[{item_code:'AXLE'}]},false);
 		await frm.set_value('custom_types','Trailers');
-		assert.equal(frm.doc.custom_show_additional_items,1);assert.equal(frm.doc.custom_enable_estimation,0);
-		assert.equal(frm.doc.custom_estimation_items.length,1);assert.equal(frm.doc.custom_additional_items.length,1);
-	});
-	await test('sales order source carries estimation cost and tax basis',async()=>{
-		const frm=form('Sales Order',{custom_quotation:'Q2',custom_types:'Oil & Gas'});
-		const task=handlers['Sales Order.custom_quotation'][0](frm);
-		resolveNext({custom_types:'Oil & Gas',custom_estimation_cost_source:'Estimation',custom_total_estimated_value:84250,
-			custom_sale_value_without_tax:85750,custom_vat_percent:5,custom_tax_percent:10,custom_tax_basis:'Sale Value'});
-		await task;
-		assert.equal(frm.doc.custom_total_estimated_value,84250);assert.equal(frm.doc.custom_net_profit,1500);
-		assert.equal(frm.doc.custom_total_quoted_value,98612.5);
+		assert.equal(frm.doc.custom_show_additional_items,1);assert.equal(frm.doc.custom_additional_items.length,1);
+		assert.ok(frm.writes.every(values=>Object.keys(values).every(key=>!/estimat|vat|tax|quoted|profit/.test(key))));
 	});
 	await test('engineering forms filter finished items by configured group',async()=>{
 		const original=context.frappe.call;
@@ -175,12 +158,6 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 			await flow.load_finished_item_group(designing);
 			assert.deepEqual(JSON.parse(JSON.stringify(flow.finished_item_filters(designing).item_group)),['descendants of (inclusive)','Finished Goods']);
 		} finally {context.frappe.call=original;}
-	});
-	await test('quotation cost rows always use the estimation basis',async()=>{
-		const frm=form('Quotation',{custom_enable_estimation:1,custom_estimation_cost_source:'Document Net Total',net_total:500,
-			custom_sale_value_without_tax:300,custom_estimation_items:[{qty:2,rate:100}]},false);
-		await flow.recalculate(frm);
-		assert.equal(frm.doc.custom_estimation_cost_source,'Estimation');assert.equal(frm.doc.custom_total_estimated_value,200);
 	});
 	console.log(`PASS: ${passed} sales-flow regression cases`);
 })().catch(error=>{console.error(error);process.exitCode=1;});

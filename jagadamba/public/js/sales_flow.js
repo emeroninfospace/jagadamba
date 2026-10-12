@@ -89,9 +89,6 @@
 			for (const [key, value] of Object.entries(response.message || {})) doc["custom_" + key] = value;
 			// Refresh dependency expressions without dirtying a saved document.
 			frm.refresh_fields();
-			if (doc.doctype === "Quotation" && frm.is_new() && doc.custom_enable_estimation && !doc.custom_estimation_cost_source) {
-				await frm.set_value("custom_estimation_cost_source", "Estimation");
-			}
 		})().catch(error => {
 			if (configurations.get(doc) === entry) configurations.delete(doc);
 			throw error;
@@ -110,26 +107,15 @@
 	jagadamba.sales_flow.recalculate = function (frm) {
 		const doc = frm.doc;
 		if (doc.docstatus !== 0 || !doc.custom_enable_estimation) return Promise.resolve();
-		const rounded = (value, field, row = doc) => flt(value, precision(field, row));
-		const rows = doc.custom_estimation_items || [];
-		let total = flt(doc.custom_total_estimated_value);
-		if (doc.doctype === "Quotation") {
-			total = 0;
-			for (const row of rows) {
-				row.amount = rounded(flt(row.qty) * flt(row.rate), "amount", row);
-				total += row.amount;
-			}
-			frm.refresh_field("custom_estimation_items");
-		}
-		const basis = (doc.doctype === "Quotation" && rows.length && "Estimation") || doc.custom_estimation_cost_source || (rows.length || (doc.doctype === "Quotation" && frm.is_new()) ? "Estimation" : "Document Net Total");
-		const cost = rounded(basis === "Estimation" ? total : flt(doc.net_total), "custom_total_estimated_value");
+		const rounded = (value, field) => flt(value, precision(field));
+		const cost = rounded(doc.net_total, "custom_total_estimated_value");
 		const sale = flt(doc.custom_sale_value_without_tax);
 		const vat = rounded(sale * flt(doc.custom_vat_percent) / 100, "custom_vat_amount");
 		const tax_basis = doc.custom_tax_basis || "Sale Value + VAT";
 		const tax_base = tax_basis === "Sale Value + VAT" ? sale + vat : sale;
 		const tax = rounded(tax_base * flt(doc.custom_tax_percent) / 100, "custom_tax_amount");
 		const values = {
-			custom_estimation_cost_source: basis,
+			custom_estimation_cost_source: "Document Net Total",
 			custom_tax_basis: tax_basis,
 			custom_total_estimated_value: cost,
 			custom_vat_amount: vat,

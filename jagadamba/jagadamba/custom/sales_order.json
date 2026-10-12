@@ -1752,7 +1752,8 @@
    "fieldtype": "Select",
    "options": "\nEstimation\nDocument Net Total",
    "depends_on": "eval:doc.custom_enable_estimation",
-   "description": "Estimation uses the cost table (or linked quotation on Sales Order). Blank legacy documents use Document Net Total."
+   "description": "Estimation uses the cost table (or linked quotation on Sales Order). Blank legacy documents use Document Net Total.",
+   "hidden": 1
   },
   {
    "dt": "Sales Order",
@@ -1766,7 +1767,7 @@
    "read_only": 1,
    "depends_on": "eval:doc.custom_enable_estimation",
    "print_hide": 1,
-   "description": "Cost copied from the linked quotation when Cost Basis is Estimation."
+   "description": "Net Total of the order items."
   },
   {
    "dt": "Sales Order",
