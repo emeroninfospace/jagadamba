@@ -180,8 +180,10 @@ class EstimationTests(unittest.TestCase):
 				calculate_oil_gas_pricing(self.estimate(custom_vat_percent=rate))
 
 	def test_legacy_basis_does_not_silently_ignore_cost_rows(self):
-		with self.assertRaises(ValueError):
-			calculate_oil_gas_pricing(self.estimate(custom_estimation_cost_source="Document Net Total"))
+		doc = self.estimate(custom_estimation_cost_source="Document Net Total", net_total=1)
+		calculate_oil_gas_pricing(doc)
+		self.assertEqual(doc.custom_estimation_cost_source, "Estimation")
+		self.assertEqual(doc.custom_total_estimated_value, 84250)
 
 	def test_new_quote_uses_estimation_existing_quote_retains_legacy(self):
 		for is_new, expected in [(1, 0), (0, 100)]:
@@ -264,22 +266,20 @@ class EstimationMetadataTests(unittest.TestCase):
 			self.assertTrue(all('total' not in key and 'items' not in key.replace('show_additional_items','') for key in call.args[2]))
 		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.MARKER})
 
-	def test_layout_groups_estimation_in_its_tab_and_additional_items_under_items(self):
+	def test_estimation_and_additional_items_sit_under_the_quotation_items(self):
 		import json
 		from pathlib import Path
 		data = json.loads(Path('jagadamba/jagadamba/custom/quotation.json').read_text())
 		fields = {f['fieldname']: f for f in data['custom_fields']}
 		order = json.loads(next(p['value'] for p in data['property_setters'] if p['property'] == 'field_order'))
-		self.assertEqual(order[order.index('items') + 1:order.index('items') + 3],
-			['custom_section_break_xuxav', 'custom_additional_items'])
-		tab = order.index('custom_estimation_tab')
-		self.assertEqual(fields['custom_estimation_tab']['fieldtype'], 'Tab Break')
-		estimation = order[tab:order.index('address_and_contact_tab')]
-		for name in ('custom_estimation_items', 'custom_total_estimated_value', 'custom_net_profit',
-			'custom_total_quoted_value', 'custom_estimation_statement'):
-			self.assertIn(name, estimation)
-		for name in estimation:
-			if name in fields and fields[name]['fieldtype'] not in ('Column Break',):
+		block = order[order.index('items') + 1:order.index('sec_break23')]
+		self.assertEqual(block[:2], ['custom_section_break_xuxav', 'custom_additional_items'])
+		for name in ('custom_estimation_items', 'custom_total_estimated_value', 'custom_net_profit', 'custom_total_quoted_value'):
+			self.assertIn(name, block)
+		self.assertFalse(any(f['fieldtype'] in ('Tab Break', 'HTML') for f in fields.values()))
+		self.assertEqual(fields['custom_estimation_cost_source'].get('hidden'), 1)
+		for name in block[2:]:
+			if fields[name]['fieldtype'] != 'Column Break':
 				self.assertTrue(fields[name].get('depends_on', '').startswith('eval:doc.custom_enable_estimation'))
 		for name in order:
 			if name in fields and fields[name].get('insert_after'):
