@@ -26,10 +26,7 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/jagadamba/css/jagadamba.css"
-app_include_js = [
-	"/assets/jagadamba/js/desk.js",
-	"/assets/jagadamba/js/sales_flow.js",
-]
+app_include_js = "jagadamba.bundle.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/jagadamba/css/jagadamba.css"
