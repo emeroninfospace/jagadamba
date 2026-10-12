@@ -1,17 +1,3 @@
-function set_vehicle_type_query(frm) {
-	frm.set_query("custom_vehicle_type", function () {
-		const filters = jagadamba.sales_flow.item_filters(frm, true);
-		return { filters: filters };
-	});
-}
-
-function set_finished_item_query(frm) {
-	frm.set_query("custom_finished_item", function () {
-		const filters = jagadamba.sales_flow.item_filters(frm, true);
-		return { filters: filters };
-	});
-}
-
 function prefill_from_lead(frm) {
 	return jagadamba.sales_flow.copy_from_source(frm, {
 		doctype: "Lead", link_field: "party_name", only_new: true,
@@ -24,8 +10,6 @@ function prefill_from_lead(frm) {
 frappe.ui.form.on("Opportunity", {
 	async refresh(frm) {
 		await jagadamba.sales_flow.configure(frm, true);
-		set_vehicle_type_query(frm);
-		set_finished_item_query(frm);
 		return prefill_from_lead(frm);
 	},
 

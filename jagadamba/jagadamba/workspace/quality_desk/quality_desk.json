@@ -1,0 +1,271 @@
+{
+ "charts": [],
+ "content": "[{\"id\": \"143d14083c\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"5fa82b63db\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quality Inspection\", \"col\": 3}}, {\"id\": \"627b49199b\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Non Conformance\", \"col\": 3}}, {\"id\": \"632400aa0f\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Job Card\", \"col\": 3}}, {\"id\": \"6a1452328d\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Work Order\", \"col\": 3}}, {\"id\": \"d5cc201ade\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quality Procedure\", \"col\": 3}}, {\"id\": \"e98fbf3038\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Documents, Reports & Masters</b></span>\", \"col\": 12}}, {\"id\": \"eab2518b4e\", \"type\": \"card\", \"data\": {\"card_name\": \"Inspection\", \"col\": 4}}, {\"id\": \"eae943ccd9\", \"type\": \"card\", \"data\": {\"card_name\": \"Quality Management\", \"col\": 4}}, {\"id\": \"3753a0859c\", \"type\": \"card\", \"data\": {\"card_name\": \"Quality Reports\", \"col\": 4}}]",
+ "creation": "2026-10-12 10:00:00",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 1,
+ "icon": "quality",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Quality Desk",
+ "links": [
+  {
+   "doctype": "Workspace Link",
+   "hidden": 0,
+   "idx": 1,
+   "is_query_report": 0,
+   "label": "Inspection",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "doctype": "Workspace Link",
+   "hidden": 0,
+   "idx": 2,
+   "is_query_report": 0,
+   "label": "Quality Inspection",
+   "link_count": 0,
+   "link_to": "Quality Inspection",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "doctype": "Workspace Link",
+   "hidden": 0,
+   "idx": 3,
+   "is_query_report": 0,
+   "label": "Quality Inspection Template",
+   "link_count": 0,
+   "link_to": "Quality Inspection Template",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "doctype": "Workspace Link",
+   "hidden": 0,
+   "idx": 4,
+   "is_query_report": 0,
+   "label": "Quality Inspection Parameter",
+   "link_count": 0,
+   "link_to": "Quality Inspection Parameter",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "doctype": "Workspace Link",
+   "hidden": 0,
+   "idx": 5,
+   "is_query_report": 0,
+   "label": "Quality Management",
+   "link_count": 6,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "doctype": "Workspace Link",
+   "hidden": 0,
+   "idx": 6,
+   "is_query_report": 0,
+   "label": "Non Conformance",
+   "link_count": 0,
+   "link_to": "Non Conformance",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "doctype": "Workspace Link",
+   "hidden": 0,
+   "idx": 7,
+   "is_query_report": 0,
+   "label": "Quality Action",
+   "link_count": 0,
+   "link_to": "Quality Action",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "doctype": "Workspace Link",
+   "hidden": 0,
+   "idx": 8,
+   "is_query_report": 0,
+   "label": "Quality Procedure",
+   "link_count": 0,
+   "link_to": "Quality Procedure",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "doctype": "Workspace Link",
+   "hidden": 0,
+   "idx": 9,
+   "is_query_report": 0,
+   "label": "Quality Goal",
+   "link_count": 0,
+   "link_to": "Quality Goal",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "doctype": "Workspace Link",
+   "hidden": 0,
+   "idx": 10,
+   "is_query_report": 0,
+   "label": "Quality Review",
+   "link_count": 0,
+   "link_to": "Quality Review",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "doctype": "Workspace Link",
+   "hidden": 0,
+   "idx": 11,
+   "is_query_report": 0,
+   "label": "Quality Feedback",
+   "link_count": 0,
+   "link_to": "Quality Feedback",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "doctype": "Workspace Link",
+   "hidden": 0,
+   "idx": 12,
+   "is_query_report": 0,
+   "label": "Quality Reports",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "doctype": "Workspace Link",
+   "hidden": 0,
+   "idx": 13,
+   "is_query_report": 1,
+   "label": "Quality Inspection Summary",
+   "link_count": 0,
+   "link_to": "Quality Inspection Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "doctype": "Workspace Link",
+   "hidden": 0,
+   "idx": 14,
+   "is_query_report": 1,
+   "label": "Cost of Poor Quality Report",
+   "link_count": 0,
+   "link_to": "Cost of Poor Quality Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "doctype": "Workspace Link",
+   "hidden": 0,
+   "idx": 15,
+   "is_query_report": 1,
+   "label": "Job Card Summary",
+   "link_count": 0,
+   "link_to": "Job Card Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-10-12 17:30:00.000000",
+ "modified_by": "Administrator",
+ "module": "Jagadamba",
+ "name": "Quality Desk",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "Management"
+  },
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Quality Engineer"
+  }
+ ],
+ "sequence_id": 12.0,
+ "shortcuts": [
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "doctype": "Workspace Shortcut",
+   "format": "{} Draft",
+   "idx": 1,
+   "label": "Quality Inspection",
+   "link_to": "Quality Inspection",
+   "stats_filter": "{\"docstatus\": 0}",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "doctype": "Workspace Shortcut",
+   "format": "{} Open",
+   "idx": 2,
+   "label": "Non Conformance",
+   "link_to": "Non Conformance",
+   "stats_filter": "{\"status\": \"Open\"}",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "doctype": "Workspace Shortcut",
+   "format": "{} Open",
+   "idx": 3,
+   "label": "Job Card",
+   "link_to": "Job Card",
+   "stats_filter": "{\"status\": [\"in\", [\"Open\", \"Work In Progress\"]]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "doctype": "Workspace Shortcut",
+   "format": "{} Active",
+   "idx": 4,
+   "label": "Work Order",
+   "link_to": "Work Order",
+   "stats_filter": "{\"status\": [\"in\", [\"Not Started\", \"In Process\"]]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "doctype": "Workspace Shortcut",
+   "idx": 5,
+   "label": "Quality Procedure",
+   "link_to": "Quality Procedure",
+   "type": "DocType"
+  }
+ ],
+ "title": "Quality Desk"
+}

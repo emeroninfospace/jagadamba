@@ -106,7 +106,7 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 		await handlers['Quotation.refresh'][0](frm);assert.equal(frm.writes.length,0);
 	});
 	await test('sales order requirement example uses net total as cost',async()=>{
-		const frm=form('Sales Order',{custom_enable_estimation:1,custom_estimation_cost_source:'Estimation',
+		const frm=form('Sales Order',{custom_enable_estimation:1,
 			custom_sale_value_without_tax:85750,custom_vat_percent:5,custom_tax_percent:10,net_total:84250});
 		await flow.recalculate(frm);
 		assert.equal(frm.doc.custom_estimation_cost_source,'Document Net Total');
@@ -126,7 +126,7 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 			const frm=form('Quotation',{custom_types:'Fabrication',company:'Company A'},false);
 			await flow.configure(frm);
 			assert.equal(frm.doc.custom_enable_estimation,1);assert.equal(frm.doc.custom_show_additional_items,0);
-			assert.deepEqual(JSON.parse(JSON.stringify(flow.item_filters(frm,true))),{disabled:0,custom_types:'Fabrication',custom_company:'Company A',item_group:['descendants of (inclusive)','Custom Equipment']});
+			assert.deepEqual(JSON.parse(JSON.stringify(flow.item_filters(frm))),{disabled:0,custom_types:'Fabrication',custom_company:'Company A'});
 			assert.equal(frm.writes.length,0);
 		} finally {context.frappe.call=original;}
 	});
@@ -147,17 +147,25 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 		assert.equal(frm.doc.custom_show_additional_items,1);assert.equal(frm.doc.custom_additional_items.length,1);
 		assert.ok(frm.writes.every(values=>Object.keys(values).every(key=>!/estimat|vat|tax|quoted|profit/.test(key))));
 	});
-	await test('engineering forms filter finished items by configured group',async()=>{
-		const original=context.frappe.call;
-		context.frappe.call=async({args})=>({message:args.type_name==='Trailers'?'Trailer Builds':'Finished Goods'});
-		try {
-			const frm=form('BOM',{custom_types:'Trailers'});
-			await flow.load_finished_item_group(frm,'custom_types');
-			assert.deepEqual(JSON.parse(JSON.stringify(flow.finished_item_filters(frm,{custom_parent_item:1}))),{disabled:0,custom_parent_item:1,item_group:['descendants of (inclusive)','Trailer Builds']});
-			const designing=form('Designing',{});
-			await flow.load_finished_item_group(designing);
-			assert.deepEqual(JSON.parse(JSON.stringify(flow.finished_item_filters(designing).item_group)),['descendants of (inclusive)','Finished Goods']);
-		} finally {context.frappe.call=original;}
+	await test('finished-item links use the server query with the document type',async()=>{
+		const queries={};
+		const frm=form('Quotation',{custom_types:'Oil & Gas',company:'Jagadamba'});
+		frm.fields_dict={custom_vehicle_type:{},oil_gas_item:{}};
+		frm.set_query=(field,fn)=>{queries[field]=fn;};
+		for (const handler of handlers['Quotation.setup']) handler(frm);
+		assert.deepEqual(JSON.parse(JSON.stringify(queries.oil_gas_item())),{query:'jagadamba.jagadamba.type_settings.finished_item_query',filters:{type:'Oil & Gas',company:'Jagadamba'}});
+		frm.doc.custom_types='Trailers';
+		assert.equal(queries.custom_vehicle_type().filters.type,'Trailers');
+		const designing=form('Designing',{});designing.fields_dict={vehicle_type:{}};
+		designing.set_query=(field,fn)=>{queries['designing.'+field]=fn;};
+		for (const handler of handlers['Designing.setup']) handler(designing);
+		assert.deepEqual(JSON.parse(JSON.stringify(queries['designing.vehicle_type']().filters)),{type:'',parent_item:1});
+		assert.equal(queries['designing.item'],undefined);
+	});
+	await test('a new form without type still configures',async()=>{
+		const frm=form('Quotation',{});
+		await flow.configure(frm,true);await flow.configure(frm,true);
+		assert.equal(frm.doc.custom_enable_estimation,0);
 	});
 	console.log(`PASS: ${passed} sales-flow regression cases`);
 })().catch(error=>{console.error(error);process.exitCode=1;});

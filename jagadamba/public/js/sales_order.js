@@ -1,7 +1,6 @@
 frappe.ui.form.on("Sales Order", {
-	refresh: async function (frm) {
-		await jagadamba.sales_flow.configure(frm, true);
-		await prefill_sales_order(frm, false);
+	// Queries are registered before any awaited lookup so they always apply.
+	setup: function (frm) {
 		frm.set_query("custom_quotation", function () {
 			const filters = {docstatus: ["!=", 2]};
 			for (const field of ["company", "currency", "custom_types"]) {
@@ -10,23 +9,15 @@ frappe.ui.form.on("Sales Order", {
 			return {filters};
 		});
 
-		frm.set_query("custom_vehicle_type", function () {
-			const filters = jagadamba.sales_flow.item_filters(frm, true);
-			return { filters: filters };
-		});
-
-		frm.set_query("oil_gas_item", function () {
-			const filters = jagadamba.sales_flow.item_filters(frm, true);
-			return { filters: filters };
-		});
-
 		// Items table — restrict by the selected Type and Company
 		frm.set_query("item_code", "items", function () {
-			const filters = { disabled: 0 };
-			if (frm.doc.custom_types) filters.custom_types = frm.doc.custom_types;
-			if (frm.doc.company) filters.custom_company = frm.doc.company;
-			return { filters: filters };
+			return { filters: jagadamba.sales_flow.item_filters(frm) };
 		});
+	},
+
+	refresh: async function (frm) {
+		await jagadamba.sales_flow.configure(frm, true);
+		await prefill_sales_order(frm, false);
 
 		setTimeout(() => {
 			frm.remove_custom_button("Payment", "Create");

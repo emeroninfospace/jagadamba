@@ -7,6 +7,18 @@ from jagadamba.jagadamba.type_settings import SALES_DOCTYPES, get_configuration
 MARKER = "jagadamba.setup_dynamic_estimation_v1"
 COST_CODE_MARKER = "jagadamba.setup_estimation_cost_codes_v1"
 REMOVE_QUOTATION_ESTIMATION_MARKER = "jagadamba.remove_quotation_estimation_v1"
+FORM_CLEANUP_MARKER = "jagadamba.form_cleanup_v1"
+# Unused or empty layout fields; dropping them from the fixtures does not delete them on a site.
+REMOVED_LAYOUT_FIELDS = (
+	("Quotation", "custom_column_break_fqddl"), ("Quotation", "custom_column_break_gmu0q"),
+	("Quotation", "custom_column_break_w0z8d"), ("Quotation", "custom_column_break_jwxq5"),
+	("Quotation", "custom_estimation_tab"), ("Quotation", "custom_estimation_statement_section"),
+	("Quotation", "custom_estimation_statement"), ("Quotation", "custom_item_groups"),
+	("Sales Order", "custom_column_break_zo0jd"), ("Sales Order", "custom_column_break_7ozif"),
+	("Sales Order", "custom_column_break_flwaf"), ("Sales Order", "custom_column_break_unsqa"),
+	("Sales Order", "custom_item_groups"), ("Sales Order", "custom_estimation_cost_source"),
+	("Lead", "custom_column_break_ddhxm"),
+)
 REMOVED_QUOTATION_FIELDS = (
 	"custom_estimation_section", "custom_estimation_cost_source", "custom_estimation_items",
 	"custom_oil_gas_pricing_section", "custom_total_estimated_value", "custom_sale_value_without_tax",
@@ -20,6 +32,7 @@ def execute():
 	_setup_type_configuration()
 	_setup_finished_item_default()
 	_remove_quotation_estimation()
+	_remove_layout_fields()
 
 
 def _setup_type_configuration():
@@ -74,3 +87,16 @@ def _remove_quotation_estimation():
 		frappe.delete_doc("DocType", "Estimation Cost Code", ignore_permissions=True, force=True)
 	frappe.clear_cache(doctype="Quotation")
 	frappe.get_doc({"doctype": "Patch Log", "patch": REMOVE_QUOTATION_ESTIMATION_MARKER}).insert(ignore_permissions=True)
+
+
+def _remove_layout_fields():
+	"""Removes empty column breaks and unused hidden fields; stored column values stay."""
+	if frappe.db.exists("Patch Log", {"patch": FORM_CLEANUP_MARKER}):
+		return
+	for doctype, fieldname in REMOVED_LAYOUT_FIELDS:
+		name = doctype + "-" + fieldname
+		if frappe.db.exists("Custom Field", name):
+			frappe.delete_doc("Custom Field", name, ignore_permissions=True, force=True)
+	for doctype in {doctype for doctype, _ in REMOVED_LAYOUT_FIELDS}:
+		frappe.clear_cache(doctype=doctype)
+	frappe.get_doc({"doctype": "Patch Log", "patch": FORM_CLEANUP_MARKER}).insert(ignore_permissions=True)

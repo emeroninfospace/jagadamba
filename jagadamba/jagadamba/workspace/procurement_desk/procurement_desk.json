@@ -126,7 +126,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-09-25 15:44:04.448521",
+ "modified": "2026-10-12 17:30:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Procurement Desk",
@@ -148,7 +148,17 @@
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [],
+ "roles": [
+  {
+   "role": "Management"
+  },
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Procurement Engineer"
+  }
+ ],
  "sequence_id": 9.0,
  "shortcuts": [
   {
