@@ -11,6 +11,13 @@ class JagadambaWorkspaceProfile(Document):
 	def validate(self):
 		for row in self.sources:
 			validate_source(row)
+		for row in self.kpis:
+			validate_source(row, value_fields=("value_field",), date_fields=("date_field",),
+				filter_fields=("filters", "secondary_filters"))
+			if row.aggregate == "Sum" and not row.value_field:
+				frappe.throw(_("Snapshot card {0}: set the Sum Field.").format(row.idx))
+		for row in self.series:
+			validate_source(row, value_fields=("amount_field",), date_fields=("date_field",), filter_fields=("filters",))
 
 	def on_update(self):
 		# Landing workspaces are resolved into each user's cached boot info.
@@ -20,7 +27,8 @@ class JagadambaWorkspaceProfile(Document):
 		frappe.cache.delete_key("bootinfo")
 
 
-def validate_source(row):
+def validate_source(row, value_fields=("amount_field", "secondary_amount_field"),
+		date_fields=("date_field", "status_field", "party_field"), filter_fields=("extra_filters", "alert_filters")):
 	"""Reject configuration that names unknown fields; values are still permission-checked at runtime."""
 	if not frappe.db.exists("DocType", row.source_doctype):
 		frappe.throw(_("Row {0}: DocType {1} does not exist.").format(row.idx, row.source_doctype))
@@ -37,12 +45,11 @@ def validate_source(row):
 		if numeric and field.fieldtype not in NUMERIC_TYPES:
 			frappe.throw(_("Row {0}: {1} must be a number or currency field.").format(row.idx, label))
 
-	check(row.date_field, _("Date Field"))
-	check(row.status_field, _("Status Field"))
-	check(row.party_field, _("Top By Field"))
-	check(row.amount_field, _("Amount Field"), numeric=True)
-	check(row.secondary_amount_field, _("Second Amount Field"), numeric=True)
-	for fieldname in ("extra_filters", "alert_filters"):
+	for fieldname in date_fields:
+		check(row.get(fieldname), row.meta.get_label(fieldname))
+	for fieldname in value_fields:
+		check(row.get(fieldname), row.meta.get_label(fieldname), numeric=True)
+	for fieldname in filter_fields:
 		text = row.get(fieldname)
 		if not text:
 			continue

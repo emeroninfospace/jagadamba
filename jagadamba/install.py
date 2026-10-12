@@ -6,6 +6,7 @@ import frappe
 DEFAULT_TYPES = ["Trailers", "Oil & Gas", "Trading"]
 PROFILE = "Jagadamba Workspace Profile"
 PROFILE_SEEDS = Path(__file__).with_name("workspace_profiles.json")
+CHILD_TABLES = ("sources", "landing_roles", "kpis", "series")
 
 
 def after_install():
@@ -53,9 +54,10 @@ def sync_workspace_profiles():
 		return
 	for seed in json.loads(PROFILE_SEEDS.read_text()):
 		if frappe.db.exists(PROFILE, seed["scope"]):
+			add_missing_overview(seed)
 			continue
 		doc = frappe.new_doc(PROFILE)
-		doc.update({key: value for key, value in seed.items() if key not in ("sources", "landing_roles")})
+		doc.update({key: value for key, value in seed.items() if key not in CHILD_TABLES})
 		if doc.home_workspace and not frappe.db.exists("Workspace", doc.home_workspace):
 			doc.home_workspace = None
 		for role in roles_for(seed["scope"]):
@@ -68,7 +70,30 @@ def sync_workspace_profiles():
 			source = clean_source(source)
 			if source:
 				doc.append("sources", source)
+		append_overview_rows(doc, seed)
 		doc.insert(ignore_permissions=True)
+
+
+def append_overview_rows(doc, seed):
+	for table in ("kpis", "series"):
+		for row in seed.get(table, []):
+			row = clean_source(row)
+			if row:
+				doc.append(table, row)
+
+
+def add_missing_overview(seed):
+	"""Give an existing profile the shipped snapshot cards and chart once, if it has none yet."""
+	if not (seed.get("kpis") or seed.get("series")):
+		return
+	doc = frappe.get_doc(PROFILE, seed["scope"])
+	if doc.get("kpis") or doc.get("series"):
+		return
+	for key in ("layout", "comparison_title", "difference_label"):
+		if seed.get(key) and not doc.get(key):
+			doc.set(key, seed[key])
+	append_overview_rows(doc, seed)
+	doc.save(ignore_permissions=True)
 
 
 def clean_source(source):
@@ -81,11 +106,16 @@ def clean_source(source):
 	def known(fieldname):
 		return fieldname in {"name", "creation", "modified", "docstatus"} or meta.has_field(fieldname)
 
-	if not known(source["date_field"]):
+	if source.get("date_field") and not known(source["date_field"]):
 		return None
-	if source.get("extra_filters") and not all(known(key) for key in json.loads(source["extra_filters"])):
-		return None
+	for fieldname in ("extra_filters", "filters"):
+		if source.get(fieldname) and not all(known(key) for key in json.loads(source[fieldname])):
+			return None
 	source = dict(source)
+	if source.get("value_field") and not known(source["value_field"]):
+		return None
+	if source.get("secondary_filters") and not all(known(key) for key in json.loads(source["secondary_filters"])):
+		source.pop("secondary_filters")
 	for fieldname in ("status_field", "party_field", "amount_field", "secondary_amount_field"):
 		if source.get(fieldname) and not known(source[fieldname]):
 			source.pop(fieldname)

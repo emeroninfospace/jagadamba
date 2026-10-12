@@ -1,0 +1,130 @@
+{
+ "actions": [],
+ "creation": "2026-10-12 12:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "istable": 1,
+ "editable_grid": 0,
+ "links": [],
+ "modified": "2026-10-12 12:00:00",
+ "modified_by": "Administrator",
+ "module": "Jagadamba",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "name": "Jagadamba Dashboard KPI",
+ "fields": [
+  {
+   "fieldname": "label",
+   "fieldtype": "Data",
+   "label": "Label",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "icon",
+   "fieldtype": "Select",
+   "label": "Icon",
+   "in_list_view": 1,
+   "columns": 1,
+   "options": "users\nprojects\ntasks\npayment\nreceivable\nquotation\ninvoice\norder\npayable\nstock\nfactory\npeople\ntruck\ntool\ncheck"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Color",
+   "label": "Colour"
+  },
+  {
+   "fieldname": "source_doctype",
+   "fieldtype": "Link",
+   "label": "Document Type",
+   "options": "DocType",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "column_break_value",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "aggregate",
+   "fieldtype": "Select",
+   "label": "Show",
+   "options": "Count\nSum",
+   "default": "Count",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "value_field",
+   "fieldtype": "Data",
+   "label": "Sum Field",
+   "depends_on": "eval:doc.aggregate=='Sum'",
+   "description": "Numeric field to add up, e.g. outstanding_amount."
+  },
+  {
+   "fieldname": "date_field",
+   "fieldtype": "Data",
+   "label": "Period Date Field",
+   "description": "Leave empty for a current-state figure (not limited to the selected period)."
+  },
+  {
+   "fieldname": "not_company_specific",
+   "fieldtype": "Check",
+   "label": "Not Company-Specific",
+   "description": "For masters without a Company field, such as Customer."
+  },
+  {
+   "fieldname": "section_break_filters",
+   "fieldtype": "Section Break",
+   "label": "Filters & Caption",
+   "description": "JSON object, e.g. {\"docstatus\": 1}. @today, @today+N, @today-N and @user are replaced when the dashboard loads."
+  },
+  {
+   "fieldname": "filters",
+   "fieldtype": "Code",
+   "label": "Filters",
+   "options": "JSON"
+  },
+  {
+   "fieldname": "secondary_filters",
+   "fieldtype": "Code",
+   "label": "Second Count Filters",
+   "options": "JSON",
+   "description": "Optional second count shown as {secondary} in the caption, e.g. overdue tasks."
+  },
+  {
+   "fieldname": "column_break_caption",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "caption",
+   "fieldtype": "Data",
+   "label": "Caption",
+   "in_list_view": 1,
+   "columns": 2,
+   "description": "Text under the number. Use {count}, {secondary}, {start} and {end}, e.g. \"{count} open invoices\"."
+  }
+ ],
+ "field_order": [
+  "label",
+  "icon",
+  "color",
+  "source_doctype",
+  "column_break_value",
+  "aggregate",
+  "value_field",
+  "date_field",
+  "not_company_specific",
+  "section_break_filters",
+  "filters",
+  "secondary_filters",
+  "column_break_caption",
+  "caption"
+ ]
+}

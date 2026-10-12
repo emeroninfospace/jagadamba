@@ -4,7 +4,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "links": [],
- "modified": "2026-10-12 10:00:00",
+ "modified": "2026-10-12 12:00:00",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "owner": "Administrator",
@@ -59,6 +59,14 @@
    "label": "Accent Colour"
   },
   {
+   "fieldname": "layout",
+   "fieldtype": "Select",
+   "label": "Layout",
+   "options": "Modern\nClassic",
+   "default": "Modern",
+   "description": "Classic shows a compact header with a snapshot grid and comparison chart in a warm paper style."
+  },
+  {
    "fieldname": "home_workspace",
    "fieldtype": "Link",
    "label": "Home Workspace",
@@ -106,6 +114,42 @@
    "fieldtype": "Table",
    "label": "Sources",
    "options": "Jagadamba Dashboard Source"
+  },
+  {
+   "fieldname": "section_break_kpis",
+   "fieldtype": "Section Break",
+   "label": "Snapshot Cards",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "kpis",
+   "fieldtype": "Table",
+   "label": "Snapshot Cards",
+   "options": "Jagadamba Dashboard KPI"
+  },
+  {
+   "fieldname": "section_break_series",
+   "fieldtype": "Section Break",
+   "label": "Comparison Chart",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "comparison_title",
+   "fieldtype": "Data",
+   "label": "Chart Title",
+   "description": "e.g. Sales & Purchase Overview"
+  },
+  {
+   "fieldname": "difference_label",
+   "fieldtype": "Data",
+   "label": "Difference Label",
+   "description": "Shows first series minus second, e.g. Profit. Leave empty to hide."
+  },
+  {
+   "fieldname": "series",
+   "fieldtype": "Table",
+   "label": "Series",
+   "options": "Jagadamba Dashboard Series"
   }
  ],
  "name": "Jagadamba Workspace Profile",
@@ -138,6 +182,7 @@
   "column_break_main",
   "enabled",
   "accent_color",
+  "layout",
   "home_workspace",
   "landing_priority",
   "section_break_roles",
@@ -145,6 +190,12 @@
   "column_break_roles",
   "landing_roles",
   "section_break_sources",
-  "sources"
+  "sources",
+  "section_break_kpis",
+  "kpis",
+  "section_break_series",
+  "comparison_title",
+  "difference_label",
+  "series"
  ]
 }

@@ -1,0 +1,81 @@
+{
+ "actions": [],
+ "creation": "2026-10-12 12:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "istable": 1,
+ "editable_grid": 0,
+ "links": [],
+ "modified": "2026-10-12 12:00:00",
+ "modified_by": "Administrator",
+ "module": "Jagadamba",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "name": "Jagadamba Dashboard Series",
+ "fields": [
+  {
+   "fieldname": "label",
+   "fieldtype": "Data",
+   "label": "Label",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Color",
+   "label": "Colour",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "source_doctype",
+   "fieldtype": "Link",
+   "label": "Document Type",
+   "options": "DocType",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "column_break_fields",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date_field",
+   "fieldtype": "Data",
+   "label": "Date Field",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "amount_field",
+   "fieldtype": "Data",
+   "label": "Amount Field",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "filters",
+   "fieldtype": "Code",
+   "label": "Filters",
+   "options": "JSON",
+   "description": "JSON object, e.g. {\"docstatus\": 1}. @today, @today+N, @today-N and @user are replaced when the dashboard loads."
+  }
+ ],
+ "field_order": [
+  "label",
+  "color",
+  "source_doctype",
+  "column_break_fields",
+  "date_field",
+  "amount_field",
+  "filters"
+ ]
+}
