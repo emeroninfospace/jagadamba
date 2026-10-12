@@ -1,4 +1,4 @@
-/* global frappe, flt */
+/* global frappe, flt, precision */
 (() => {
 	"use strict";
 	frappe.provide("jagadamba.sales_flow");
@@ -70,18 +70,73 @@
 		return frm.set_value(Object.fromEntries(fields.map(field => [field, ""])));
 	};
 
+	const configurations = new WeakMap();
+	jagadamba.sales_flow.configure = function (frm, force = false) {
+		const doc = frm.doc;
+		const type = doc.custom_types;
+		const previous = configurations.get(doc);
+		if (previous?.type === type && (!force || previous.pending)) return previous.promise;
+		const entry = {type, pending: true};
+		configurations.set(doc, entry);
+		entry.promise = (async () => {
+			const response = await frappe.call({
+				method: "jagadamba.jagadamba.type_settings.get_type_settings",
+				args: {type_name: type || null},
+			});
+			if (frm.doc !== doc || doc.custom_types !== type || configurations.get(doc) !== entry) return;
+			for (const [key, value] of Object.entries(response.message || {})) doc["custom_" + key] = value;
+			// Refresh dependency expressions without dirtying a saved document.
+			frm.refresh_fields();
+			if (doc.doctype === "Quotation" && frm.is_new() && doc.custom_enable_estimation && !doc.custom_estimation_cost_source) {
+				await frm.set_value("custom_estimation_cost_source", "Estimation");
+			}
+		})().catch(error => {
+			if (configurations.get(doc) === entry) configurations.delete(doc);
+			throw error;
+		}).finally(() => { entry.pending = false; });
+		return entry.promise;
+	};
+
+	jagadamba.sales_flow.item_filters = function (frm, finished = false) {
+		const filters = {disabled: 0};
+		if (frm.doc.custom_types) filters.custom_types = frm.doc.custom_types;
+		if (frm.doc.company) filters.custom_company = frm.doc.company;
+		if (finished && frm.doc.custom_finished_item_group) filters.item_group = frm.doc.custom_finished_item_group;
+		return filters;
+	};
+
 	jagadamba.sales_flow.recalculate = function (frm) {
-		if (frm.doc.docstatus !== 0 || frm.doc.custom_types !== "Oil & Gas") return Promise.resolve();
-		const sale = flt(frm.doc.custom_sale_value_without_tax);
-		const vat = sale * flt(frm.doc.custom_vat_percent) / 100;
-		const tax = (sale + vat) * flt(frm.doc.custom_tax_percent) / 100;
+		const doc = frm.doc;
+		if (doc.docstatus !== 0 || !doc.custom_enable_estimation) return Promise.resolve();
+		const rounded = (value, field, row = doc) => flt(value, precision(field, row));
+		const rows = doc.custom_estimation_items || [];
+		let total = flt(doc.custom_total_estimated_value);
+		if (doc.doctype === "Quotation") {
+			total = 0;
+			for (const row of rows) {
+				row.amount = rounded(flt(row.qty) * flt(row.rate), "amount", row);
+				total += row.amount;
+			}
+			frm.refresh_field("custom_estimation_items");
+		}
+		const basis = doc.custom_estimation_cost_source || (rows.length || (doc.doctype === "Quotation" && frm.is_new()) ? "Estimation" : "Document Net Total");
+		const cost = rounded(basis === "Estimation" ? total : flt(doc.net_total), "custom_total_estimated_value");
+		const sale = flt(doc.custom_sale_value_without_tax);
+		const vat = rounded(sale * flt(doc.custom_vat_percent) / 100, "custom_vat_amount");
+		const tax_basis = doc.custom_tax_basis || "Sale Value + VAT";
+		const tax_base = tax_basis === "Sale Value + VAT" ? sale + vat : sale;
+		const tax = rounded(tax_base * flt(doc.custom_tax_percent) / 100, "custom_tax_amount");
 		const values = {
+			custom_estimation_cost_source: basis,
+			custom_tax_basis: tax_basis,
+			custom_total_estimated_value: cost,
 			custom_vat_amount: vat,
 			custom_tax_amount: tax,
-			custom_total_quoted_value: sale + vat + tax,
-			custom_net_profit: sale - flt(frm.doc.net_total),
+			custom_total_quoted_value: rounded(sale + vat + tax, "custom_total_quoted_value"),
+			custom_net_profit: rounded(sale - cost, "custom_net_profit"),
 		};
-		const changes = Object.fromEntries(Object.entries(values).filter(([field, value]) => flt(frm.doc[field]) !== value));
+		const changes = Object.fromEntries(Object.entries(values).filter(([field, value]) =>
+			typeof value === "number" ? flt(doc[field]) !== value : doc[field] !== value));
 		return Object.keys(changes).length ? frm.set_value(changes) : Promise.resolve();
 	};
 })();

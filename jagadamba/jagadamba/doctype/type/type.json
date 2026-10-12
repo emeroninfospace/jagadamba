@@ -7,7 +7,14 @@
  "engine": "InnoDB",
  "field_order": [
   "type",
-  "description"
+  "description",
+  "sales_behavior_section",
+  "enable_estimation",
+  "show_additional_items",
+  "show_vehicle_item",
+  "show_job_item",
+  "show_project_details",
+  "finished_item_group"
  ],
  "fields": [
   {
@@ -22,12 +29,49 @@
    "fieldname": "description",
    "fieldtype": "Small Text",
    "label": "Description"
+  },
+  {
+   "fieldname": "sales_behavior_section",
+   "label": "Sales and Estimation",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "enable_estimation",
+   "label": "Enable Estimation Costing",
+   "fieldtype": "Check"
+  },
+  {
+   "fieldname": "show_additional_items",
+   "label": "Show Additional Items",
+   "fieldtype": "Check"
+  },
+  {
+   "fieldname": "show_vehicle_item",
+   "label": "Show Vehicle Item",
+   "fieldtype": "Check"
+  },
+  {
+   "fieldname": "show_job_item",
+   "label": "Show Job Item",
+   "fieldtype": "Check"
+  },
+  {
+   "fieldname": "show_project_details",
+   "label": "Show Project and Revision Details",
+   "fieldtype": "Check"
+  },
+  {
+   "fieldname": "finished_item_group",
+   "label": "Finished Item Group",
+   "fieldtype": "Link",
+   "options": "Item Group",
+   "description": "Optional item group filter for Vehicle and Job Item links."
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-08-29 15:35:11.686755",
+ "modified": "2026-10-12 12:06:22",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Type",
@@ -45,6 +89,21 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "role": "Sales User",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "Sales Manager",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "Sales Executive",
+   "read": 1,
+   "select": 1
   }
  ],
  "row_format": "Dynamic",

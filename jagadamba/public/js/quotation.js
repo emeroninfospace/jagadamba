@@ -1,19 +1,14 @@
 frappe.ui.form.on("Quotation", {
 	refresh: async function (frm) {
-		// frm.set_query("item_code", "items", function () {
-		// 	return { filters: { custom_parent_item: 1, disabled: 0 } };
-		// });
+		await jagadamba.sales_flow.configure(frm, true);
 
 		frm.set_query("custom_vehicle_type", function () {
-			const filters = { disabled: 0, item_group: "Finished Items" };
-			if (frm.doc.custom_types) filters.custom_types = frm.doc.custom_types;
-			if (frm.doc.company) filters.custom_company = frm.doc.company;
+			const filters = jagadamba.sales_flow.item_filters(frm, true);
 			return { filters: filters };
 		});
 
 		frm.set_query("oil_gas_item", function () {
-			const filters = { item_group: "Finished Items", disabled: 0, custom_types: "Oil & Gas" };
-			if (frm.doc.company) filters.custom_company = frm.doc.company;
+			const filters = jagadamba.sales_flow.item_filters(frm, true);
 			return { filters: filters };
 		});
 
@@ -33,8 +28,6 @@ frappe.ui.form.on("Quotation", {
 			if (frm.doc.company) filters.custom_company = frm.doc.company;
 			return { filters: filters };
 		});
-
-		toggle_trading_fields(frm);
 
 		if (frm.is_new() && frm.doc.quotation_to === "Lead" && frm.doc.party_name) {
 			const doc = frm.doc;
@@ -71,25 +64,19 @@ frappe.ui.form.on("Quotation", {
 
 	opportunity(frm) { return prefill_quotation_type(frm); },
 
-	custom_types: function (frm) {
-		jagadamba.sales_flow.clear_type_items(frm, ["custom_vehicle_type", "oil_gas_item"]);
-		recalc_oil_gas_pricing(frm);
-		toggle_trading_fields(frm);
+	custom_types: async function (frm) {
+		await jagadamba.sales_flow.clear_type_items(frm, ["custom_vehicle_type", "oil_gas_item"]);
+		await jagadamba.sales_flow.configure(frm);
+		return recalc_oil_gas_pricing(frm);
 	},
 	custom_sale_value_without_tax(frm) { recalc_oil_gas_pricing(frm); },
 	custom_vat_percent(frm) { recalc_oil_gas_pricing(frm); },
 	custom_tax_percent(frm) { recalc_oil_gas_pricing(frm); },
-	net_total(frm) { recalc_oil_gas_pricing(frm); },
+	net_total(frm) { return recalc_oil_gas_pricing(frm); },
+	custom_estimation_cost_source(frm) { return recalc_oil_gas_pricing(frm); },
+	custom_tax_basis(frm) { return recalc_oil_gas_pricing(frm); },
 
 });
-
-function toggle_trading_fields(frm) {
-	// For Trading, hide Project, Estimator and Revision Number
-	const is_trading = frm.doc.custom_types === "Trading";
-	["custom_project", "estimator", "revision_number"].forEach((f) => {
-		if (frm.get_field(f)) frm.toggle_display(f, !is_trading);
-	});
-}
 
 function recalc_oil_gas_pricing(frm) {
 	return jagadamba.sales_flow.recalculate(frm);
@@ -106,73 +93,6 @@ frappe.ui.form.on("Quotation Additional Item", {
 	},
 });
 
-// frappe.ui.form.on("Quotation Item", {
-// 	before_remove: function (frm, cdt, cdn) {
-// 		let row = locals[cdt][cdn];
-// 		if (!row.item_code) return;
-// 		let to_remove = (frm.doc.custom_item_groups || []).filter(
-// 			(i) => i.parent_item === row.item_code
-// 		);
-// 		to_remove.forEach((i) => frappe.model.clear_doc(i.doctype, i.name));
-// 		frm.doc.custom_item_groups = (frm.doc.custom_item_groups || []).filter(
-// 			(i) => i.parent_item !== row.item_code
-// 		);
-// 		frm.refresh_field("custom_item_groups");
-// 	},
-//
-// 	item_code: function (frm, cdt, cdn) {
-// 		let row = locals[cdt][cdn];
-//
-// 		let current_parents = new Set(
-// 			(frm.doc.items || []).map((i) => i.item_code).filter(Boolean)
-// 		);
-// 		let stale = (frm.doc.custom_item_groups || []).filter(
-// 			(i) => i.parent_item && !current_parents.has(i.parent_item)
-// 		);
-// 		stale.forEach((i) => frappe.model.clear_doc(i.doctype, i.name));
-// 		frm.doc.custom_item_groups = (frm.doc.custom_item_groups || []).filter(
-// 			(i) => !i.parent_item || current_parents.has(i.parent_item)
-// 		);
-// 		frm.refresh_field("custom_item_groups");
-//
-// 		if (!row.item_code) return;
-//
-// 		frappe.dom.freeze(__("Fetching build category items..."));
-// 		frappe.call({
-// 			method: "jagadamba.jagadamba.api.get_child_items_for_parent_items",
-// 			args: { parent_item_codes: JSON.stringify([row.item_code]) },
-// 			callback: function (r) {
-// 				frappe.dom.unfreeze();
-// 				if (!r.message || !r.message.length) return;
-//
-// 				let added = 0;
-// 				r.message.forEach((item) => {
-// 					let exists = (frm.doc.custom_item_groups || []).some(
-// 						(i) => i.item_code === item.item_code
-// 					);
-// 					if (!exists) {
-// 						let child = frm.add_child("custom_item_groups");
-// 						child.parent_item = item.parent_item;
-// 						child.item_code = item.item_code;
-// 						child.item_name = item.item_name;
-// 						child.uom = item.uom;
-// 						child.item_group = item.item_group;
-// 						child.description = item.description;
-// 						added++;
-// 					}
-// 				});
-// 				frm.refresh_field("custom_item_groups");
-// 				if (added) {
-// 					frappe.show_alert({
-// 						message: __("{0} item(s) added to Build Categories", [added]),
-// 						indicator: "green",
-// 					});
-// 				}
-// 			},
-// 		});
-// 	},
-// });
-
 function prefill_quotation_type(frm) {
 	return jagadamba.sales_flow.copy_from_source(frm, {
 		doctype: "Opportunity", link_field: "opportunity", only_new: true,
@@ -180,3 +100,10 @@ function prefill_quotation_type(frm) {
 			oil_gas_item: "custom_finished_item" },
 	});
 }
+
+frappe.ui.form.on("Quotation Estimation Item", {
+	qty(frm) { return jagadamba.sales_flow.recalculate(frm); },
+	rate(frm) { return jagadamba.sales_flow.recalculate(frm); },
+	custom_estimation_items_add(frm) { return jagadamba.sales_flow.recalculate(frm); },
+	custom_estimation_items_remove(frm) { return jagadamba.sales_flow.recalculate(frm); },
+});

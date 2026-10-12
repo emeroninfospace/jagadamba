@@ -61,7 +61,11 @@ doc_events = {
     "Customer": {
         "before_insert": "jagadamba.jagadamba.overrides.customer_overrides.before_insert",
     },
+    "Lead": {
+        "validate": "jagadamba.jagadamba.type_settings.sync_type_settings",
+    },
     "Opportunity": {
+        "validate": "jagadamba.jagadamba.type_settings.sync_type_settings",
         "before_insert": "jagadamba.jagadamba.overrides.opportunity_overrides.before_insert",
     },
     "Quotation": {
@@ -340,3 +344,8 @@ after_install = "jagadamba.install.after_install"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+# Runs after custom fields have been synchronized; the setup records its own one-time marker.
+after_migrate = "jagadamba.patches.setup_estimation.execute"
+
+# On a fresh install, after_install precedes custom-field synchronization.
+after_sync = "jagadamba.patches.setup_estimation.execute"

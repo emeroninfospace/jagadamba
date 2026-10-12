@@ -1,17 +1,22 @@
 frappe.ui.form.on("Sales Order", {
 	refresh: async function (frm) {
+		await jagadamba.sales_flow.configure(frm, true);
 		await prefill_sales_order(frm, false);
+		frm.set_query("custom_quotation", function () {
+			const filters = {docstatus: ["!=", 2]};
+			for (const field of ["company", "currency", "custom_types"]) {
+				if (frm.doc[field]) filters[field] = frm.doc[field];
+			}
+			return {filters};
+		});
 
 		frm.set_query("custom_vehicle_type", function () {
-			const filters = { disabled: 0, item_group: "Finished Items" };
-			if (frm.doc.custom_types) filters.custom_types = frm.doc.custom_types;
-			if (frm.doc.company) filters.custom_company = frm.doc.company;
+			const filters = jagadamba.sales_flow.item_filters(frm, true);
 			return { filters: filters };
 		});
 
 		frm.set_query("oil_gas_item", function () {
-			const filters = { item_group: "Finished Items", disabled: 0, custom_types: "Oil & Gas" };
-			if (frm.doc.company) filters.custom_company = frm.doc.company;
+			const filters = jagadamba.sales_flow.item_filters(frm, true);
 			return { filters: filters };
 		});
 
@@ -150,15 +155,18 @@ frappe.ui.form.on("Sales Order", {
 		return prefill_sales_order(frm, true);
 	},
 
-	custom_types: function (frm) {
-		jagadamba.sales_flow.clear_type_items(frm, ["custom_vehicle_type", "oil_gas_item"]);
-		recalc_oil_gas_pricing(frm);
+	custom_types: async function (frm) {
+		await jagadamba.sales_flow.clear_type_items(frm, ["custom_vehicle_type", "oil_gas_item"]);
+		await jagadamba.sales_flow.configure(frm);
+		return recalc_oil_gas_pricing(frm);
 	},
 
 	custom_sale_value_without_tax(frm) { recalc_oil_gas_pricing(frm); },
 	custom_vat_percent(frm) { recalc_oil_gas_pricing(frm); },
 	custom_tax_percent(frm) { recalc_oil_gas_pricing(frm); },
-	net_total(frm) { recalc_oil_gas_pricing(frm); },
+	net_total(frm) { return recalc_oil_gas_pricing(frm); },
+	custom_estimation_cost_source(frm) { return recalc_oil_gas_pricing(frm); },
+	custom_tax_basis(frm) { return recalc_oil_gas_pricing(frm); },
 
 });
 
@@ -172,8 +180,10 @@ function prefill_sales_order(frm, overwrite) {
 	if (overwrite) Object.assign(fields, {
 		custom_sale_value_without_tax: "custom_sale_value_without_tax",
 		custom_vat_percent: "custom_vat_percent", custom_tax_percent: "custom_tax_percent",
+		custom_estimation_cost_source: "custom_estimation_cost_source", custom_total_estimated_value: "custom_total_estimated_value",
+		custom_tax_basis: "custom_tax_basis",
 	});
 	return jagadamba.sales_flow.copy_from_source(frm, {
 		doctype: "Quotation", link_field: "custom_quotation", fields, overwrite,
-	});
+	}).then(() => overwrite ? jagadamba.sales_flow.recalculate(frm) : undefined);
 }

@@ -16,7 +16,9 @@ if importlib.util.find_spec("frappe") is None:
 		raise ValueError(message)
 	frappe.throw = throw
 	utils = types.ModuleType("frappe.utils")
-	utils.flt = lambda value: float(value or 0)
+	utils.flt = lambda value, precision=None: round(float(value or 0), precision) if precision is not None else float(value or 0)
+	utils.cint = lambda value: int(value or 0)
+	frappe.get_cached_doc = Mock()
 	utils.today = lambda: "2026-10-12"
 	utils.get_fullname = lambda user: "Tester"
 	sys.modules.update({"frappe": frappe, "frappe.utils": utils})
@@ -28,6 +30,12 @@ from jagadamba.jagadamba.overrides import opportunity_overrides as opportunity
 
 
 class Doc(dict):
+	def set(self, key, value):
+		self[key] = value
+	def is_new(self):
+		return bool(self.get("__islocal"))
+	def precision(self, field):
+		return 2
 	def __getattr__(self, key):
 		return self.get(key)
 	def __setattr__(self, key, value):
@@ -35,9 +43,13 @@ class Doc(dict):
 
 
 class PricingTests(unittest.TestCase):
+	def setUp(self):
+		self.config = patch("jagadamba.jagadamba.type_settings.get_configuration", side_effect=lambda name: {"enable_estimation": int(name == "Oil & Gas")})
+		self.config.start()
+		self.addCleanup(self.config.stop)
 	def test_compound_formula_preserved_for_both_documents(self):
 		for validate in (quotation.validate, sales_order.validate):
-			doc = Doc(custom_types="Oil & Gas", custom_sale_value_without_tax="1000",
+			doc = Doc(doctype="Quotation", custom_enable_estimation=1, custom_types="Oil & Gas", custom_sale_value_without_tax="1000",
 				custom_vat_percent="5", custom_tax_percent="2", net_total="600")
 			validate(doc)
 			self.assertEqual(doc.custom_vat_amount, 50)
@@ -46,14 +58,14 @@ class PricingTests(unittest.TestCase):
 			self.assertEqual(doc.custom_net_profit, 400)
 
 	def test_zero_vat_is_a_valid_value(self):
-		doc = Doc(custom_types="Oil & Gas", custom_sale_value_without_tax=100,
+		doc = Doc(doctype="Quotation", custom_enable_estimation=1, custom_types="Oil & Gas", custom_sale_value_without_tax=100,
 			custom_vat_percent=0, custom_tax_percent=2, net_total=70)
 		calculate_oil_gas_pricing(doc)
 		self.assertEqual(doc.custom_vat_amount, 0)
 		self.assertEqual(doc.custom_total_quoted_value, 102)
 
 	def test_missing_values_do_not_raise(self):
-		doc = Doc(custom_types="Oil & Gas")
+		doc = Doc(doctype="Quotation", custom_enable_estimation=1, custom_types="Oil & Gas")
 		calculate_oil_gas_pricing(doc)
 		self.assertEqual(doc.custom_total_quoted_value, 0)
 
@@ -63,7 +75,7 @@ class PricingTests(unittest.TestCase):
 		self.assertEqual(doc, {"custom_types": "Trading", "custom_total_quoted_value": 123})
 
 	def test_negative_values_retain_existing_formula(self):
-		doc = Doc(custom_types="Oil & Gas", custom_sale_value_without_tax=-100,
+		doc = Doc(doctype="Quotation", custom_enable_estimation=1, custom_types="Oil & Gas", custom_sale_value_without_tax=-100,
 			custom_vat_percent=5, custom_tax_percent=2, net_total=0)
 		calculate_oil_gas_pricing(doc)
 		self.assertAlmostEqual(doc.custom_total_quoted_value, -107.1)
@@ -103,22 +115,153 @@ class RevisionTests(unittest.TestCase):
 class MappingTests(unittest.TestCase):
 	def test_opportunity_preserves_different_explicit_type(self):
 		doc = Doc(opportunity_from="Lead", party_name="L-001", custom_types="Trading")
-		with patch.object(opportunity.frappe.db, "get_value", return_value=Doc(custom_types="Oil & Gas", oil_gas_item="PIPE")):
+		with patch.object(opportunity.frappe.db, "get_value", return_value=Doc(doctype="Quotation", custom_enable_estimation=1, custom_types="Oil & Gas", oil_gas_item="PIPE")):
 			opportunity.before_insert(doc)
 		self.assertIsNone(doc.custom_finished_item)
 
 	def test_quotation_preserves_different_explicit_type(self):
 		doc = Doc(opportunity="OPP-001", custom_types="Trailers")
-		with patch.object(quotation.frappe.db, "get_value", return_value=Doc(custom_types="Oil & Gas", custom_finished_item="PIPE")):
+		with patch.object(quotation.frappe.db, "get_value", return_value=Doc(doctype="Quotation", custom_enable_estimation=1, custom_types="Oil & Gas", custom_finished_item="PIPE")):
 			quotation._copy_type_fields_from_opportunity(doc)
 		self.assertIsNone(doc.oil_gas_item)
 
 	def test_quotation_copies_matching_source_fields(self):
 		doc = Doc(opportunity="OPP-001")
-		with patch.object(quotation.frappe.db, "get_value", return_value=Doc(custom_types="Oil & Gas", custom_finished_item="PIPE")):
+		with patch.object(quotation.frappe.db, "get_value", return_value=Doc(doctype="Quotation", custom_enable_estimation=1, custom_types="Oil & Gas", custom_finished_item="PIPE")):
 			quotation._copy_type_fields_from_opportunity(doc)
 		self.assertEqual(doc.custom_types, "Oil & Gas")
 		self.assertEqual(doc.oil_gas_item, "PIPE")
+
+
+class EstimationTests(unittest.TestCase):
+	def estimate(self, **values):
+		data = dict(doctype="Quotation", custom_enable_estimation=1, custom_types="Fabrication",
+			custom_estimation_cost_source="Estimation", custom_sale_value_without_tax=85750,
+			custom_vat_percent=5, custom_tax_percent=10,
+			custom_estimation_items=[Doc(qty=q, rate=r) for q, r in
+				[(10, 5000), (1, 1000), (1000, 20), (1, 10000), (10, 250), (7.5, 100)]])
+		data.update(values)
+		return Doc(data)
+
+	def test_requirement_example_recalculated_from_inputs(self):
+		doc = self.estimate(net_total=999999)
+		calculate_oil_gas_pricing(doc)
+		self.assertEqual(doc.custom_total_estimated_value, 84250)
+		self.assertEqual(doc.custom_net_profit, 1500)
+		self.assertEqual(doc.custom_vat_amount, 4287.50)
+		self.assertEqual(doc.custom_tax_amount, 9003.75)
+		self.assertEqual(doc.custom_total_quoted_value, 99041.25)
+
+	def test_non_compound_tax_is_selectable(self):
+		doc = self.estimate(custom_tax_basis="Sale Value")
+		calculate_oil_gas_pricing(doc)
+		self.assertEqual(doc.custom_tax_amount, 8575)
+		self.assertEqual(doc.custom_total_quoted_value, 98612.5)
+
+	def test_removing_last_row_resets_cost_without_net_total_fallback(self):
+		doc = self.estimate(custom_estimation_items=[], net_total=99999)
+		calculate_oil_gas_pricing(doc)
+		self.assertEqual(doc.custom_total_estimated_value, 0)
+		self.assertEqual(doc.custom_net_profit, 85750)
+
+	def test_row_amounts_use_currency_precision(self):
+		doc = self.estimate(custom_estimation_items=[Doc(qty=3, rate=0.3333), Doc(qty=1, rate=0)])
+		calculate_oil_gas_pricing(doc)
+		self.assertEqual(doc.custom_total_estimated_value, 1)
+		self.assertEqual(doc.custom_estimation_items[1].amount, 0)
+
+	def test_invalid_costs_and_rates_are_rejected(self):
+		for row in [Doc(qty=-1, rate=1), Doc(qty=1, rate=-1), Doc(qty=float('inf'), rate=1), Doc(qty=1, rate='abc')]:
+			with self.subTest(row=row), self.assertRaises(ValueError):
+				calculate_oil_gas_pricing(self.estimate(custom_estimation_items=[row]))
+		for rate in [-1, 101, float('nan')]:
+			with self.subTest(rate=rate), self.assertRaises(ValueError):
+				calculate_oil_gas_pricing(self.estimate(custom_vat_percent=rate))
+
+	def test_legacy_basis_does_not_silently_ignore_cost_rows(self):
+		with self.assertRaises(ValueError):
+			calculate_oil_gas_pricing(self.estimate(custom_estimation_cost_source="Document Net Total"))
+
+	def test_new_quote_uses_estimation_existing_quote_retains_legacy(self):
+		for is_new, expected in [(1, 0), (0, 100)]:
+			doc = self.estimate(custom_estimation_cost_source="", custom_estimation_items=[], __islocal=is_new, net_total=100)
+			calculate_oil_gas_pricing(doc)
+			self.assertEqual(doc.custom_total_estimated_value, expected)
+
+	def test_type_configuration_overrides_tampered_client_flag(self):
+		from jagadamba.jagadamba.type_settings import sync_type_settings
+		doc = self.estimate(custom_enable_estimation=1)
+		with patch.object(quotation.frappe, 'get_cached_doc', return_value=Doc(enable_estimation=0)):
+			sync_type_settings(doc)
+		self.assertEqual(doc.custom_enable_estimation, 0)
+		calculate_oil_gas_pricing(doc)
+		self.assertIsNone(doc.custom_total_quoted_value)
+
+	def test_renamed_type_keeps_estimation_enabled(self):
+		doc = self.estimate(custom_enable_estimation=0)
+		with patch.object(quotation.frappe, 'get_cached_doc', return_value=Doc(enable_estimation=1)):
+			quotation.validate(doc)
+		self.assertEqual(doc.custom_total_estimated_value, 84250)
+
+	def test_sales_order_reads_authorized_quotation_cost(self):
+		doc = self.estimate(doctype="Sales Order", custom_quotation="Q1", custom_total_estimated_value=1)
+		source = Doc(custom_types="Fabrication", docstatus=1, custom_total_estimated_value=84250, check_permission=Mock())
+		with patch.object(quotation.frappe, 'get_doc', return_value=source):
+			calculate_oil_gas_pricing(doc)
+		source.check_permission.assert_called_once_with('read')
+		self.assertEqual(doc.custom_total_estimated_value, 84250)
+		self.assertEqual(doc.custom_net_profit, 1500)
+
+	def test_sales_order_rejects_cost_from_different_currency_or_company(self):
+		for company, currency in [('Other', 'AED'), ('Company A', 'USD')]:
+			source = Doc(custom_types='Fabrication', docstatus=1, company=company, currency=currency, check_permission=Mock())
+			with patch.object(quotation.frappe, 'get_doc', return_value=source), self.assertRaises(ValueError):
+				calculate_oil_gas_pricing(self.estimate(doctype='Sales Order', custom_quotation='Q1', company='Company A', currency='AED'))
+
+	def test_sales_order_requires_matching_readable_source(self):
+		for source in [Doc(custom_types='Other', docstatus=1, check_permission=Mock()),
+			Doc(custom_types='Fabrication', docstatus=2, check_permission=Mock()),
+			Doc(check_permission=Mock(side_effect=PermissionError))]:
+			with patch.object(quotation.frappe, 'get_doc', return_value=source), self.assertRaises((ValueError, PermissionError)):
+				calculate_oil_gas_pricing(self.estimate(doctype='Sales Order', custom_quotation='Q1'))
+
+
+class EstimationMetadataTests(unittest.TestCase):
+	def test_field_layout_and_type_conditions(self):
+		import json
+		from pathlib import Path
+		data = json.loads(Path('jagadamba/jagadamba/custom/quotation.json').read_text())
+		fields = {f['fieldname']: f for f in data['custom_fields']}
+		order = json.loads(next(p['value'] for p in data['property_setters'] if p['property'] == 'field_order'))
+		self.assertEqual(len(order), len(set(order)))
+		self.assertTrue(set(fields) <= set(order))
+		self.assertEqual(fields['custom_additional_items']['depends_on'], 'eval:doc.custom_show_additional_items')
+		self.assertEqual(fields['custom_estimation_section']['depends_on'], 'eval:doc.custom_enable_estimation')
+		start, end = order.index('custom_estimation_section'), order.index('custom_oil_gas_pricing_section')
+		self.assertIn('custom_estimation_items', order[start:end])
+		self.assertFalse(any(fields.get(n, {}).get('fieldtype') == 'Column Break' for n in order[start:end]))
+
+	def test_setup_marker_preserves_admin_changes_on_repeat_migrate(self):
+		from jagadamba.patches import setup_estimation
+		with patch.object(setup_estimation.frappe.db, 'exists', return_value=True), patch.object(setup_estimation.frappe.db, 'set_value') as write:
+			setup_estimation.execute()
+		write.assert_not_called()
+
+	def test_setup_changes_only_type_configuration_and_document_flags(self):
+		from jagadamba.patches import setup_estimation
+		api = setup_estimation.frappe
+		with patch.object(api.db, 'exists', side_effect=lambda dt, name: dt != 'Patch Log'), \
+			patch.object(api.db, 'set_value') as write, \
+			patch.object(api, 'clear_document_cache', create=True), \
+			patch.object(api, 'get_all', return_value=['Oil & Gas'], create=True), \
+			patch.object(setup_estimation, 'get_configuration', return_value={'enable_estimation': 1}), \
+			patch.object(api, 'get_doc', return_value=Mock()) as log:
+			setup_estimation.execute()
+		self.assertEqual(write.call_count, 7)
+		for call in write.call_args_list:
+			self.assertFalse(call.kwargs['update_modified'])
+			self.assertTrue(all('total' not in key and 'items' not in key.replace('show_additional_items','') for key in call.args[2]))
+		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.MARKER})
 
 
 if __name__ == "__main__":

@@ -1,16 +1,13 @@
 function set_vehicle_type_query(frm) {
 	frm.set_query("custom_vehicle_type", function () {
-		const filters = { disabled: 0, item_group: "Finished Items" };
-		if (frm.doc.custom_types) filters.custom_types = frm.doc.custom_types;
-		if (frm.doc.company) filters.custom_company = frm.doc.company;
+		const filters = jagadamba.sales_flow.item_filters(frm, true);
 		return { filters: filters };
 	});
 }
 
 function set_oil_gas_item_query(frm) {
 	frm.set_query("oil_gas_item", function () {
-		const filters = { item_group: "Finished Items", disabled: 0, custom_types: "Oil & Gas" };
-		if (frm.doc.company) filters.custom_company = frm.doc.company;
+		const filters = jagadamba.sales_flow.item_filters(frm, true);
 		return { filters: filters };
 	});
 }
@@ -69,7 +66,8 @@ async function make_opportunity_direct(frm) {
 }
 
 frappe.ui.form.on("Lead", {
-	refresh: function (frm) {
+	refresh: async function (frm) {
+		await jagadamba.sales_flow.configure(frm, true);
 		set_vehicle_type_query(frm);
 		set_oil_gas_item_query(frm);
 
@@ -83,10 +81,9 @@ frappe.ui.form.on("Lead", {
 		}, 100);
 	},
 
-	custom_types: function (frm) {
-		frm.set_value("custom_vehicle_type", "");
-		frm.set_value("oil_gas_item", "");
-		set_vehicle_type_query(frm);
+	custom_types: async function (frm) {
+		await jagadamba.sales_flow.clear_type_items(frm, ["custom_vehicle_type", "oil_gas_item"]);
+		await jagadamba.sales_flow.configure(frm);
 	},
 
 	custom_customers: async function (frm) {

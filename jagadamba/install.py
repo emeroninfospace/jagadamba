@@ -15,4 +15,3 @@ def _seed_types():
 		doc = frappe.new_doc("Type")
 		doc.type = type_name
 		doc.insert(ignore_permissions=True)
-	frappe.db.commit()
