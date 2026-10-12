@@ -1,13 +1,13 @@
 {
- "charts": [
+ "charts": [],
+ "content": "[{\"id\":\"jg-projects\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Project Dashboard\",\"col\":12}},{\"id\":\"8gXsOyIjyW\",\"type\":\"card\",\"data\":{\"card_name\":\"Project & Budget\",\"col\":4}},{\"id\":\"UXy6gdPOWz\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
+ "creation": "2026-09-25 15:08:00.505039",
+ "custom_blocks": [
   {
-   "chart_name": "Project Summary",
-   "label": "Project Summary"
+   "custom_block_name": "Project Dashboard",
+   "label": "Project Dashboard"
   }
  ],
- "content": "[{\"id\":\"tgd9-39ICN\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Project Desk</span>\",\"col\":12}},{\"id\":\"F5jKohDBbb\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Active Projects\",\"col\":3}},{\"id\":\"DtAmRxbviC\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Draft Project Budgets\",\"col\":3}},{\"id\":\"tIet7Ee9Il\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Project Budgets Pending Approval\",\"col\":3}},{\"id\":\"0PCz7Ed1mz\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Budgeted Value\",\"col\":3}},{\"id\":\"nWq-alJIxR\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"8gXsOyIjyW\",\"type\":\"card\",\"data\":{\"card_name\":\"Project & Budget\",\"col\":4}},{\"id\":\"UXy6gdPOWz\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"X1ulXHnXcK\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Project Summary\",\"col\":12}}]",
- "creation": "2026-09-25 15:08:00.505039",
- "custom_blocks": [],
  "docstatus": 0,
  "doctype": "Workspace",
  "for_user": "",
@@ -111,29 +111,31 @@
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Project Desk",
- "number_cards": [
-  {
-   "label": "Active Projects",
-   "number_card_name": "Active Projects"
-  },
-  {
-   "label": "Draft Project Budgets",
-   "number_card_name": "Draft Project Budgets"
-  },
-  {
-   "label": "Project Budgets Pending Approval",
-   "number_card_name": "Project Budgets Pending Approval"
-  },
-  {
-   "label": "Total Budgeted Value",
-   "number_card_name": "Total Budgeted Value"
-  }
- ],
+ "number_cards": [],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [],
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Management"
+  },
+  {
+   "role": "Project Engineer"
+  },
+  {
+   "role": "Projects User"
+  },
+  {
+   "role": "Projects Manager"
+  },
+  {
+   "role": "Engineering Head"
+  }
+ ],
  "sequence_id": 7.0,
  "shortcuts": [],
  "title": "Project Desk"

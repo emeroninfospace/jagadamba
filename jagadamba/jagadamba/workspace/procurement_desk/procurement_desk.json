@@ -1,13 +1,13 @@
 {
- "charts": [
+ "charts": [],
+ "content": "[{\"id\":\"jg-procurement\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Procurement Dashboard\",\"col\":12}},{\"id\":\"l5MxcTfFqo\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Material Request\",\"col\":3}},{\"id\":\"iev07AnrXi\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Purchase Order\",\"col\":3}},{\"id\":\"Ok5OFE_kiE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier Quotation\",\"col\":3}},{\"id\":\"R9lEpoivkZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier\",\"col\":3}},{\"id\":\"F9BXY20-Kz\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\",\"col\":4}},{\"id\":\"G4B_tP5bMu\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"177jj_Eoug\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}}]",
+ "creation": "2026-09-25 14:49:28.214858",
+ "custom_blocks": [
   {
-   "chart_name": "Purchase Order Analysis",
-   "label": "Purchase Order Analysis"
+   "custom_block_name": "Procurement Dashboard",
+   "label": "Procurement Dashboard"
   }
  ],
- "content": "[{\"id\":\"eUFNNU-i89\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Procurement Desk</span>\",\"col\":12}},{\"id\":\"igRS0wUH5P\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Material Request Pending \",\"col\":4}},{\"id\":\"NL-U7fRjh3\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Draft Purchase Orders\",\"col\":4}},{\"id\":\"0Mv1FYOyZh\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Purchase Order First Release Pending\",\"col\":4}},{\"id\":\"1j7UVI5JyN\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"l5MxcTfFqo\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Material Request\",\"col\":3}},{\"id\":\"iev07AnrXi\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Purchase Order\",\"col\":3}},{\"id\":\"Ok5OFE_kiE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier Quotation\",\"col\":3}},{\"id\":\"R9lEpoivkZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier\",\"col\":3}},{\"id\":\"gB1a-CP0BO\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"F9BXY20-Kz\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\",\"col\":4}},{\"id\":\"G4B_tP5bMu\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"177jj_Eoug\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}},{\"id\":\"VtwntAtd2n\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Purchase Order Analysis\",\"col\":12}}]",
- "creation": "2026-09-25 14:49:28.214858",
- "custom_blocks": [],
  "docstatus": 0,
  "doctype": "Workspace",
  "for_user": "",
@@ -130,25 +130,28 @@
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Procurement Desk",
- "number_cards": [
-  {
-   "label": "Material Request Pending ",
-   "number_card_name": "Material Request Pending Action"
-  },
-  {
-   "label": "Draft Purchase Orders",
-   "number_card_name": "Draft Purchase Orders"
-  },
-  {
-   "label": "Purchase Order First Release Pending",
-   "number_card_name": "POs Pending First Release"
-  }
- ],
+ "number_cards": [],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [],
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Management"
+  },
+  {
+   "role": "Procurement Engineer"
+  },
+  {
+   "role": "Purchase User"
+  },
+  {
+   "role": "Purchase Manager"
+  }
+ ],
  "sequence_id": 9.0,
  "shortcuts": [
   {

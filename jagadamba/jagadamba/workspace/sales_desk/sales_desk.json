@@ -1,13 +1,13 @@
 {
- "charts": [
+ "charts": [],
+ "content": "[{\"id\":\"jg-sales\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Sales Dashboard\",\"col\":12}},{\"id\":\"84hV3rtSfP\",\"type\":\"paragraph\",\"data\":{\"text\":\"Shortcuts\",\"col\":12}},{\"id\":\"Zltd-Mmihk\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lead\",\"col\":3}},{\"id\":\"PExrDtWm26\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotation\",\"col\":3}},{\"id\":\"2Lhls0uWbJ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Order\",\"col\":3}},{\"id\":\"jruQIHI_o3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customer\",\"col\":3}},{\"id\":\"anDFe3U241\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\",\"col\":4}},{\"id\":\"jvHyx6uh8_\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}}]",
+ "creation": "2026-09-25 12:48:07.203622",
+ "custom_blocks": [
   {
-   "chart_name": "Sales Order Analysis",
-   "label": "Sales Order Analysis"
+   "custom_block_name": "Sales Dashboard",
+   "label": "Sales Dashboard"
   }
  ],
- "content": "[{\"id\":\"ClZ76YqFZj\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Sales Desk</span>\",\"col\":12}},{\"id\":\"1E_9Bo_Lnt\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Active Customers\",\"col\":3}},{\"id\":\"ck-H1bCunL\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Leads\",\"col\":3}},{\"id\":\"bMm85wg2pb\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Quotation\",\"col\":3}},{\"id\":\"iDeIB1afeZ\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Sales Orders to Bill\",\"col\":3}},{\"id\":\"KWRV4ChTAQ\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"84hV3rtSfP\",\"type\":\"paragraph\",\"data\":{\"text\":\"Shortcuts\",\"col\":12}},{\"id\":\"Zltd-Mmihk\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lead\",\"col\":3}},{\"id\":\"PExrDtWm26\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotation\",\"col\":3}},{\"id\":\"2Lhls0uWbJ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Order\",\"col\":3}},{\"id\":\"jruQIHI_o3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customer\",\"col\":3}},{\"id\":\"TNjL0PfHxs\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"anDFe3U241\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\",\"col\":4}},{\"id\":\"jvHyx6uh8_\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}},{\"id\":\"PHvTeE05aV\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Sales Order Analysis\",\"col\":12}}]",
- "creation": "2026-09-25 12:48:07.203622",
- "custom_blocks": [],
  "docstatus": 0,
  "doctype": "Workspace",
  "for_user": "",
@@ -91,29 +91,28 @@
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Sales Desk",
- "number_cards": [
-  {
-   "label": "Active Customers",
-   "number_card_name": "Active Customers"
-  },
-  {
-   "label": "Total Leads",
-   "number_card_name": "Total Leads"
-  },
-  {
-   "label": "Quotation",
-   "number_card_name": "Quotation"
-  },
-  {
-   "label": "Sales Orders to Bill",
-   "number_card_name": "Sales Orders to Bill"
-  }
- ],
+ "number_cards": [],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [],
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Management"
+  },
+  {
+   "role": "Sales Executive"
+  },
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Sales Manager"
+  }
+ ],
  "sequence_id": 8.0,
  "shortcuts": [
   {

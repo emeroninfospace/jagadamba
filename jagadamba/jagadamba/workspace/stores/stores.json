@@ -1,8 +1,13 @@
 {
  "charts": [],
- "content": "[{\"id\":\"MTM_FajoE6\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Stores</span>\",\"col\":12}},{\"id\":\"3ZofNVWnhj\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Stock Value\",\"col\":4}},{\"id\":\"2AeuQjEyej\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Active Items\",\"col\":4}},{\"id\":\"5jH_7C4P76\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Warehouses\",\"col\":4}},{\"id\":\"gDdyPm-Us8\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"XqtbUdyV_l\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"GRN\",\"col\":3}},{\"id\":\"YImIbhXpAL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Entry\",\"col\":3}},{\"id\":\"YKmDKALOE-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"qppGSdOGZB\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Warehouse\",\"col\":3}},{\"id\":\"Cu0UQ8zh5L\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"73KgRrP42l\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}},{\"id\":\"BbmpOHnyr-\",\"type\":\"card\",\"data\":{\"card_name\":\"Store Operations\",\"col\":4}},{\"id\":\"G5r5RplZes\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
+ "content": "[{\"id\":\"jg-stores\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Stores Dashboard\",\"col\":12}},{\"id\":\"XqtbUdyV_l\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"GRN\",\"col\":3}},{\"id\":\"YImIbhXpAL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Entry\",\"col\":3}},{\"id\":\"YKmDKALOE-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"qppGSdOGZB\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Warehouse\",\"col\":3}},{\"id\":\"73KgRrP42l\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}},{\"id\":\"BbmpOHnyr-\",\"type\":\"card\",\"data\":{\"card_name\":\"Store Operations\",\"col\":4}},{\"id\":\"G5r5RplZes\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
  "creation": "2026-09-25 15:25:10.063350",
- "custom_blocks": [],
+ "custom_blocks": [
+  {
+   "custom_block_name": "Stores Dashboard",
+   "label": "Stores Dashboard"
+  }
+ ],
  "docstatus": 0,
  "doctype": "Workspace",
  "for_user": "",
@@ -135,25 +140,28 @@
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Stores",
- "number_cards": [
-  {
-   "label": "Total Stock Value",
-   "number_card_name": "Total Stock Value"
-  },
-  {
-   "label": "Total Active Items",
-   "number_card_name": "Total Active Items"
-  },
-  {
-   "label": "Total Warehouses",
-   "number_card_name": "Total Warehouses"
-  }
- ],
+ "number_cards": [],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [],
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Management"
+  },
+  {
+   "role": "Stores User"
+  },
+  {
+   "role": "Stock User"
+  },
+  {
+   "role": "Stock Manager"
+  }
+ ],
  "sequence_id": 43.0,
  "shortcuts": [
   {

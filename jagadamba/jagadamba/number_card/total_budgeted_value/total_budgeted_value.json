@@ -1,5 +1,5 @@
 {
- "aggregate_function_based_on": "",
+ "aggregate_function_based_on": "total_budget_amount",
  "creation": "2026-09-25 15:13:22.365404",
  "currency": "AED",
  "docstatus": 0,
@@ -7,7 +7,7 @@
  "document_type": "Project Budget",
  "dynamic_filters_json": "[]",
  "filters_json": "[[\"Project Budget\",\"total_budget_amount\",\"is\",\"set\",false]]",
- "function": "Count",
+ "function": "Sum",
  "idx": 0,
  "is_public": 1,
  "is_standard": 1,

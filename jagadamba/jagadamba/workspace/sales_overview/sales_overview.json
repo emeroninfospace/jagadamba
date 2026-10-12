@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"X6nt697FOD\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Sales Dashboard\",\"col\":12}}]",
+ "content": "[{\"id\":\"jg-sales\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Sales Dashboard\",\"col\":12}}]",
  "creation": "2026-08-17 14:40:21.844967",
  "custom_blocks": [
   {
@@ -27,7 +27,23 @@
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [],
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Management"
+  },
+  {
+   "role": "Sales Executive"
+  },
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Sales Manager"
+  }
+ ],
  "sequence_id": 11.0,
  "shortcuts": [],
  "title": "Sales Overview"
