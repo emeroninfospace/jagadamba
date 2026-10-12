@@ -1,12 +1,15 @@
 import frappe
 from frappe.utils import flt
 
+from jagadamba.jagadamba.workspace_dashboard import require_legacy_administrator
+
 # Project Budget docstatus filter: < 2 = Draft + Submitted, = 1 = Submitted only
 PB_DOCSTATUS_COND = "pb.docstatus < 2"
 
 
 @frappe.whitelist()
 def get_project_dashboard_data(company=None, status=None):
+	require_legacy_administrator()
 	company = company or _default_company()
 
 	projects = get_projects(company, status)
@@ -234,6 +237,7 @@ def get_over_budget_projects(projects, limit=8):
 
 @frappe.whitelist()
 def get_project_detail(project):
+	require_legacy_administrator()
 	proj = frappe.db.get_value(
 		"Project",
 		project,
@@ -273,6 +277,7 @@ def get_project_detail(project):
 
 @frappe.whitelist()
 def get_item_projects(item_code):
+	require_legacy_administrator()
 	rows = frappe.db.sql(
 		"""
 		SELECT p.name AS project, p.project_name, p.status,

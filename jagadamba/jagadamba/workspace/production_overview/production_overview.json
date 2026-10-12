@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"MTktvba6YW\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Production Dashboard\",\"col\":12}}]",
+ "content": "[{\"id\":\"jg-production\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Production Dashboard\",\"col\":12}}]",
  "creation": "2026-08-15 11:25:33.106181",
  "custom_blocks": [
   {
@@ -27,7 +27,26 @@
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [],
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Management"
+  },
+  {
+   "role": "Production Engineer"
+  },
+  {
+   "role": "Manufacturing User"
+  },
+  {
+   "role": "Manufacturing Manager"
+  },
+  {
+   "role": "Quality Engineer"
+  }
+ ],
  "sequence_id": 3.0,
  "shortcuts": [],
  "title": "Production Overview"

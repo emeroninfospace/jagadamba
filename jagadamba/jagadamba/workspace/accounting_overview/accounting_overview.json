@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"0GmU88we91\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Accounting Dashboard\",\"col\":12}}]",
+ "content": "[{\"id\":\"jg-accounting\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Accounting Dashboard\",\"col\":12}}]",
  "creation": "2026-08-15 13:06:07.752568",
  "custom_blocks": [
   {
@@ -27,7 +27,23 @@
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [],
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Management"
+  },
+  {
+   "role": "Finance Manager"
+  },
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Accounts Manager"
+  }
+ ],
  "sequence_id": 5.0,
  "shortcuts": [],
  "title": "Accounting Overview"

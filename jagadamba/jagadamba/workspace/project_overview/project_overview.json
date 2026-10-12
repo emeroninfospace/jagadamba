@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"WKDtL4la4V\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Project Dashboard\",\"col\":12}}]",
+ "content": "[{\"id\":\"jg-projects\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Project Dashboard\",\"col\":12}}]",
  "creation": "2026-08-18 12:09:37.865611",
  "custom_blocks": [
   {
@@ -27,7 +27,26 @@
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [],
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Management"
+  },
+  {
+   "role": "Project Engineer"
+  },
+  {
+   "role": "Projects User"
+  },
+  {
+   "role": "Projects Manager"
+  },
+  {
+   "role": "Engineering Head"
+  }
+ ],
  "sequence_id": 4.0,
  "shortcuts": [],
  "title": "Project Overview"

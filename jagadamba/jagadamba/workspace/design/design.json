@@ -1,8 +1,13 @@
 {
  "charts": [],
- "content": "[{\"id\":\"OkRS7vRrK9\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Design</span>\",\"col\":12}},{\"id\":\"Vn94NICTFP\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Draft Documents\",\"col\":4}},{\"id\":\"pUF8q-7GBm\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Documents First Release\",\"col\":4}},{\"id\":\"zHfcxcTknu\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Documents Final Release\",\"col\":4}},{\"id\":\"KJ7TbAtmz7\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"BOMs Pending Approval\",\"col\":4}},{\"id\":\"2WbxFuyJNe\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Rejected Documents\",\"col\":4}},{\"id\":\"0g90V78eYl\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"9kasQq4Wal\",\"type\":\"card\",\"data\":{\"card_name\":\"BOM\",\"col\":4}},{\"id\":\"rlvz7FPEV-\",\"type\":\"card\",\"data\":{\"card_name\":\"Design Work\",\"col\":4}}]",
+ "content": "[{\"id\":\"jg-design\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Design Dashboard\",\"col\":12}},{\"id\":\"9kasQq4Wal\",\"type\":\"card\",\"data\":{\"card_name\":\"BOM\",\"col\":4}},{\"id\":\"rlvz7FPEV-\",\"type\":\"card\",\"data\":{\"card_name\":\"Design Work\",\"col\":4}}]",
  "creation": "2026-09-25 14:37:38.811139",
- "custom_blocks": [],
+ "custom_blocks": [
+  {
+   "custom_block_name": "Design Dashboard",
+   "label": "Design Dashboard"
+  }
+ ],
  "docstatus": 0,
  "doctype": "Workspace",
  "for_user": "",
@@ -96,33 +101,25 @@
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Design",
- "number_cards": [
-  {
-   "label": "Draft Documents",
-   "number_card_name": "Draft Documents"
-  },
-  {
-   "label": "Documents First Release",
-   "number_card_name": "Documents First Release"
-  },
-  {
-   "label": "Documents Final Release",
-   "number_card_name": "Documents Final Release"
-  },
-  {
-   "label": "BOMs Pending Approval",
-   "number_card_name": "BOMs Pending Approval"
-  },
-  {
-   "label": "Rejected Documents",
-   "number_card_name": "Rejected Documents"
-  }
- ],
+ "number_cards": [],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [],
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Management"
+  },
+  {
+   "role": "Design Engineer"
+  },
+  {
+   "role": "Engineering Head"
+  }
+ ],
  "sequence_id": 6.0,
  "shortcuts": [],
  "title": "Design"

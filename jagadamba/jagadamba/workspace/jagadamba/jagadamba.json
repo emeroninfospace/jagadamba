@@ -1,8 +1,13 @@
 {
  "charts": [],
- "content": "[{\"id\":\"CtTlkJCrRt\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Jagadamba</span>\",\"col\":12}},{\"id\":\"8XmIeg2zeK\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lead\",\"col\":3}},{\"id\":\"5bVTKjK1yY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotation\",\"col\":3}},{\"id\":\"CEvQX32EkE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Order\",\"col\":3}},{\"id\":\"eh1gbipoXC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project\",\"col\":3}},{\"id\":\"nDjj7Kj9lx\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Order Confirmation Sheet\",\"col\":3}},{\"id\":\"ylrFUkPfux\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Designing\",\"col\":3}},{\"id\":\"ayYvFs6oCn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Purchase Order\",\"col\":3}},{\"id\":\"2TgKipjfih\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"4Rwe82xwE1\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"e79qVMqMiM\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\",\"col\":4}},{\"id\":\"sd_qMcWWJq\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}},{\"id\":\"V8XNA_Tlmu\",\"type\":\"spacer\",\"data\":{\"col\":12}}]",
+ "content": "[{\"id\":\"jg-overview\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Jagadamba Overview\",\"col\":12}},{\"id\":\"8XmIeg2zeK\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lead\",\"col\":3}},{\"id\":\"5bVTKjK1yY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotation\",\"col\":3}},{\"id\":\"CEvQX32EkE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Order\",\"col\":3}},{\"id\":\"eh1gbipoXC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project\",\"col\":3}},{\"id\":\"nDjj7Kj9lx\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Order Confirmation Sheet\",\"col\":3}},{\"id\":\"ylrFUkPfux\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Designing\",\"col\":3}},{\"id\":\"ayYvFs6oCn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Purchase Order\",\"col\":3}},{\"id\":\"2TgKipjfih\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"e79qVMqMiM\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\",\"col\":4}},{\"id\":\"sd_qMcWWJq\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}}]",
  "creation": "2026-08-13 15:14:52.787263",
- "custom_blocks": [],
+ "custom_blocks": [
+  {
+   "custom_block_name": "Jagadamba Overview",
+   "label": "Jagadamba Overview"
+  }
+ ],
  "docstatus": 0,
  "doctype": "Workspace",
  "for_user": "",
@@ -161,7 +166,83 @@
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [],
+ "roles": [
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Design Engineer"
+  },
+  {
+   "role": "Engineering Head"
+  },
+  {
+   "role": "Finance Manager"
+  },
+  {
+   "role": "HR Manager"
+  },
+  {
+   "role": "HR User"
+  },
+  {
+   "role": "Management"
+  },
+  {
+   "role": "Manufacturing Manager"
+  },
+  {
+   "role": "Manufacturing User"
+  },
+  {
+   "role": "Procurement Engineer"
+  },
+  {
+   "role": "Production Engineer"
+  },
+  {
+   "role": "Project Engineer"
+  },
+  {
+   "role": "Projects Manager"
+  },
+  {
+   "role": "Projects User"
+  },
+  {
+   "role": "Purchase Manager"
+  },
+  {
+   "role": "Purchase User"
+  },
+  {
+   "role": "Quality Engineer"
+  },
+  {
+   "role": "Sales Executive"
+  },
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Stock Manager"
+  },
+  {
+   "role": "Stock User"
+  },
+  {
+   "role": "Stores User"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
  "sequence_id": 2.0,
  "shortcuts": [
   {

@@ -8,7 +8,7 @@ app_license = "mit"
 # Apps
 # ------------------
 
-# required_apps = []
+required_apps = ["erpnext"]
 
 # Each item in the list will be shown as an app in the apps page
 # add_to_apps_screen = [
@@ -114,7 +114,7 @@ doctype_js = {
 fixtures = [
     {
         "dt": "Custom HTML Block",
-        "filters": [["name", "in", ["Production Dashboard", "Accounting Dashboard", "Sales Dashboard", "HR Overview", "Project Dashboard"]]],
+        "filters": [["name", "in", ['Jagadamba Overview', 'Sales Dashboard', 'Production Dashboard', 'Project Dashboard', 'Procurement Dashboard', 'Stores Dashboard', 'Design Dashboard', 'Accounting Dashboard', 'HR Overview']]],
     },
     {
         "dt": "Role",
@@ -337,3 +337,6 @@ after_install = "jagadamba.install.after_install"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+
+# Apply only missing workspace audiences after fixtures are available.
+after_migrate = "jagadamba.install.sync_workspace_roles"
