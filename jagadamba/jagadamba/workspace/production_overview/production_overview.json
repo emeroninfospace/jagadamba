@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"MTktvba6YW\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Production Dashboard\",\"col\":12}}]",
+ "content": "[{\"id\": \"RMf7NQ1V1O\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Production Overview</b></span>\", \"col\": 12}}, {\"id\": \"MTktvba6YW\", \"type\": \"custom_block\", \"data\": {\"custom_block_name\": \"Production Dashboard\", \"col\": 12}}, {\"id\": \"GcOxCHYgRD\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"MYs7yVBCj9\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"Z51dfAeIs7\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Work Order\", \"col\": 3}}, {\"id\": \"xPTB0LKxOT\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Job Card\", \"col\": 3}}, {\"id\": \"KcZHNnGAea\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Production Plan\", \"col\": 3}}, {\"id\": \"aPG6xeTLob\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"BOM\", \"col\": 3}}, {\"id\": \"uwHk03bUa5\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Material Request\", \"col\": 3}}, {\"id\": \"8nVUtSoGP6\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Stock Entry\", \"col\": 3}}, {\"id\": \"tNcsrTnEjn\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Workstation\", \"col\": 3}}, {\"id\": \"rNOdCCgJPa\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Operation\", \"col\": 3}}, {\"id\": \"rPpfCPivwb\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Routing\", \"col\": 3}}, {\"id\": \"gjeKkOGQp0\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quality Inspection\", \"col\": 3}}, {\"id\": \"HsEbKlI4si\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Production Planning Report\", \"col\": 3}}, {\"id\": \"nhSkBLHI6R\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Work Order Summary\", \"col\": 3}}]",
  "creation": "2026-08-15 11:25:33.106181",
  "custom_blocks": [
   {
@@ -18,7 +18,7 @@
  "is_hidden": 0,
  "label": "Production Overview",
  "links": [],
- "modified": "2026-10-12 17:30:00.000000",
+ "modified": "2026-10-12 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Production Overview",
@@ -39,6 +39,105 @@
   }
  ],
  "sequence_id": 3.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "format": "{} In Process",
+   "label": "Work Order",
+   "link_to": "Work Order",
+   "stats_filter": "[[\"Work Order\", \"status\", \"=\", \"In Process\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "format": "{} In Progress",
+   "label": "Job Card",
+   "link_to": "Job Card",
+   "stats_filter": "[[\"Job Card\", \"status\", \"=\", \"Work In Progress\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "label": "Production Plan",
+   "link_to": "Production Plan",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "doc_view": "List",
+   "label": "BOM",
+   "link_to": "BOM",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Material Request",
+   "link_to": "Material Request",
+   "stats_filter": "[[\"Material Request\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Stock Entry",
+   "link_to": "Stock Entry",
+   "stats_filter": "[[\"Stock Entry\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "label": "Workstation",
+   "link_to": "Workstation",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "label": "Operation",
+   "link_to": "Operation",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Routing",
+   "link_to": "Routing",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "label": "Quality Inspection",
+   "link_to": "Quality Inspection",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "label": "Production Planning Report",
+   "link_to": "Production Planning Report",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Orange",
+   "label": "Work Order Summary",
+   "link_to": "Work Order Summary",
+   "stats_filter": "[]",
+   "type": "Report"
+  }
+ ],
  "title": "Production Overview"
 }

@@ -1,6 +1,19 @@
 {
- "charts": [],
- "content": "[{\"id\": \"fced213d6d\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"ecc523df14\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Delivery Note\", \"col\": 3}}, {\"id\": \"66473d9f6d\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Delivery Trip\", \"col\": 3}}, {\"id\": \"52d149bb37\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Sales Order\", \"col\": 3}}, {\"id\": \"bb05952d53\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"GRN\", \"col\": 3}}, {\"id\": \"d53f7c7167\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Shipment\", \"col\": 3}}, {\"id\": \"6aa3ad1068\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Driver\", \"col\": 3}}, {\"id\": \"ac489e4a35\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Vehicle\", \"col\": 3}}, {\"id\": \"fd95c74f2e\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Documents, Reports & Masters</b></span>\", \"col\": 12}}, {\"id\": \"a704377a52\", \"type\": \"card\", \"data\": {\"card_name\": \"Dispatch\", \"col\": 4}}, {\"id\": \"43baa70f7d\", \"type\": \"card\", \"data\": {\"card_name\": \"Fleet & Partners\", \"col\": 4}}, {\"id\": \"cb2e10e983\", \"type\": \"card\", \"data\": {\"card_name\": \"Logistics Reports\", \"col\": 4}}]",
+ "charts": [
+  {
+   "chart_name": "Delivery Trends",
+   "label": "Delivery Trends"
+  },
+  {
+   "chart_name": "Delivery Trips by Status",
+   "label": "Delivery Trips by Status"
+  },
+  {
+   "chart_name": "Purchase Receipt Trends",
+   "label": "Purchase Receipt Trends"
+  }
+ ],
+ "content": "[{\"id\": \"3PzxsjD22p\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Logistics Desk</b></span>\", \"col\": 12}}, {\"id\": \"So2BP8CSVj\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Draft Delivery Notes\", \"col\": 3}}, {\"id\": \"sgyGUdo2hf\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Scheduled Delivery Trips\", \"col\": 3}}, {\"id\": \"3t4431PdcL\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Sales Orders to Deliver\", \"col\": 3}}, {\"id\": \"rp0cMF1Y3q\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Purchase Orders to Receive\", \"col\": 3}}, {\"id\": \"ywdOJPWjUY\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Delivery Trends\", \"col\": 6}}, {\"id\": \"OfzkZuDmwD\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Delivery Trips by Status\", \"col\": 6}}, {\"id\": \"7wNUH0XP26\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Purchase Receipt Trends\", \"col\": 6}}, {\"id\": \"qWQmYI1EA8\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"5WwV4HQweP\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"6jXzIH984F\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Delivery Note\", \"col\": 3}}, {\"id\": \"ZWYTHhkLPa\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Delivery Trip\", \"col\": 3}}, {\"id\": \"lGUlYSa6on\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Sales Order\", \"col\": 3}}, {\"id\": \"EJesjDF9la\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Purchase Receipt\", \"col\": 3}}, {\"id\": \"PkDQHuCtk3\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Shipment\", \"col\": 3}}, {\"id\": \"hVMHiJyFKR\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Pick List\", \"col\": 3}}, {\"id\": \"Y4jyylh9pp\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Packing Slip\", \"col\": 3}}, {\"id\": \"9dU3etTvXK\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Driver\", \"col\": 3}}, {\"id\": \"hY5ogsouvM\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Vehicle\", \"col\": 3}}, {\"id\": \"FukH1KkDfe\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Address\", \"col\": 3}}, {\"id\": \"pTdeB1srG0\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Delivery Note Trends\", \"col\": 3}}, {\"id\": \"cWNxZsKKQD\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"qAHVvHwVVC\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\", \"col\": 12}}, {\"id\": \"a704377a52\", \"type\": \"card\", \"data\": {\"card_name\": \"Dispatch\", \"col\": 4}}, {\"id\": \"43baa70f7d\", \"type\": \"card\", \"data\": {\"card_name\": \"Fleet & Partners\", \"col\": 4}}, {\"id\": \"cb2e10e983\", \"type\": \"card\", \"data\": {\"card_name\": \"Logistics Reports\", \"col\": 4}}]",
  "creation": "2026-10-12 10:00:00",
  "custom_blocks": [],
  "docstatus": 0,
@@ -215,11 +228,28 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-12 17:30:00.000000",
+ "modified": "2026-10-12 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Logistics Desk",
- "number_cards": [],
+ "number_cards": [
+  {
+   "label": "Draft Delivery Notes",
+   "number_card_name": "Draft Delivery Notes"
+  },
+  {
+   "label": "Scheduled Delivery Trips",
+   "number_card_name": "Scheduled Delivery Trips"
+  },
+  {
+   "label": "Sales Orders to Deliver",
+   "number_card_name": "Sales Orders to Deliver"
+  },
+  {
+   "label": "Purchase Orders to Receive",
+   "number_card_name": "Purchase Orders to Receive"
+  }
+ ],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
@@ -241,75 +271,93 @@
  "sequence_id": 13.0,
  "shortcuts": [
   {
-   "color": "Green",
+   "color": "Blue",
    "doc_view": "List",
-   "doctype": "Workspace Shortcut",
-   "format": "{} To Bill",
-   "idx": 1,
+   "format": "{} Draft",
    "label": "Delivery Note",
    "link_to": "Delivery Note",
-   "stats_filter": "{\"status\": \"To Bill\"}",
+   "stats_filter": "[[\"Delivery Note\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "format": "{} Scheduled",
+   "label": "Delivery Trip",
+   "link_to": "Delivery Trip",
+   "stats_filter": "[[\"Delivery Trip\", \"status\", \"=\", \"Scheduled\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "label": "Sales Order",
+   "link_to": "Sales Order",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "doc_view": "List",
+   "label": "Purchase Receipt",
+   "link_to": "Purchase Receipt",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
    "color": "Cyan",
    "doc_view": "List",
-   "doctype": "Workspace Shortcut",
-   "format": "{} Active",
-   "idx": 2,
-   "label": "Delivery Trip",
-   "link_to": "Delivery Trip",
-   "stats_filter": "{\"status\": [\"in\", [\"Scheduled\", \"In Transit\"]]}",
+   "label": "Shipment",
+   "link_to": "Shipment",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "label": "Pick List",
+   "link_to": "Pick List",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "label": "Packing Slip",
+   "link_to": "Packing Slip",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "label": "Driver",
+   "link_to": "Driver",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Vehicle",
+   "link_to": "Vehicle",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "label": "Address",
+   "link_to": "Address",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
    "color": "Green",
-   "doc_view": "List",
-   "doctype": "Workspace Shortcut",
-   "format": "{} Pending",
-   "idx": 3,
-   "label": "Sales Order",
-   "link_to": "Sales Order",
-   "stats_filter": "{\"status\": [\"in\", [\"To Deliver and Bill\", \"To Deliver\", \"To Bill\"]]}",
-   "type": "DocType"
-  },
-  {
-   "color": "Blue",
-   "doc_view": "List",
-   "doctype": "Workspace Shortcut",
-   "format": "{} To Bill",
-   "idx": 4,
-   "label": "GRN",
-   "link_to": "Purchase Receipt",
-   "stats_filter": "{\"status\": \"To Bill\"}",
-   "type": "DocType"
-  },
-  {
-   "color": "Blue",
-   "doc_view": "List",
-   "doctype": "Workspace Shortcut",
-   "idx": 5,
-   "label": "Shipment",
-   "link_to": "Shipment",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "doctype": "Workspace Shortcut",
-   "idx": 6,
-   "label": "Driver",
-   "link_to": "Driver",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "doctype": "Workspace Shortcut",
-   "idx": 7,
-   "label": "Vehicle",
-   "link_to": "Vehicle",
-   "type": "DocType"
+   "label": "Delivery Note Trends",
+   "link_to": "Delivery Note Trends",
+   "stats_filter": "[]",
+   "type": "Report"
   }
  ],
  "title": "Logistics Desk"

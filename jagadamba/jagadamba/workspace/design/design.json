@@ -1,6 +1,11 @@
 {
- "charts": [],
- "content": "[{\"id\":\"OkRS7vRrK9\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Design</span>\",\"col\":12}},{\"id\":\"Vn94NICTFP\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Draft Documents\",\"col\":4}},{\"id\":\"pUF8q-7GBm\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Documents First Release\",\"col\":4}},{\"id\":\"zHfcxcTknu\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Documents Final Release\",\"col\":4}},{\"id\":\"KJ7TbAtmz7\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"BOMs Pending Approval\",\"col\":4}},{\"id\":\"2WbxFuyJNe\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Rejected Documents\",\"col\":4}},{\"id\":\"0g90V78eYl\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"9kasQq4Wal\",\"type\":\"card\",\"data\":{\"card_name\":\"BOM\",\"col\":4}},{\"id\":\"rlvz7FPEV-\",\"type\":\"card\",\"data\":{\"card_name\":\"Design Work\",\"col\":4}}]",
+ "charts": [
+  {
+   "chart_name": "Designing by Status",
+   "label": "Designing by Status"
+  }
+ ],
+ "content": "[{\"id\": \"EqrAhCkU0p\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Design</b></span>\", \"col\": 12}}, {\"id\": \"D4CuDslEh1\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Designs In Progress\", \"col\": 3}}, {\"id\": \"aLGtYRbuuX\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Designs Awaiting Customer\", \"col\": 3}}, {\"id\": \"y7UxBNak1M\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Draft Documents\", \"col\": 3}}, {\"id\": \"ysdC40O3NA\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Documents First Release\", \"col\": 3}}, {\"id\": \"oRHJGywfzd\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Documents Final Release\", \"col\": 3}}, {\"id\": \"ej9A1sWmss\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"BOMs Pending Approval\", \"col\": 3}}, {\"id\": \"YvKWuZAYVK\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Rejected Documents\", \"col\": 3}}, {\"id\": \"Dc90iY0hDp\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Active Items\", \"col\": 3}}, {\"id\": \"GDKn8kOWKi\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Designing by Status\", \"col\": 6}}, {\"id\": \"pyzXJOXQvn\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"BKvkFAupkJ\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"N5P8Z8Pwn8\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Designing\", \"col\": 3}}, {\"id\": \"xi3qSnxNzq\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Documents\", \"col\": 3}}, {\"id\": \"vsPhCSBOmD\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"BOM\", \"col\": 3}}, {\"id\": \"uNd3u9Bns2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Item\", \"col\": 3}}, {\"id\": \"UNfTsjT9Xx\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Vehicle Type\", \"col\": 3}}, {\"id\": \"dgFHmulUyO\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Type\", \"col\": 3}}, {\"id\": \"m0e3hYrxqG\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"UOM\", \"col\": 3}}, {\"id\": \"XFiTaNWLav\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Order Confirmation Sheet\", \"col\": 3}}, {\"id\": \"FfyKYT9YRy\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Sales Order\", \"col\": 3}}, {\"id\": \"wQqsM8f1x4\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"BOM Explorer\", \"col\": 3}}, {\"id\": \"cJGVwG6cLI\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"BOM Stock Report\", \"col\": 3}}, {\"id\": \"8myuRSiEQE\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"yz6HMSAvBv\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\", \"col\": 12}}, {\"id\": \"9kasQq4Wal\", \"type\": \"card\", \"data\": {\"card_name\": \"BOM\", \"col\": 4}}, {\"id\": \"rlvz7FPEV-\", \"type\": \"card\", \"data\": {\"card_name\": \"Design Work\", \"col\": 4}}]",
  "creation": "2026-09-25 14:37:38.811139",
  "custom_blocks": [],
  "docstatus": 0,
@@ -92,11 +97,19 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-12 17:30:00.000000",
+ "modified": "2026-10-12 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Design",
  "number_cards": [
+  {
+   "label": "Designs In Progress",
+   "number_card_name": "Designs In Progress"
+  },
+  {
+   "label": "Designs Awaiting Customer",
+   "number_card_name": "Designs Awaiting Customer"
+  },
   {
    "label": "Draft Documents",
    "number_card_name": "Draft Documents"
@@ -116,6 +129,10 @@
   {
    "label": "Rejected Documents",
    "number_card_name": "Rejected Documents"
+  },
+  {
+   "label": "Total Active Items",
+   "number_card_name": "Total Active Items"
   }
  ],
  "owner": "Administrator",
@@ -137,6 +154,96 @@
   }
  ],
  "sequence_id": 6.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "format": "{} In Progress",
+   "label": "Designing",
+   "link_to": "Designing",
+   "stats_filter": "[[\"Designing\", \"status\", \"=\", \"Design In Progress\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Documents",
+   "link_to": "Documents",
+   "stats_filter": "[[\"Documents\", \"workflow_state\", \"=\", \"Draft\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "BOM",
+   "link_to": "BOM",
+   "stats_filter": "[[\"BOM\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "doc_view": "List",
+   "label": "Item",
+   "link_to": "Item",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "List",
+   "label": "Vehicle Type",
+   "link_to": "Vehicle Type",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "label": "Type",
+   "link_to": "Type",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "label": "UOM",
+   "link_to": "UOM",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "label": "Order Confirmation Sheet",
+   "link_to": "Order Confirmation Sheet",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Sales Order",
+   "link_to": "Sales Order",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "label": "BOM Explorer",
+   "link_to": "BOM Explorer",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Green",
+   "label": "BOM Stock Report",
+   "link_to": "BOM Stock Report",
+   "stats_filter": "[]",
+   "type": "Report"
+  }
+ ],
  "title": "Design"
 }

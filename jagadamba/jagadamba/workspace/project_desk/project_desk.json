@@ -3,9 +3,13 @@
   {
    "chart_name": "Project Summary",
    "label": "Project Summary"
+  },
+  {
+   "chart_name": "Projects by Status",
+   "label": "Projects by Status"
   }
  ],
- "content": "[{\"id\":\"tgd9-39ICN\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Project Desk</span>\",\"col\":12}},{\"id\":\"F5jKohDBbb\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Active Projects\",\"col\":3}},{\"id\":\"DtAmRxbviC\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Draft Project Budgets\",\"col\":3}},{\"id\":\"tIet7Ee9Il\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Project Budgets Pending Approval\",\"col\":3}},{\"id\":\"0PCz7Ed1mz\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Budgeted Value\",\"col\":3}},{\"id\":\"nWq-alJIxR\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"8gXsOyIjyW\",\"type\":\"card\",\"data\":{\"card_name\":\"Project & Budget\",\"col\":4}},{\"id\":\"UXy6gdPOWz\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"X1ulXHnXcK\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Project Summary\",\"col\":12}}]",
+ "content": "[{\"id\": \"yY4GBNx4Xg\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Project Desk</b></span>\", \"col\": 12}}, {\"id\": \"bw5vQwZ7O8\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Active Projects\", \"col\": 3}}, {\"id\": \"U9ecgoWMUw\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Draft Project Budgets\", \"col\": 3}}, {\"id\": \"t3Cd3L5fpe\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Project Budgets Pending Approval\", \"col\": 3}}, {\"id\": \"nhwAHhkBBE\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Budgeted Value\", \"col\": 3}}, {\"id\": \"mwr6Pr1SAG\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Project Summary\", \"col\": 6}}, {\"id\": \"gCRkrhtoIC\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Projects by Status\", \"col\": 6}}, {\"id\": \"jpZ3gHNaPu\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"5AfOln3XlA\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"OLRCi7FenV\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Project\", \"col\": 3}}, {\"id\": \"D1n9HbSnow\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Task\", \"col\": 3}}, {\"id\": \"j35RBEAP9G\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Project Budget\", \"col\": 3}}, {\"id\": \"64qEhAwlmT\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Order Confirmation Sheet\", \"col\": 3}}, {\"id\": \"JgwEogFFAP\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Timesheet\", \"col\": 3}}, {\"id\": \"72tLPTkjyK\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Cost Center\", \"col\": 3}}, {\"id\": \"bgI9xvHAc8\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"BOM\", \"col\": 3}}, {\"id\": \"9l1pmi2ZKg\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Sales Order\", \"col\": 3}}, {\"id\": \"SsJl8vhN2S\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Project Budget vs Actual\", \"col\": 3}}, {\"id\": \"VRSfx8Ladp\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Project Summary\", \"col\": 3}}, {\"id\": \"nSBLJKTIpU\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"ehDmrDFqJ7\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\", \"col\": 12}}, {\"id\": \"8gXsOyIjyW\", \"type\": \"card\", \"data\": {\"card_name\": \"Project & Budget\", \"col\": 4}}, {\"id\": \"UXy6gdPOWz\", \"type\": \"card\", \"data\": {\"card_name\": \"Reports\", \"col\": 4}}]",
  "creation": "2026-09-25 15:08:00.505039",
  "custom_blocks": [],
  "docstatus": 0,
@@ -107,7 +111,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-12 17:30:00.000000",
+ "modified": "2026-10-12 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Project Desk",
@@ -148,6 +152,88 @@
   }
  ],
  "sequence_id": 7.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "format": "{} Open",
+   "label": "Project",
+   "link_to": "Project",
+   "stats_filter": "[[\"Project\", \"status\", \"=\", \"Open\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "format": "{} Open",
+   "label": "Task",
+   "link_to": "Task",
+   "stats_filter": "[[\"Task\", \"status\", \"=\", \"Open\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Project Budget",
+   "link_to": "Project Budget",
+   "stats_filter": "[[\"Project Budget\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "doc_view": "List",
+   "label": "Order Confirmation Sheet",
+   "link_to": "Order Confirmation Sheet",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "List",
+   "label": "Timesheet",
+   "link_to": "Timesheet",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "label": "Cost Center",
+   "link_to": "Cost Center",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "label": "BOM",
+   "link_to": "BOM",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "label": "Sales Order",
+   "link_to": "Sales Order",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "label": "Project Budget vs Actual",
+   "link_to": "Project Budget vs Actual",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Blue",
+   "label": "Project Summary",
+   "link_to": "Project Summary",
+   "stats_filter": "[]",
+   "type": "Report"
+  }
+ ],
  "title": "Project Desk"
 }

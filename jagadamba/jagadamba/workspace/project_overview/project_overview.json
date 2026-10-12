@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"WKDtL4la4V\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Project Dashboard\",\"col\":12}}]",
+ "content": "[{\"id\": \"4Fvn28xZlH\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Project Overview</b></span>\", \"col\": 12}}, {\"id\": \"WKDtL4la4V\", \"type\": \"custom_block\", \"data\": {\"custom_block_name\": \"Project Dashboard\", \"col\": 12}}, {\"id\": \"23Bc3lD0Mz\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"Oyyqt8WvNr\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"sIgFr2iMGo\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Project\", \"col\": 3}}, {\"id\": \"PasskhZoQT\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Task\", \"col\": 3}}, {\"id\": \"O7NJbar82p\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Project Budget\", \"col\": 3}}, {\"id\": \"y3haqZDHQw\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Order Confirmation Sheet\", \"col\": 3}}, {\"id\": \"JUqteBiTSK\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Timesheet\", \"col\": 3}}, {\"id\": \"BX041340Ry\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Cost Center\", \"col\": 3}}, {\"id\": \"vADaSLrBCr\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"BOM\", \"col\": 3}}, {\"id\": \"CstwL9EM9d\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Sales Order\", \"col\": 3}}, {\"id\": \"0tni1rlsjP\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Project Budget vs Actual\", \"col\": 3}}, {\"id\": \"pbPY42BGX4\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Project Summary\", \"col\": 3}}]",
  "creation": "2026-08-18 12:09:37.865611",
  "custom_blocks": [
   {
@@ -18,7 +18,7 @@
  "is_hidden": 0,
  "label": "Project Overview",
  "links": [],
- "modified": "2026-10-12 17:30:00.000000",
+ "modified": "2026-10-12 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Project Overview",
@@ -42,6 +42,88 @@
   }
  ],
  "sequence_id": 4.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "format": "{} Open",
+   "label": "Project",
+   "link_to": "Project",
+   "stats_filter": "[[\"Project\", \"status\", \"=\", \"Open\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "format": "{} Open",
+   "label": "Task",
+   "link_to": "Task",
+   "stats_filter": "[[\"Task\", \"status\", \"=\", \"Open\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Project Budget",
+   "link_to": "Project Budget",
+   "stats_filter": "[[\"Project Budget\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "doc_view": "List",
+   "label": "Order Confirmation Sheet",
+   "link_to": "Order Confirmation Sheet",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "List",
+   "label": "Timesheet",
+   "link_to": "Timesheet",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "label": "Cost Center",
+   "link_to": "Cost Center",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "label": "BOM",
+   "link_to": "BOM",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "label": "Sales Order",
+   "link_to": "Sales Order",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "label": "Project Budget vs Actual",
+   "link_to": "Project Budget vs Actual",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Blue",
+   "label": "Project Summary",
+   "link_to": "Project Summary",
+   "stats_filter": "[]",
+   "type": "Report"
+  }
+ ],
  "title": "Project Overview"
 }

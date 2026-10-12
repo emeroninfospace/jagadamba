@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"X6nt697FOD\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Sales Dashboard\",\"col\":12}}]",
+ "content": "[{\"id\": \"BcvvOzh6nV\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Sales Overview</b></span>\", \"col\": 12}}, {\"id\": \"X6nt697FOD\", \"type\": \"custom_block\", \"data\": {\"custom_block_name\": \"Sales Dashboard\", \"col\": 12}}, {\"id\": \"zSLlAAQtqE\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"s2sY7btPY8\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"uAuElYtQ7f\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Lead\", \"col\": 3}}, {\"id\": \"vpVzd5Eana\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Opportunity\", \"col\": 3}}, {\"id\": \"HS1cvqZAgC\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quotation\", \"col\": 3}}, {\"id\": \"BuaQHsgLA4\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Sales Order\", \"col\": 3}}, {\"id\": \"dWk4tiAzMO\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Customer\", \"col\": 3}}, {\"id\": \"3vFuEg8wK8\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Order Confirmation Sheet\", \"col\": 3}}, {\"id\": \"Wz6etwOatW\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Sales Invoice\", \"col\": 3}}, {\"id\": \"cm8LB82FG7\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Item\", \"col\": 3}}, {\"id\": \"kHDkOB2dVM\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Item Price\", \"col\": 3}}, {\"id\": \"fzpKslttN2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Contact\", \"col\": 3}}, {\"id\": \"HPuRqtxsGC\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Quotation Trends\", \"col\": 3}}, {\"id\": \"CgjZOo2hhj\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Sales Analytics\", \"col\": 3}}]",
  "creation": "2026-08-17 14:40:21.844967",
  "custom_blocks": [
   {
@@ -18,7 +18,7 @@
  "is_hidden": 0,
  "label": "Sales Overview",
  "links": [],
- "modified": "2026-10-12 17:30:00.000000",
+ "modified": "2026-10-12 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Sales Overview",
@@ -39,6 +39,106 @@
   }
  ],
  "sequence_id": 11.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "format": "{} Open",
+   "label": "Lead",
+   "link_to": "Lead",
+   "stats_filter": "[[\"Lead\", \"status\", \"=\", \"Open\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "format": "{} Open",
+   "label": "Opportunity",
+   "link_to": "Opportunity",
+   "stats_filter": "[[\"Opportunity\", \"status\", \"=\", \"Open\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Quotation",
+   "link_to": "Quotation",
+   "stats_filter": "[[\"Quotation\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "doc_view": "List",
+   "format": "{} To Deliver",
+   "label": "Sales Order",
+   "link_to": "Sales Order",
+   "stats_filter": "[[\"Sales Order\", \"status\", \"=\", \"To Deliver and Bill\", false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "List",
+   "label": "Customer",
+   "link_to": "Customer",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "label": "Order Confirmation Sheet",
+   "link_to": "Order Confirmation Sheet",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Sales Invoice",
+   "link_to": "Sales Invoice",
+   "stats_filter": "[[\"Sales Invoice\", \"docstatus\", \"=\", 0, false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "label": "Item",
+   "link_to": "Item",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Item Price",
+   "link_to": "Item Price",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "label": "Contact",
+   "link_to": "Contact",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "label": "Quotation Trends",
+   "link_to": "Quotation Trends",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Orange",
+   "label": "Sales Analytics",
+   "link_to": "Sales Analytics",
+   "stats_filter": "[]",
+   "type": "Report"
+  }
+ ],
  "title": "Sales Overview"
 }
