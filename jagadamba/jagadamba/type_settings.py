@@ -33,12 +33,38 @@ def get_type_settings(type_name=None):
 	return get_configuration(type_name)
 
 
-@frappe.whitelist()
-def get_finished_item_group(type_name=None):
-	"""Item group for finished-item links on engineering forms (BOM, Designing, Documents)."""
-	return get_configuration(type_name)["finished_item_group"]
-
-
 def sync_type_settings(doc, method=None):
 	for key, value in get_configuration(doc.get("custom_types")).items():
 		doc.set("custom_" + key, value)
+
+
+@frappe.whitelist()
+def finished_item_query(doctype, txt, searchfield, start, page_len, filters):
+	"""Link search for Job Item / Vehicle Type style fields: enabled finished items of the
+	document's Type. The finished item group (and its sub-groups) is resolved here, so the
+	filter never depends on form scripts having loaded the Type settings first."""
+	filters = frappe._dict(filters or {})
+	type_name = filters.get("type") or None
+	if type_name and not frappe.db.exists("Type", type_name):
+		type_name = None
+	conditions = {"disabled": 0}
+	if type_name:
+		conditions["custom_types"] = type_name
+	if filters.get("company"):
+		conditions["custom_company"] = filters.company
+	if cint(filters.get("parent_item")):
+		conditions["custom_parent_item"] = 1
+	group = get_configuration(type_name)["finished_item_group"]
+	if group:
+		conditions["item_group"] = ["descendants of (inclusive)", group]
+	txt = "%{}%".format(txt or "")
+	return frappe.get_list(
+		"Item",
+		filters=conditions,
+		or_filters={"name": ["like", txt], "item_name": ["like", txt]},
+		fields=["name", "item_name"],
+		order_by="name",
+		limit_start=cint(start),
+		limit_page_length=cint(page_len) or 20,
+		as_list=True,
+	)

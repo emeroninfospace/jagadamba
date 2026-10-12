@@ -148,9 +148,9 @@ class SalesOrderPricingTests(unittest.TestCase):
 		return Doc(data)
 
 	def test_requirement_example(self):
-		doc = self.order(custom_estimation_cost_source="Estimation")
+		doc = self.order()
 		calculate_oil_gas_pricing(doc)
-		self.assertEqual(doc.custom_estimation_cost_source, "Document Net Total")
+		self.assertEqual(doc.custom_total_estimated_value, 84250)
 		self.assertEqual(doc.custom_net_profit, 1500)
 		self.assertEqual(doc.custom_vat_amount, 4287.50)
 		self.assertEqual(doc.custom_tax_amount, 9003.75)
@@ -196,7 +196,17 @@ class LayoutTests(unittest.TestCase):
 	def test_sales_order_pricing_is_type_driven(self):
 		fields, order = self.load('sales_order')
 		self.assertEqual(fields['custom_oil_gas_pricing_section']['depends_on'], 'eval:doc.custom_enable_estimation')
-		self.assertEqual(fields['custom_estimation_cost_source'].get('hidden'), 1)
+		self.assertNotIn('custom_estimation_cost_source', fields)
+		for field in fields.values():
+			if field.get('insert_after'):
+				self.assertIn(field['insert_after'], order)
+
+	def test_lead_technical_sections_follow_job_item(self):
+		fields, order = self.load('lead')
+		for name in ('equipment_section', 'technical_specs_section', 'requirements_section'):
+			self.assertEqual(fields[name]['depends_on'], 'eval:doc.custom_show_job_item')
+		self.assertEqual(order[order.index('custom_types') - 1], 'col_break123')
+		self.assertEqual(order[order.index('oil_gas_item') - 1], 'custom_vehicle_type')
 
 
 class SetupTests(unittest.TestCase):
@@ -244,6 +254,29 @@ class SetupTests(unittest.TestCase):
 		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.REMOVE_QUOTATION_ESTIMATION_MARKER})
 
 
+	def test_removes_unused_layout_fields_once(self):
+		from jagadamba.patches import setup_estimation
+		api = setup_estimation.frappe
+		existing = {'Custom Field': {'Sales Order-custom_column_break_7ozif', 'Quotation-custom_estimation_tab'}}
+		with patch.object(api.db, 'exists', side_effect=lambda dt, name: isinstance(name, str) and name in existing.get(dt, set())), \
+			patch.object(api, 'delete_doc', create=True) as delete, \
+			patch.object(api, 'clear_cache', create=True), \
+			patch.object(api, 'get_doc', return_value=Mock()) as log:
+			setup_estimation._remove_layout_fields()
+		deleted = {c.args[:2] for c in delete.call_args_list}
+		self.assertEqual(deleted, {('Custom Field', 'Sales Order-custom_column_break_7ozif'), ('Custom Field', 'Quotation-custom_estimation_tab')})
+		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.FORM_CLEANUP_MARKER})
+
+	def test_removed_layout_fields_are_gone_from_fixtures(self):
+		import json
+
+		from jagadamba.patches import setup_estimation
+		files = {'Quotation': 'quotation', 'Sales Order': 'sales_order', 'Lead': 'lead'}
+		for doctype, fieldname in setup_estimation.REMOVED_LAYOUT_FIELDS:
+			with open(f'jagadamba/jagadamba/custom/{files[doctype]}.json') as handle:
+				self.assertNotIn(f'"{fieldname}"', handle.read(), fieldname)
+
+
 class TypeConfigurationTests(unittest.TestCase):
 	def test_finished_item_group_falls_back_to_settings_default(self):
 		from jagadamba.jagadamba import type_settings
@@ -254,9 +287,33 @@ class TypeConfigurationTests(unittest.TestCase):
 			self.assertEqual(type_settings.get_configuration('Any Type')['show_additional_items'], 1)
 			self.assertEqual(type_settings.get_configuration(None)['finished_item_group'], 'Assemblies')
 			self.assertEqual(type_settings.get_configuration(None)['show_additional_items'], 0)
-		with patch.object(api.db, 'get_single_value', return_value='Assemblies'), \
-			patch.object(api, 'get_cached_doc', return_value=Doc(finished_item_group='Skids')):
-			self.assertEqual(type_settings.get_finished_item_group('Any Type'), 'Skids')
+
+	def _query(self, filters, type_exists=True, group='Finished Goods'):
+		from jagadamba.jagadamba import type_settings
+		api = type_settings.frappe
+		api._dict = getattr(api, '_dict', None) or Doc
+		with patch.object(api.db, 'exists', return_value=type_exists, create=True), \
+			patch.object(type_settings, 'get_configuration', return_value={'finished_item_group': group}), \
+			patch.object(api, 'get_list', return_value=[['JGES-1', 'Tanker']], create=True) as get_list:
+			result = type_settings.finished_item_query('Item', 'tank', 'name', 0, 10, filters)
+		return result, get_list.call_args
+
+	def test_finished_item_query_limits_to_type_group_and_company(self):
+		result, call = self._query({'type': 'Oil & Gas', 'company': 'Jagadamba'})
+		self.assertEqual(result, [['JGES-1', 'Tanker']])
+		self.assertEqual(call.kwargs['filters'], {'disabled': 0, 'custom_types': 'Oil & Gas', 'custom_company': 'Jagadamba',
+			'item_group': ['descendants of (inclusive)', 'Finished Goods']})
+		self.assertEqual(call.kwargs['or_filters'], {'name': ['like', '%tank%'], 'item_name': ['like', '%tank%']})
+		self.assertEqual(call.kwargs['limit_page_length'], 10)
+
+	def test_finished_item_query_without_type_uses_default_group_only(self):
+		_, call = self._query({'type': '', 'parent_item': 1}, group='Assemblies')
+		self.assertEqual(call.kwargs['filters'], {'disabled': 0, 'custom_parent_item': 1,
+			'item_group': ['descendants of (inclusive)', 'Assemblies']})
+
+	def test_finished_item_query_ignores_unknown_type(self):
+		_, call = self._query({'type': 'Missing'}, type_exists=False, group='')
+		self.assertEqual(call.kwargs['filters'], {'disabled': 0})
 
 
 if __name__ == "__main__":

@@ -17,7 +17,13 @@ The first migration set Oil & Gas to show the job item and pricing, Trailers to 
 
 ## Finished-item filters
 
-Vehicle Type and Job Item on the sales documents, and the finished-item links on BOM, Designing and Documents, only list enabled items in the Type's Finished Item Group or the Jagadamba Settings default, including that group's sub-groups. On the sales documents they are also limited to the selected Type and Company.
+Job Item and Vehicle Type on Lead, Opportunity, Quotation and Sales Order, the same links on Project, Project Budget, Work Order, Job Card, Material Request, Purchase Order, Purchase Receipt, Purchase Invoice, Sales Invoice and Stock Entry, and the finished-item links on BOM, Designing and Documents only list enabled items that have the document's Type and sit in the Type's Finished Item Group (or the Jagadamba Settings default), including its sub-groups. On the sales documents they are also limited to the document's Company.
+
+The server (`type_settings.finished_item_query`) applies these filters, so they work as soon as the form opens, before the Type settings have loaded. An item only appears when its own **Type** and **Company** fields are filled in on the Item.
+
+## Lead
+
+The Equipment Details, Technical Specifications and Requirements & Standards sections show for Types with **Show Job Item** ticked (Oil & Gas).
 
 ## Quotation
 

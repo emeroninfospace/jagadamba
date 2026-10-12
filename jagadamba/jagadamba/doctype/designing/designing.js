@@ -1,14 +1,5 @@
 frappe.ui.form.on("Designing", {
 	refresh: function (frm) {
-		jagadamba.sales_flow.load_finished_item_group(frm);
-		frm.set_query("item", function () {
-			return { filters: jagadamba.sales_flow.finished_item_filters(frm) };
-		});
-
-		frm.set_query("vehicle_type", function () {
-			return { filters: jagadamba.sales_flow.finished_item_filters(frm, { custom_parent_item: 1 }) };
-		});
-
 		if (frm.doc.docstatus !== 2) {
 			frm.add_custom_button(__("Fetch PO Items"), () => {
 				if (!frm.doc.project) {

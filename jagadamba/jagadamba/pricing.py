@@ -21,7 +21,6 @@ def calculate_oil_gas_pricing(doc):
 		return
 
 	precision = doc.precision
-	doc.custom_estimation_cost_source = "Document Net Total"
 	doc.custom_total_estimated_value = flt(doc.get("net_total"), precision("custom_total_estimated_value"))
 	sale = _number(doc.get("custom_sale_value_without_tax"), frappe._("Sale Value"))
 	vat_percent = _number(doc.get("custom_vat_percent"), frappe._("VAT %"))

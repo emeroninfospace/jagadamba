@@ -1,33 +1,21 @@
 frappe.ui.form.on("Quotation", {
-	refresh: async function (frm) {
-		await jagadamba.sales_flow.configure(frm, true);
-
-		frm.set_query("custom_vehicle_type", function () {
-			const filters = jagadamba.sales_flow.item_filters(frm, true);
-			return { filters: filters };
-		});
-
-		frm.set_query("oil_gas_item", function () {
-			const filters = jagadamba.sales_flow.item_filters(frm, true);
-			return { filters: filters };
-		});
-
+	// Queries are registered before any awaited lookup so they always apply.
+	setup: function (frm) {
 		// Items table — restrict by the selected Type and Company
 		frm.set_query("item_code", "items", function () {
-			const filters = { disabled: 0 };
-			if (frm.doc.custom_types) filters.custom_types = frm.doc.custom_types;
-			if (frm.doc.company) filters.custom_company = frm.doc.company;
-			return { filters: filters };
+			return { filters: jagadamba.sales_flow.item_filters(frm) };
 		});
 
 		frm.set_query("item_code", "custom_additional_items", function (doc, cdt, cdn) {
 			const row = locals[cdt][cdn];
-			const filters = { disabled: 0 };
+			const filters = jagadamba.sales_flow.item_filters(frm);
 			if (row.item_group) filters.item_group = row.item_group;
-			if (frm.doc.custom_types) filters.custom_types = frm.doc.custom_types;
-			if (frm.doc.company) filters.custom_company = frm.doc.company;
 			return { filters: filters };
 		});
+	},
+
+	refresh: async function (frm) {
+		await jagadamba.sales_flow.configure(frm, true);
 
 		if (frm.is_new() && frm.doc.quotation_to === "Lead" && frm.doc.party_name) {
 			const doc = frm.doc;
