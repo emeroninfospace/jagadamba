@@ -1,12 +1,9 @@
 import frappe
 from frappe.utils import getdate, nowdate, add_days, add_months, flt, fmt_money
 
-from jagadamba.jagadamba.workspace_dashboard import require_legacy_administrator
-
 
 @frappe.whitelist()
 def get_accounting_dashboard_data(period="this_month", date_from=None, date_to=None, company=None):
-	require_legacy_administrator()
 	company = company or _default_company()
 	date_range = _resolve_acct_period(period, date_from, date_to)
 

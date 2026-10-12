@@ -8,13 +8,9 @@ You can install this app using the [bench](https://github.com/frappe/bench) CLI:
 
 ```bash
 cd $PATH_TO_YOUR_BENCH
-bench get-app https://github.com/emeroninfospace/jagadamba.git --branch main
-bench --site your-site.example.com install-app jagadamba
+bench get-app $URL_OF_THIS_REPO --branch develop
+bench install-app jagadamba
 ```
-
-### Workspace upgrade
-
-See [workspace upgrade notes](docs/workspace-upgrade.md) for department roles, dashboard semantics, compatibility changes, validation limits and staging instructions. ERPNext must be installed before this app; HRMS is needed for its existing Employee customizations and HR features.
 
 ### Contributing
 
@@ -36,7 +32,7 @@ Pre-commit is configured to use the following tools for checking and formatting 
 
 This app can use GitHub Actions for CI. The following workflows are configured:
 
-- CI: Installs this app and runs unit tests on every push to `main` and on pull requests.
+- CI: Installs this app and runs unit tests on every push to `develop` branch.
 - Linters: Runs [Frappe Semgrep Rules](https://github.com/frappe/semgrep-rules) and [pip-audit](https://pypi.org/project/pip-audit/) on every pull request.
 
 

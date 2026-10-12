@@ -3,31 +3,19 @@ import frappe
 from frappe import _
 from frappe.utils import flt, today, getdate, nowdate, add_days
 
-from jagadamba.jagadamba.workspace_dashboard import require_legacy_administrator
-
-
-def _read_doc(doctype, name):
-	doc = frappe.get_doc(doctype, name)
-	doc.check_permission("read")
-	return doc
-
-
 @frappe.whitelist()
 def create_drawing(project):
-	frappe.get_doc("Project", project).check_permission("read")
-	frappe.has_permission("Documents", "create", throw=True)
 	existing = frappe.db.get_value(
 		"Documents",
 		{"project": project, "docstatus": ["!=", 2]},
 		"name",
 	)
 	if existing:
-		_read_doc("Documents", existing)
 		return {"existing": existing}
 
 	proj = frappe.db.get_value(
 		"Project", project,
-		["sales_order", "customer", "custom_types", "custom_vehicle_type", "oil_gas_item", "company"],
+		["sales_order", "customer", "custom_types", "custom_vehicle_type", "oil_gas_item"],
 		as_dict=True,
 	)
 
@@ -61,8 +49,7 @@ def create_drawing(project):
 
 @frappe.whitelist()
 def create_bom_from_drawing(drawing):
-	doc = _read_doc("Documents", drawing)
-	frappe.has_permission("BOM", "create", throw=True)
+	doc = frappe.get_doc("Documents", drawing)
 	if not doc.item:
 		frappe.throw("Please set the Item field on the Documents record before creating a BOM.")
 
@@ -82,8 +69,6 @@ def create_bom_from_drawing(drawing):
 
 @frappe.whitelist()
 def create_bom_from_project(project):
-	frappe.get_doc("Project", project).check_permission("read")
-	frappe.has_permission("BOM", "create", throw=True)
 	proj = frappe.db.get_value(
 		"Project", project,
 		["custom_types", "custom_vehicle_type", "oil_gas_item"],
@@ -112,29 +97,28 @@ def create_bom_from_project(project):
 
 @frappe.whitelist()
 def create_project_budget(project):
-	frappe.get_doc("Project", project).check_permission("read")
-	frappe.has_permission("Project Budget", "create", throw=True)
 	existing = frappe.db.get_value(
 		"Project Budget",
 		{"project": project, "docstatus": ["!=", 2]},
 		"name",
 	)
 	if existing:
-		_read_doc("Project Budget", existing)
 		return {"existing": existing}
 
 	proj = frappe.db.get_value(
 		"Project", project,
-		["sales_order", "customer", "custom_types", "custom_vehicle_type", "oil_gas_item", "company"],
+		["sales_order", "customer", "custom_types", "custom_vehicle_type", "oil_gas_item"],
 		as_dict=True,
 	)
 
-	from erpnext.accounts.utils import get_fiscal_year
-	fiscal_year = get_fiscal_year(today(), company=proj.company)[0]
+	try:
+		from frappe.utils.data import get_fiscal_year
+		fiscal_year = get_fiscal_year(today())[0]
+	except Exception:
+		fiscal_year = None
 
 	pb = frappe.new_doc("Project Budget")
 	pb.project = project
-	pb.company = proj.company
 	pb.fiscal_year = fiscal_year
 
 	if proj:
@@ -155,8 +139,7 @@ def create_project_budget(project):
 
 @frappe.whitelist()
 def create_material_request_from_bom(bom):
-	bom_doc = _read_doc("BOM", bom)
-	frappe.has_permission("Material Request", "create", throw=True)
+	bom_doc = frappe.get_doc("BOM", bom)
 
 	if not bom_doc.items:
 		frappe.throw(_("BOM {0} has no items to request.").format(bom))
@@ -193,8 +176,7 @@ def create_material_request_from_bom(bom):
 
 @frappe.whitelist()
 def make_purchase_order(sales_order):
-	so = _read_doc("Sales Order", sales_order)
-	frappe.has_permission("Purchase Order", "create", throw=True)
+	so = frappe.get_doc("Sales Order", sales_order)
 
 	if not so.items:
 		frappe.throw("Sales Order has no items to procure.")
@@ -229,7 +211,7 @@ def make_purchase_order(sales_order):
 
 @frappe.whitelist()
 def create_project(project_name, customer=None, sales_order=None):
-	frappe.has_permission("Project", "create", throw=True)
+	frappe.log_error(title="create_project START", message=f"args: project_name={project_name}, sales_order={sales_order}")
 
 	project = frappe.new_doc("Project")
 	project.project_name = project_name
@@ -237,18 +219,7 @@ def create_project(project_name, customer=None, sales_order=None):
 
 	so_fields = {}
 	if sales_order:
-		sales_order_doc = frappe.get_doc("Sales Order", sales_order, for_update=True)
-		sales_order_doc.check_permission("read")
-		sales_order_doc.check_permission("write")
-		if sales_order_doc.docstatus != 1:
-			frappe.throw(_("Create a project from a submitted Sales Order."))
-		if sales_order_doc.project:
-			_read_doc("Project", sales_order_doc.project)
-			return sales_order_doc.project
-		project.company = sales_order_doc.company
-		if customer and customer != sales_order_doc.customer:
-			frappe.throw(_("Customer must match the Sales Order."))
-		project.customer = sales_order_doc.customer
+		sales_order_doc = frappe.get_doc("Sales Order", sales_order)
 
 		project.sales_order = sales_order
 
@@ -267,35 +238,40 @@ def create_project(project_name, customer=None, sales_order=None):
 		if sales_order_doc.oil_gas_item:
 			so_fields["oil_gas_item"] = sales_order_doc.oil_gas_item
 
-	project.update(so_fields)
-	project.insert()
+	project.insert(ignore_permissions=True)
+
+	frappe.log_error(
+		title="create_project END",
+		message=f"project={project.name}, so_fields={so_fields}"
+	)
+
+	if so_fields:
+		frappe.db.set_value("Project", project.name, so_fields)
 
 	if sales_order:
-		# ERPNext's submitted Sales Order project field is not allow_on_submit.
-		# This dedicated link update follows explicit read/write checks and a row lock;
-		# do not re-save or recalculate the submitted commercial document.
-		sales_order_doc.db_set("project", project.name)
+		frappe.db.set_value("Sales Order", sales_order, "project", project.name)
 
 	return project.name
 
 
 @frappe.whitelist()
 def get_po_items_for_designing(project):
-	frappe.get_doc("Project", project).check_permission("read")
-	orders = frappe.get_list("Purchase Order", filters={"project": project, "docstatus": 1},
-		pluck="name", limit_page_length=0)
-	if not orders:
-		return []
-	return frappe.get_list("Purchase Order", filters={"name": ["in", orders]},
-		fields=["items.item_code", "items.item_name", "items.qty", "items.uom", "items.description"],
-		limit_page_length=0)
-
+	po_items = frappe.db.sql(
+		"""
+		SELECT poi.item_code, poi.item_name, poi.qty, poi.uom, poi.description
+		FROM `tabPurchase Order Item` poi
+		JOIN `tabPurchase Order` po ON po.name = poi.parent
+		WHERE po.project = %s AND po.docstatus = 1
+		""",
+		(project,),
+		as_dict=True,
+	)
+	return po_items
 
 
 @frappe.whitelist()
 def create_bom_from_designing(designing):
-	doc = _read_doc("Designing", designing)
-	frappe.has_permission("BOM", "create", throw=True)
+	doc = frappe.get_doc("Designing", designing)
 	if not doc.item:
 		frappe.throw("Please set the Item field before creating a BOM.")
 
@@ -325,29 +301,37 @@ def create_bom_from_designing(designing):
 def get_child_items_for_parent_items(parent_item_codes):
 	if isinstance(parent_item_codes, str):
 		parent_item_codes = json.loads(parent_item_codes)
-	if not isinstance(parent_item_codes, list) or len(parent_item_codes) > 100:
-		frappe.throw(_("Select at most 100 parent items."))
-	if not all(isinstance(code, str) for code in parent_item_codes):
-		frappe.throw(_("Parent item codes must be strings."))
-	codes = list(dict.fromkeys(parent_item_codes))
-	if not codes:
-		return []
-	parents = frappe.get_list("Item", filters={"name": ["in", codes]},
-		fields=["name", "item_group"], limit_page_length=0)
-	if len(parents) != len(codes):
-		frappe.throw(_("One or more parent items are unavailable."), frappe.PermissionError)
-	children = frappe.get_list("Item", filters={
-		"item_group": ["in", list({row.item_group for row in parents})],
-		"custom_parent_item": 0, "disabled": 0,
-	}, fields=["item_code", "item_name", "stock_uom", "item_group", "description"],
-		order_by="item_code", limit_page_length=0)
-	by_group = {}
-	for child in children:
-		by_group.setdefault(child.item_group, []).append(child)
-	parent_groups = {row.name: row.item_group for row in parents}
-	return [{"parent_item": code, "item_code": child.item_code, "item_name": child.item_name,
-		"uom": child.stock_uom, "item_group": child.item_group, "description": child.description}
-		for code in codes for child in by_group.get(parent_groups[code], []) if child.item_code != code]
+
+	result = []
+	for parent_code in parent_item_codes:
+		parent_doc = frappe.get_doc("Item", parent_code)
+		item_group = parent_doc.item_group
+
+		child_items = frappe.db.sql(
+			"""
+			SELECT item_code, item_name, stock_uom, item_group, description
+			FROM `tabItem`
+			WHERE item_group = %s
+			  AND IFNULL(custom_parent_item, 0) = 0
+			  AND disabled = 0
+			  AND item_code != %s
+			""",
+			(item_group, parent_code),
+			as_dict=True,
+		)
+		for ci in child_items:
+			result.append(
+				{
+					"parent_item": parent_code,
+					"item_code": ci.item_code,
+					"item_name": ci.item_name,
+					"uom": ci.stock_uom,
+					"item_group": ci.item_group,
+					"description": ci.description,
+				}
+			)
+
+	return result
 
 
 
@@ -364,7 +348,6 @@ JOB_CARD_STATUS_ORDER = [
 
 @frappe.whitelist()
 def get_production_dashboard_data(period="this_month", date_from=None, date_to=None, project=None, type=None, company=None):
-    require_legacy_administrator()
     project = project or None
     type    = type or None
     company = company or None

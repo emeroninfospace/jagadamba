@@ -1,13 +1,13 @@
 {
- "charts": [],
- "content": "[{\"id\":\"e8f9632f4e\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Sales Dashboard\",\"col\":12}},{\"id\":\"e0ae095345\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Access</b></span>\",\"col\":12}},{\"id\":\"b6b1114ec0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lead\",\"col\":3}},{\"id\":\"4732430c99\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Opportunity\",\"col\":3}},{\"id\":\"61a2704727\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotation\",\"col\":3}},{\"id\":\"fc80fc4e7b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Order\",\"col\":3}},{\"id\":\"9d17c66500\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Order Confirmation Sheet\",\"col\":3}},{\"id\":\"d64c4b2d81\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customer\",\"col\":3}},{\"id\":\"56806e8f69\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Invoice\",\"col\":3}},{\"id\":\"98af25bbcb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"852b070456\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Documents, Reports & Masters</b></span>\",\"col\":12}},{\"id\":\"01807e9467\",\"type\":\"card\",\"data\":{\"card_name\":\"Selling\",\"col\":4}},{\"id\":\"03210172ef\",\"type\":\"card\",\"data\":{\"card_name\":\"Sales Reports\",\"col\":4}},{\"id\":\"28a5732f3b\",\"type\":\"card\",\"data\":{\"card_name\":\"Sales Masters\",\"col\":4}}]",
- "creation": "2026-09-25 12:48:07.203622",
- "custom_blocks": [
+ "charts": [
   {
-   "custom_block_name": "Sales Dashboard",
-   "label": "Sales Dashboard"
+   "chart_name": "Sales Order Analysis",
+   "label": "Sales Order Analysis"
   }
  ],
+ "content": "[{\"id\":\"ClZ76YqFZj\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Sales Desk</span>\",\"col\":12}},{\"id\":\"1E_9Bo_Lnt\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Active Customers\",\"col\":3}},{\"id\":\"ck-H1bCunL\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Leads\",\"col\":3}},{\"id\":\"bMm85wg2pb\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Quotation\",\"col\":3}},{\"id\":\"iDeIB1afeZ\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Sales Orders to Bill\",\"col\":3}},{\"id\":\"KWRV4ChTAQ\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"84hV3rtSfP\",\"type\":\"paragraph\",\"data\":{\"text\":\"Shortcuts\",\"col\":12}},{\"id\":\"Zltd-Mmihk\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lead\",\"col\":3}},{\"id\":\"PExrDtWm26\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotation\",\"col\":3}},{\"id\":\"2Lhls0uWbJ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Order\",\"col\":3}},{\"id\":\"jruQIHI_o3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customer\",\"col\":3}},{\"id\":\"TNjL0PfHxs\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"anDFe3U241\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\",\"col\":4}},{\"id\":\"jvHyx6uh8_\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}},{\"id\":\"PHvTeE05aV\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Sales Order Analysis\",\"col\":12}}]",
+ "creation": "2026-09-25 12:48:07.203622",
+ "custom_blocks": [],
  "docstatus": 0,
  "doctype": "Workspace",
  "for_user": "",
@@ -21,8 +21,8 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Selling",
-   "link_count": 6,
+   "label": "Operations",
+   "link_count": 3,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -33,16 +33,6 @@
    "label": "Lead",
    "link_count": 0,
    "link_to": "Lead",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Opportunity",
-   "link_count": 0,
-   "link_to": "Opportunity",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -70,137 +60,8 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Order Confirmation Sheet",
-   "link_count": 0,
-   "link_to": "Order Confirmation Sheet",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Sales Invoice",
-   "link_count": 0,
-   "link_to": "Sales Invoice",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Sales Reports",
-   "link_count": 10,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Sales Analytics",
-   "link_count": 0,
-   "link_to": "Sales Analytics",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Sales Order Analysis",
-   "link_count": 0,
-   "link_to": "Sales Order Analysis",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Quotation Trends",
-   "link_count": 0,
-   "link_to": "Quotation Trends",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Sales Order Trends",
-   "link_count": 0,
-   "link_to": "Sales Order Trends",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Sales Pipeline Analytics",
-   "link_count": 0,
-   "link_to": "Sales Pipeline Analytics",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Opportunity Summary by Sales Stage",
-   "link_count": 0,
-   "link_to": "Opportunity Summary by Sales Stage",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Lead Details",
-   "link_count": 0,
-   "link_to": "Lead Details",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Lost Quotations",
-   "link_count": 0,
-   "link_to": "Lost Quotations",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Item-wise Sales History",
-   "link_count": 0,
-   "link_to": "Item-wise Sales History",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Sales Person-wise Transaction Summary",
-   "link_count": 0,
-   "link_to": "Sales Person-wise Transaction Summary",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Sales Masters",
-   "link_count": 9,
+   "label": "Masters",
+   "link_count": 2,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -218,155 +79,65 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Contact",
-   "link_count": 0,
-   "link_to": "Contact",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Item",
    "link_count": 0,
    "link_to": "Item",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Price List",
-   "link_count": 0,
-   "link_to": "Price List",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Item Price",
-   "link_count": 0,
-   "link_to": "Item Price",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Sales Person",
-   "link_count": 0,
-   "link_to": "Sales Person",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Territory",
-   "link_count": 0,
-   "link_to": "Territory",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Type",
-   "link_count": 0,
-   "link_to": "Type",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Vehicle Type",
-   "link_count": 0,
-   "link_to": "Vehicle Type",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
   }
  ],
- "modified": "2026-10-12 10:00:00",
+ "modified": "2026-09-26 12:17:07.062153",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Sales Desk",
- "number_cards": [],
+ "number_cards": [
+  {
+   "label": "Active Customers",
+   "number_card_name": "Active Customers"
+  },
+  {
+   "label": "Total Leads",
+   "number_card_name": "Total Leads"
+  },
+  {
+   "label": "Quotation",
+   "number_card_name": "Quotation"
+  },
+  {
+   "label": "Sales Orders to Bill",
+   "number_card_name": "Sales Orders to Bill"
+  }
+ ],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [
-  {
-   "role": "System Manager"
-  },
-  {
-   "role": "Management"
-  },
-  {
-   "role": "Sales Executive"
-  },
-  {
-   "role": "Sales User"
-  },
-  {
-   "role": "Sales Manager"
-  }
- ],
+ "roles": [],
  "sequence_id": 8.0,
  "shortcuts": [
   {
-   "color": "Blue",
+   "color": "Grey",
    "doc_view": "List",
-   "format": "{} To Follow Up",
    "label": "Lead",
    "link_to": "Lead",
-   "stats_filter": "{\"status\": [\"in\", [\"Lead\", \"Open\", \"Replied\"]]}",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
-   "color": "Cyan",
+   "color": "Grey",
    "doc_view": "List",
-   "format": "{} Open",
-   "label": "Opportunity",
-   "link_to": "Opportunity",
-   "stats_filter": "{\"status\": \"Open\"}",
-   "type": "DocType"
-  },
-  {
-   "color": "Orange",
-   "doc_view": "List",
-   "format": "{} Open",
    "label": "Quotation",
    "link_to": "Quotation",
-   "stats_filter": "{\"status\": \"Open\", \"docstatus\": 1}",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
-   "color": "Green",
+   "color": "Grey",
    "doc_view": "List",
-   "format": "{} Pending",
    "label": "Sales Order",
    "link_to": "Sales Order",
-   "stats_filter": "{\"status\": [\"in\", [\"To Deliver and Bill\", \"To Deliver\", \"To Bill\"]]}",
-   "type": "DocType"
-  },
-  {
-   "color": "Pink",
-   "doc_view": "List",
-   "format": "{} With Design",
-   "label": "Order Confirmation Sheet",
-   "link_to": "Order Confirmation Sheet",
-   "stats_filter": "{\"status\": \"Sent to Design\"}",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
@@ -374,22 +145,7 @@
    "doc_view": "List",
    "label": "Customer",
    "link_to": "Customer",
-   "type": "DocType"
-  },
-  {
-   "color": "Red",
-   "doc_view": "List",
-   "format": "{} Unpaid",
-   "label": "Sales Invoice",
-   "link_to": "Sales Invoice",
-   "stats_filter": "{\"status\": [\"in\", [\"Unpaid\", \"Overdue\", \"Partly Paid\"]]}",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Item",
-   "link_to": "Item",
+   "stats_filter": "[]",
    "type": "DocType"
   }
  ],

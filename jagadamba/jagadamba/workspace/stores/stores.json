@@ -1,13 +1,8 @@
 {
  "charts": [],
- "content": "[{\"id\":\"a41ca1add1\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Stores Dashboard\",\"col\":12}},{\"id\":\"423aa40791\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Access</b></span>\",\"col\":12}},{\"id\":\"b7cff2411e\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"GRN\",\"col\":3}},{\"id\":\"2a83da85b9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Entry\",\"col\":3}},{\"id\":\"a215889950\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Material Request\",\"col\":3}},{\"id\":\"6a4c1a694d\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Delivery Note\",\"col\":3}},{\"id\":\"4ee69c8378\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"73a156472a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Warehouse\",\"col\":3}},{\"id\":\"cccd534ed1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Balance\",\"col\":3}},{\"id\":\"9aa8bfa3e7\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Documents, Reports & Masters</b></span>\",\"col\":12}},{\"id\":\"5065a89b3c\",\"type\":\"card\",\"data\":{\"card_name\":\"Store Operations\",\"col\":4}},{\"id\":\"c7ae0e94d0\",\"type\":\"card\",\"data\":{\"card_name\":\"Stock Reports\",\"col\":4}},{\"id\":\"48817f30a5\",\"type\":\"card\",\"data\":{\"card_name\":\"Stock Masters\",\"col\":4}}]",
+ "content": "[{\"id\":\"MTM_FajoE6\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Stores</span>\",\"col\":12}},{\"id\":\"3ZofNVWnhj\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Stock Value\",\"col\":4}},{\"id\":\"2AeuQjEyej\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Active Items\",\"col\":4}},{\"id\":\"5jH_7C4P76\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Warehouses\",\"col\":4}},{\"id\":\"gDdyPm-Us8\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"XqtbUdyV_l\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"GRN\",\"col\":3}},{\"id\":\"YImIbhXpAL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Entry\",\"col\":3}},{\"id\":\"YKmDKALOE-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"qppGSdOGZB\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Warehouse\",\"col\":3}},{\"id\":\"Cu0UQ8zh5L\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"73KgRrP42l\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}},{\"id\":\"BbmpOHnyr-\",\"type\":\"card\",\"data\":{\"card_name\":\"Store Operations\",\"col\":4}},{\"id\":\"G5r5RplZes\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
  "creation": "2026-09-25 15:25:10.063350",
- "custom_blocks": [
-  {
-   "custom_block_name": "Stores Dashboard",
-   "label": "Stores Dashboard"
-  }
- ],
+ "custom_blocks": [],
  "docstatus": 0,
  "doctype": "Workspace",
  "for_user": "",
@@ -21,176 +16,8 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Store Operations",
-   "link_count": 6,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Goods Receipt Note",
-   "link_count": 0,
-   "link_to": "Purchase Receipt",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Stock Entry",
-   "link_count": 0,
-   "link_to": "Stock Entry",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Material Request",
-   "link_count": 0,
-   "link_to": "Material Request",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Delivery Note",
-   "link_count": 0,
-   "link_to": "Delivery Note",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Stock Reconciliation",
-   "link_count": 0,
-   "link_to": "Stock Reconciliation",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Pick List",
-   "link_count": 0,
-   "link_to": "Pick List",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Stock Reports",
-   "link_count": 9,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Stock Balance",
-   "link_count": 0,
-   "link_to": "Stock Balance",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Stock Ledger",
-   "link_count": 0,
-   "link_to": "Stock Ledger",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Stock Projected Qty",
-   "link_count": 0,
-   "link_to": "Stock Projected Qty",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Warehouse Wise Stock Balance",
-   "link_count": 0,
-   "link_to": "Warehouse Wise Stock Balance",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Stock Ageing",
-   "link_count": 0,
-   "link_to": "Stock Ageing",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Item Shortage Report",
-   "link_count": 0,
-   "link_to": "Item Shortage Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Requested Items To Be Transferred",
-   "link_count": 0,
-   "link_to": "Requested Items To Be Transferred",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Purchase Receipt Trends",
-   "link_count": 0,
-   "link_to": "Purchase Receipt Trends",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Batch-Wise Balance History",
-   "link_count": 0,
-   "link_to": "Batch-Wise Balance History",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Stock Masters",
-   "link_count": 7,
+   "label": "Masters",
+   "link_count": 3,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -201,16 +28,6 @@
    "label": "Item",
    "link_count": 0,
    "link_to": "Item",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Item Group",
-   "link_count": 0,
-   "link_to": "Item Group",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -238,9 +55,18 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "UOM",
+   "label": "Store Operations",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Goods Receipt Note",
    "link_count": 0,
-   "link_to": "UOM",
+   "link_to": "Purchase Receipt",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -248,9 +74,9 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Batch",
+   "label": "Delivery Note",
    "link_count": 0,
-   "link_to": "Batch",
+   "link_to": "Delivery Note",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -258,76 +84,92 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Serial No",
+   "label": "Stock Entry",
    "link_count": 0,
-   "link_to": "Serial No",
+   "link_to": "Stock Entry",
    "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Stock Ledger",
+   "link_count": 0,
+   "link_to": "Stock Ledger",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Stock Balance",
+   "link_count": 0,
+   "link_to": "Stock Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Warehouse Wise Stock Balance",
+   "link_count": 0,
+   "link_to": "Warehouse Wise Stock Balance",
+   "link_type": "Report",
    "onboard": 0,
    "type": "Link"
   }
  ],
- "modified": "2026-10-12 10:00:00",
+ "modified": "2026-09-25 15:33:09.579117",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Stores",
- "number_cards": [],
+ "number_cards": [
+  {
+   "label": "Total Stock Value",
+   "number_card_name": "Total Stock Value"
+  },
+  {
+   "label": "Total Active Items",
+   "number_card_name": "Total Active Items"
+  },
+  {
+   "label": "Total Warehouses",
+   "number_card_name": "Total Warehouses"
+  }
+ ],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [
-  {
-   "role": "System Manager"
-  },
-  {
-   "role": "Management"
-  },
-  {
-   "role": "Stores User"
-  },
-  {
-   "role": "Stock User"
-  },
-  {
-   "role": "Stock Manager"
-  }
- ],
+ "roles": [],
  "sequence_id": 43.0,
  "shortcuts": [
   {
-   "color": "Blue",
+   "color": "Grey",
    "doc_view": "List",
-   "format": "{} To Bill",
    "label": "GRN",
    "link_to": "Purchase Receipt",
-   "stats_filter": "{\"status\": \"To Bill\"}",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
-   "color": "Cyan",
+   "color": "Grey",
    "doc_view": "List",
-   "format": "{} Draft",
    "label": "Stock Entry",
    "link_to": "Stock Entry",
-   "stats_filter": "{\"docstatus\": 0}",
-   "type": "DocType"
-  },
-  {
-   "color": "Cyan",
-   "doc_view": "List",
-   "format": "{} Pending",
-   "label": "Material Request",
-   "link_to": "Material Request",
-   "stats_filter": "{\"status\": [\"in\", [\"Pending\", \"Partially Ordered\"]], \"docstatus\": 1}",
-   "type": "DocType"
-  },
-  {
-   "color": "Green",
-   "doc_view": "List",
-   "format": "{} To Bill",
-   "label": "Delivery Note",
-   "link_to": "Delivery Note",
-   "stats_filter": "{\"status\": \"To Bill\"}",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
@@ -335,21 +177,16 @@
    "doc_view": "List",
    "label": "Item",
    "link_to": "Item",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
    "color": "Grey",
-   "doc_view": "Tree",
+   "doc_view": "List",
    "label": "Warehouse",
    "link_to": "Warehouse",
+   "stats_filter": "[]",
    "type": "DocType"
-  },
-  {
-   "color": "Blue",
-   "doc_view": "",
-   "label": "Stock Balance",
-   "link_to": "Stock Balance",
-   "type": "Report"
   }
  ],
  "title": "Stores"

@@ -1,13 +1,8 @@
 {
  "charts": [],
- "content": "[{\"id\":\"2981689bd6\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Jagadamba Overview\",\"col\":12}},{\"id\":\"99052fe16f\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Access</b></span>\",\"col\":12}},{\"id\":\"760822ca1e\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lead\",\"col\":3}},{\"id\":\"68f9869bb1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotation\",\"col\":3}},{\"id\":\"8dc25fc3fd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Order\",\"col\":3}},{\"id\":\"8285ec7d12\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Order Confirmation Sheet\",\"col\":3}},{\"id\":\"53736caef6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project\",\"col\":3}},{\"id\":\"dec48f3f1c\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Designing\",\"col\":3}},{\"id\":\"faade4c4d1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Purchase Order\",\"col\":3}},{\"id\":\"346f116e0e\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Work Order\",\"col\":3}},{\"id\":\"2d978d6733\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Documents, Reports & Masters</b></span>\",\"col\":12}},{\"id\":\"1a9be35700\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\",\"col\":4}},{\"id\":\"272410c3de\",\"type\":\"card\",\"data\":{\"card_name\":\"Management Reports\",\"col\":4}},{\"id\":\"28fb8d458c\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}}]",
+ "content": "[{\"id\":\"CtTlkJCrRt\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Jagadamba</span>\",\"col\":12}},{\"id\":\"8XmIeg2zeK\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lead\",\"col\":3}},{\"id\":\"5bVTKjK1yY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotation\",\"col\":3}},{\"id\":\"CEvQX32EkE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Order\",\"col\":3}},{\"id\":\"eh1gbipoXC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project\",\"col\":3}},{\"id\":\"nDjj7Kj9lx\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Order Confirmation Sheet\",\"col\":3}},{\"id\":\"ylrFUkPfux\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Designing\",\"col\":3}},{\"id\":\"ayYvFs6oCn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Purchase Order\",\"col\":3}},{\"id\":\"2TgKipjfih\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"4Rwe82xwE1\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"e79qVMqMiM\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\",\"col\":4}},{\"id\":\"sd_qMcWWJq\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}},{\"id\":\"V8XNA_Tlmu\",\"type\":\"spacer\",\"data\":{\"col\":12}}]",
  "creation": "2026-08-13 15:14:52.787263",
- "custom_blocks": [
-  {
-   "custom_block_name": "Jagadamba Overview",
-   "label": "Jagadamba Overview"
-  }
- ],
+ "custom_blocks": [],
  "docstatus": 0,
  "doctype": "Workspace",
  "for_user": "",
@@ -21,8 +16,57 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Masters",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Customers",
+   "link_count": 0,
+   "link_to": "Customer",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employees",
+   "link_count": 0,
+   "link_to": "Employee",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Item",
+   "link_count": 0,
+   "link_to": "Item",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Users",
+   "link_count": 0,
+   "link_to": "User",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Operations",
-   "link_count": 10,
+   "link_count": 8,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -53,16 +97,6 @@
    "label": "Sales Order",
    "link_count": 0,
    "link_to": "Sales Order",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Order Confirmation Sheet",
-   "link_count": 0,
-   "link_to": "Order Confirmation Sheet",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -90,9 +124,9 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Designing",
+   "label": "Purchase Order",
    "link_count": 0,
-   "link_to": "Designing",
+   "link_to": "Purchase Order",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -110,213 +144,15 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Purchase Order",
+   "label": "Order Confirmation Sheet",
    "link_count": 0,
-   "link_to": "Purchase Order",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Work Order",
-   "link_count": 0,
-   "link_to": "Work Order",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Management Reports",
-   "link_count": 8,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Sales Analytics",
-   "link_count": 0,
-   "link_to": "Sales Analytics",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Profit and Loss Statement",
-   "link_count": 0,
-   "link_to": "Profit and Loss Statement",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Accounts Receivable",
-   "link_count": 0,
-   "link_to": "Accounts Receivable",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Accounts Payable",
-   "link_count": 0,
-   "link_to": "Accounts Payable",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Project Budget vs Actual",
-   "link_count": 0,
-   "link_to": "Project Budget vs Actual",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Purchase Order Analysis",
-   "link_count": 0,
-   "link_to": "Purchase Order Analysis",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Work Order Summary",
-   "link_count": 0,
-   "link_to": "Work Order Summary",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Stock Balance",
-   "link_count": 0,
-   "link_to": "Stock Balance",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Masters",
-   "link_count": 9,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Customer",
-   "link_count": 0,
-   "link_to": "Customer",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Supplier",
-   "link_count": 0,
-   "link_to": "Supplier",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Employee",
-   "link_count": 0,
-   "link_to": "Employee",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Item",
-   "link_count": 0,
-   "link_to": "Item",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Type",
-   "link_count": 0,
-   "link_to": "Type",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Vehicle Type",
-   "link_count": 0,
-   "link_to": "Vehicle Type",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "User",
-   "link_count": 0,
-   "link_to": "User",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Jagadamba Workspace Profile",
-   "link_count": 0,
-   "link_to": "Jagadamba Workspace Profile",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Jagadamba Settings",
-   "link_count": 0,
-   "link_to": "Jagadamba Settings",
+   "link_to": "Order Confirmation Sheet",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
   }
  ],
- "modified": "2026-10-12 10:00:00",
+ "modified": "2026-09-25 15:33:06.428106",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Jagadamba",
@@ -325,170 +161,71 @@
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [
-  {
-   "role": "Accounts Manager"
-  },
-  {
-   "role": "Accounts User"
-  },
-  {
-   "role": "Delivery Manager"
-  },
-  {
-   "role": "Delivery User"
-  },
-  {
-   "role": "Design Engineer"
-  },
-  {
-   "role": "Engineering Head"
-  },
-  {
-   "role": "Finance Manager"
-  },
-  {
-   "role": "HR Manager"
-  },
-  {
-   "role": "HR User"
-  },
-  {
-   "role": "Maintenance Manager"
-  },
-  {
-   "role": "Maintenance User"
-  },
-  {
-   "role": "Management"
-  },
-  {
-   "role": "Manufacturing Manager"
-  },
-  {
-   "role": "Manufacturing User"
-  },
-  {
-   "role": "Procurement Engineer"
-  },
-  {
-   "role": "Production Engineer"
-  },
-  {
-   "role": "Project Engineer"
-  },
-  {
-   "role": "Projects Manager"
-  },
-  {
-   "role": "Projects User"
-  },
-  {
-   "role": "Purchase Manager"
-  },
-  {
-   "role": "Purchase User"
-  },
-  {
-   "role": "Quality Engineer"
-  },
-  {
-   "role": "Quality Manager"
-  },
-  {
-   "role": "Sales Executive"
-  },
-  {
-   "role": "Sales Manager"
-  },
-  {
-   "role": "Sales User"
-  },
-  {
-   "role": "Stock Manager"
-  },
-  {
-   "role": "Stock User"
-  },
-  {
-   "role": "Stores User"
-  },
-  {
-   "role": "System Manager"
-  }
- ],
+ "roles": [],
  "sequence_id": 2.0,
  "shortcuts": [
   {
-   "color": "Blue",
+   "color": "Grey",
    "doc_view": "List",
-   "format": "{} To Follow Up",
    "label": "Lead",
    "link_to": "Lead",
-   "stats_filter": "{\"status\": [\"in\", [\"Lead\", \"Open\", \"Replied\"]]}",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
-   "color": "Orange",
+   "color": "Grey",
    "doc_view": "List",
-   "format": "{} Open",
    "label": "Quotation",
    "link_to": "Quotation",
-   "stats_filter": "{\"status\": \"Open\", \"docstatus\": 1}",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
-   "color": "Green",
+   "color": "Grey",
    "doc_view": "List",
-   "format": "{} Pending",
    "label": "Sales Order",
    "link_to": "Sales Order",
-   "stats_filter": "{\"status\": [\"in\", [\"To Deliver and Bill\", \"To Deliver\", \"To Bill\"]]}",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
-   "color": "Pink",
+   "color": "Grey",
    "doc_view": "List",
-   "format": "{} With Design",
    "label": "Order Confirmation Sheet",
    "link_to": "Order Confirmation Sheet",
-   "stats_filter": "{\"status\": \"Sent to Design\"}",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
-   "color": "Blue",
+   "color": "Grey",
    "doc_view": "List",
-   "format": "{} Open",
-   "label": "Project",
-   "link_to": "Project",
-   "stats_filter": "{\"status\": \"Open\"}",
-   "type": "DocType"
-  },
-  {
-   "color": "Purple",
-   "doc_view": "List",
-   "format": "{} In Progress",
    "label": "Designing",
    "link_to": "Designing",
-   "stats_filter": "{\"status\": [\"in\", [\"Design In Progress\", \"Sent to Customer\"]]}",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
-   "color": "Green",
+   "color": "Grey",
    "doc_view": "List",
-   "format": "{} To Receive",
    "label": "Purchase Order",
    "link_to": "Purchase Order",
-   "stats_filter": "{\"status\": [\"in\", [\"To Receive and Bill\", \"To Receive\"]]}",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
-   "color": "Orange",
+   "color": "Grey",
    "doc_view": "List",
-   "format": "{} Active",
-   "label": "Work Order",
-   "link_to": "Work Order",
-   "stats_filter": "{\"status\": [\"in\", [\"Not Started\", \"In Process\"]]}",
+   "label": "Project",
+   "link_to": "Project",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Item",
+   "link_to": "Item",
+   "stats_filter": "[]",
    "type": "DocType"
   }
  ],

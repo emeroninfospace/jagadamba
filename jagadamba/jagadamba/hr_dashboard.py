@@ -1,12 +1,9 @@
 import frappe
 from frappe.utils import getdate, nowdate, add_days, flt
 
-from jagadamba.jagadamba.workspace_dashboard import require_legacy_administrator
-
 
 @frappe.whitelist()
 def get_hr_dashboard_data(date_from=None, date_to=None, employee=None, company=None):
-	require_legacy_administrator()
 	company = company or _default_company()
 	today = getdate(nowdate())
 
@@ -27,7 +24,6 @@ def get_hr_dashboard_data(date_from=None, date_to=None, employee=None, company=N
 
 @frappe.whitelist()
 def search_employees(txt=""):
-	require_legacy_administrator()
 	return frappe.db.sql(
 		"""
 		SELECT name, employee_name

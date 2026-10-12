@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"ab96e56928\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Sales Dashboard\",\"col\":12}},{\"id\":\"6c8090e098\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Access</b></span>\",\"col\":12}},{\"id\":\"ccf1e299a0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotation\",\"col\":3}},{\"id\":\"603a8b3e22\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Order\",\"col\":3}},{\"id\":\"4c1a99907f\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Invoice\",\"col\":3}},{\"id\":\"763ef62e40\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customer\",\"col\":3}},{\"id\":\"44b9e172bd\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Documents, Reports & Masters</b></span>\",\"col\":12}},{\"id\":\"3a00a6b410\",\"type\":\"card\",\"data\":{\"card_name\":\"Sales Reports\",\"col\":4}}]",
+ "content": "[{\"id\":\"X6nt697FOD\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Sales Dashboard\",\"col\":12}}]",
  "creation": "2026-08-17 14:40:21.844967",
  "custom_blocks": [
   {
@@ -17,118 +17,8 @@
  "indicator_color": "green",
  "is_hidden": 0,
  "label": "Sales Overview",
- "links": [
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Sales Reports",
-   "link_count": 10,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Sales Analytics",
-   "link_count": 0,
-   "link_to": "Sales Analytics",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Sales Order Analysis",
-   "link_count": 0,
-   "link_to": "Sales Order Analysis",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Quotation Trends",
-   "link_count": 0,
-   "link_to": "Quotation Trends",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Sales Order Trends",
-   "link_count": 0,
-   "link_to": "Sales Order Trends",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Sales Pipeline Analytics",
-   "link_count": 0,
-   "link_to": "Sales Pipeline Analytics",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Opportunity Summary by Sales Stage",
-   "link_count": 0,
-   "link_to": "Opportunity Summary by Sales Stage",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Lead Details",
-   "link_count": 0,
-   "link_to": "Lead Details",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Lost Quotations",
-   "link_count": 0,
-   "link_to": "Lost Quotations",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Item-wise Sales History",
-   "link_count": 0,
-   "link_to": "Item-wise Sales History",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Sales Person-wise Transaction Summary",
-   "link_count": 0,
-   "link_to": "Sales Person-wise Transaction Summary",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  }
- ],
- "modified": "2026-10-12 10:00:00",
+ "links": [],
+ "modified": "2026-09-25 15:33:06.809755",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Sales Overview",
@@ -137,59 +27,8 @@
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [
-  {
-   "role": "System Manager"
-  },
-  {
-   "role": "Management"
-  },
-  {
-   "role": "Sales Executive"
-  },
-  {
-   "role": "Sales User"
-  },
-  {
-   "role": "Sales Manager"
-  }
- ],
+ "roles": [],
  "sequence_id": 11.0,
- "shortcuts": [
-  {
-   "color": "Orange",
-   "doc_view": "List",
-   "format": "{} Open",
-   "label": "Quotation",
-   "link_to": "Quotation",
-   "stats_filter": "{\"status\": \"Open\", \"docstatus\": 1}",
-   "type": "DocType"
-  },
-  {
-   "color": "Green",
-   "doc_view": "List",
-   "format": "{} Pending",
-   "label": "Sales Order",
-   "link_to": "Sales Order",
-   "stats_filter": "{\"status\": [\"in\", [\"To Deliver and Bill\", \"To Deliver\", \"To Bill\"]]}",
-   "type": "DocType"
-  },
-  {
-   "color": "Red",
-   "doc_view": "List",
-   "format": "{} Unpaid",
-   "label": "Sales Invoice",
-   "link_to": "Sales Invoice",
-   "stats_filter": "{\"status\": [\"in\", [\"Unpaid\", \"Overdue\", \"Partly Paid\"]]}",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Customer",
-   "link_to": "Customer",
-   "type": "DocType"
-  }
- ],
+ "shortcuts": [],
  "title": "Sales Overview"
 }

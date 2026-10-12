@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"44c02697ae\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Production Dashboard\",\"col\":12}},{\"id\":\"3b9e5c5aec\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Access</b></span>\",\"col\":12}},{\"id\":\"106cd86960\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Work Order\",\"col\":3}},{\"id\":\"c9440c12b4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Job Card\",\"col\":3}},{\"id\":\"3fd8d5574b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Production Plan\",\"col\":3}},{\"id\":\"3511e5c8d7\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Documents, Reports & Masters</b></span>\",\"col\":12}},{\"id\":\"671fcc4c80\",\"type\":\"card\",\"data\":{\"card_name\":\"Production Reports\",\"col\":4}}]",
+ "content": "[{\"id\":\"MTktvba6YW\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Production Dashboard\",\"col\":12}}]",
  "creation": "2026-08-15 11:25:33.106181",
  "custom_blocks": [
   {
@@ -17,128 +17,8 @@
  "indicator_color": "",
  "is_hidden": 0,
  "label": "Production Overview",
- "links": [
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Production Reports",
-   "link_count": 11,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Work Order Summary",
-   "link_count": 0,
-   "link_to": "Work Order Summary",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Work Orders in Progress",
-   "link_count": 0,
-   "link_to": "Work Orders in Progress",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Open Work Orders",
-   "link_count": 0,
-   "link_to": "Open Work Orders",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Completed Work Orders",
-   "link_count": 0,
-   "link_to": "Completed Work Orders",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Production Analytics",
-   "link_count": 0,
-   "link_to": "Production Analytics",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Production Planning Report",
-   "link_count": 0,
-   "link_to": "Production Planning Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Job Card Summary",
-   "link_count": 0,
-   "link_to": "Job Card Summary",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "BOM Stock Report",
-   "link_count": 0,
-   "link_to": "BOM Stock Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "BOM Explorer",
-   "link_count": 0,
-   "link_to": "BOM Explorer",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Downtime Analysis",
-   "link_count": 0,
-   "link_to": "Downtime Analysis",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Work Order Consumed Materials",
-   "link_count": 0,
-   "link_to": "Work Order Consumed Materials",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  }
- ],
- "modified": "2026-10-12 10:00:00",
+ "links": [],
+ "modified": "2026-09-25 15:33:06.479851",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Production Overview",
@@ -147,55 +27,8 @@
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [
-  {
-   "role": "System Manager"
-  },
-  {
-   "role": "Management"
-  },
-  {
-   "role": "Production Engineer"
-  },
-  {
-   "role": "Manufacturing User"
-  },
-  {
-   "role": "Manufacturing Manager"
-  },
-  {
-   "role": "Quality Engineer"
-  }
- ],
+ "roles": [],
  "sequence_id": 3.0,
- "shortcuts": [
-  {
-   "color": "Orange",
-   "doc_view": "List",
-   "format": "{} Active",
-   "label": "Work Order",
-   "link_to": "Work Order",
-   "stats_filter": "{\"status\": [\"in\", [\"Not Started\", \"In Process\"]]}",
-   "type": "DocType"
-  },
-  {
-   "color": "Yellow",
-   "doc_view": "List",
-   "format": "{} Open",
-   "label": "Job Card",
-   "link_to": "Job Card",
-   "stats_filter": "{\"status\": [\"in\", [\"Open\", \"Work In Progress\"]]}",
-   "type": "DocType"
-  },
-  {
-   "color": "Blue",
-   "doc_view": "List",
-   "format": "{} Active",
-   "label": "Production Plan",
-   "link_to": "Production Plan",
-   "stats_filter": "{\"status\": [\"in\", [\"Not Started\", \"In Process\"]]}",
-   "type": "DocType"
-  }
- ],
+ "shortcuts": [],
  "title": "Production Overview"
 }
