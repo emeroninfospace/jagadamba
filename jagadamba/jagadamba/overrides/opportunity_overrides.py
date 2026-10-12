@@ -13,6 +13,8 @@ def before_insert(doc, method=None):
 	)
 	if not lead:
 		return
+	if doc.get("custom_types") and lead.custom_types and doc.custom_types != lead.custom_types:
+		return
 
 	if not doc.get("custom_types") and lead.custom_types:
 		doc.custom_types = lead.custom_types

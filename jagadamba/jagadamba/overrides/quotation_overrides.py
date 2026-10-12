@@ -1,6 +1,8 @@
 import re
 import frappe
-from frappe.utils import today, get_fullname, flt
+from frappe.utils import today, get_fullname
+
+from jagadamba.jagadamba.pricing import calculate_oil_gas_pricing
 
 
 def before_insert(doc, _method=None):
@@ -10,27 +12,7 @@ def before_insert(doc, _method=None):
 
 
 def validate(doc, _method=None):
-	_calculate_oil_gas_pricing(doc)
-
-
-def _calculate_oil_gas_pricing(doc):
-	"""For Oil & Gas quotations, derive VAT, Tax and Total Quoted from the
-	user-entered Sale Value. Tax compounds on (Sale Value + VAT)."""
-	if (doc.get("custom_types") or "") != "Oil & Gas":
-		return
-
-	sale_value = flt(doc.get("custom_sale_value_without_tax"))
-	vat_pct = flt(doc.get("custom_vat_percent"))
-	tax_pct = flt(doc.get("custom_tax_percent"))
-	net_total = flt(doc.get("net_total"))
-
-	vat_amount = sale_value * vat_pct / 100
-	tax_amount = (sale_value + vat_amount) * tax_pct / 100
-
-	doc.custom_vat_amount = vat_amount
-	doc.custom_tax_amount = tax_amount
-	doc.custom_total_quoted_value = sale_value + vat_amount + tax_amount
-	doc.custom_net_profit = sale_value - net_total
+	calculate_oil_gas_pricing(doc)
 
 
 def _copy_type_fields_from_opportunity(doc):
@@ -46,6 +28,8 @@ def _copy_type_fields_from_opportunity(doc):
 		as_dict=True,
 	)
 	if not opp:
+		return
+	if doc.get("custom_types") and opp.custom_types and doc.custom_types != opp.custom_types:
 		return
 
 	if not doc.get("custom_types") and opp.custom_types:
@@ -89,15 +73,16 @@ def _append_revision_history(doc, auto=False, note=""):
 	suffix = " | {}".format(note) if note else (" | Auto-logged on submit" if auto else "")
 	line = "{} | {} | {} | {}{}".format(rev, today(), user, status, suffix)
 
-	existing = frappe.db.get_value("Quotation", doc.name, "revision_history") or ""
+	existing = doc.get("revision_history") or ""
 	new_value = (existing + "\n" + line).strip()
 	doc.db_set("revision_history", new_value, update_modified=False)
 
 
 @frappe.whitelist()
 def log_revision_note(quotation, note):
-	doc = frappe.get_doc("Quotation", quotation)
-	_append_revision_history(doc, note=note)
+	if not isinstance(note, str) or not note.strip():
+		frappe.throw(frappe._("Enter a revision note."))
+	doc = frappe.get_doc("Quotation", quotation, for_update=True)
+	doc.check_permission("write")
+	_append_revision_history(doc, note=note.strip())
 	return True
-
-

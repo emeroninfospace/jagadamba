@@ -1,15 +1,6 @@
 frappe.ui.form.on("Sales Order", {
-	refresh: function (frm) {
-		if (frm.doc.custom_quotation && (!frm.doc.custom_types || !frm.doc.custom_vehicle_type && !frm.doc.oil_gas_item)) {
-			frappe.db.get_value("Quotation", frm.doc.custom_quotation,
-				["custom_types", "custom_vehicle_type", "oil_gas_item"], (r) => {
-					if (!r) return;
-					if (!frm.doc.custom_types && r.custom_types) frm.set_value("custom_types", r.custom_types);
-					if (!frm.doc.custom_vehicle_type && r.custom_vehicle_type) frm.set_value("custom_vehicle_type", r.custom_vehicle_type);
-					if (!frm.doc.oil_gas_item && r.oil_gas_item) frm.set_value("oil_gas_item", r.oil_gas_item);
-				}
-			);
-		}
+	refresh: async function (frm) {
+		await prefill_sales_order(frm, false);
 
 		frm.set_query("custom_vehicle_type", function () {
 			const filters = { disabled: 0, item_group: "Finished Items" };
@@ -152,34 +143,15 @@ frappe.ui.form.on("Sales Order", {
 
 frappe.ui.form.on("Sales Order", {
 	refresh(frm) {
-		recalc_oil_gas_pricing(frm);
+		if (frm.is_new()) return recalc_oil_gas_pricing(frm);
 	},
 
 	custom_quotation(frm) {
-		if (!frm.doc.custom_quotation) return;
-		frappe.db.get_value("Quotation", frm.doc.custom_quotation,
-			["custom_types", "custom_vehicle_type", "oil_gas_item",
-			 "custom_sale_value_without_tax", "custom_vat_percent", "custom_tax_percent"], (r) => {
-				if (!r) return;
-				if (r.custom_types) frm.set_value("custom_types", r.custom_types);
-				if (r.custom_vehicle_type) frm.set_value("custom_vehicle_type", r.custom_vehicle_type);
-				if (r.oil_gas_item) frm.set_value("oil_gas_item", r.oil_gas_item);
-				if (r.custom_sale_value_without_tax && !frm.doc.custom_sale_value_without_tax) {
-					frm.set_value("custom_sale_value_without_tax", r.custom_sale_value_without_tax);
-				}
-				if (r.custom_vat_percent && !frm.doc.custom_vat_percent) {
-					frm.set_value("custom_vat_percent", r.custom_vat_percent);
-				}
-				if (r.custom_tax_percent && !frm.doc.custom_tax_percent) {
-					frm.set_value("custom_tax_percent", r.custom_tax_percent);
-				}
-			}
-		);
+		return prefill_sales_order(frm, true);
 	},
 
 	custom_types: function (frm) {
-		frm.set_value("custom_vehicle_type", "");
-		frm.set_value("oil_gas_item", "");
+		jagadamba.sales_flow.clear_type_items(frm, ["custom_vehicle_type", "oil_gas_item"]);
 		recalc_oil_gas_pricing(frm);
 	},
 
@@ -191,20 +163,17 @@ frappe.ui.form.on("Sales Order", {
 });
 
 function recalc_oil_gas_pricing(frm) {
-	if (frm.doc.custom_types !== "Oil & Gas") return;
-	const net_total = flt(frm.doc.net_total);
-	const sale_value = flt(frm.doc.custom_sale_value_without_tax);
-	const vat_pct = flt(frm.doc.custom_vat_percent);
-	const tax_pct = flt(frm.doc.custom_tax_percent);
-
-	const vat_amount = sale_value * vat_pct / 100;
-	const tax_amount = (sale_value + vat_amount) * tax_pct / 100;
-	const total_quoted = sale_value + vat_amount + tax_amount;
-	const net_profit = sale_value - net_total;
-
-	frm.set_value("custom_vat_amount", vat_amount);
-	frm.set_value("custom_tax_amount", tax_amount);
-	frm.set_value("custom_total_quoted_value", total_quoted);
-	frm.set_value("custom_net_profit", net_profit);
+	return jagadamba.sales_flow.recalculate(frm);
 }
 
+
+function prefill_sales_order(frm, overwrite) {
+	const fields = { custom_types: "custom_types", custom_vehicle_type: "custom_vehicle_type", oil_gas_item: "oil_gas_item" };
+	if (overwrite) Object.assign(fields, {
+		custom_sale_value_without_tax: "custom_sale_value_without_tax",
+		custom_vat_percent: "custom_vat_percent", custom_tax_percent: "custom_tax_percent",
+	});
+	return jagadamba.sales_flow.copy_from_source(frm, {
+		doctype: "Quotation", link_field: "custom_quotation", fields, overwrite,
+	});
+}
