@@ -206,6 +206,19 @@
    "print_hide": 1
   },
   {
+   "dt": "Quotation",
+   "name": "Quotation-custom_finished_item_group",
+   "doctype": "Custom Field",
+   "insert_after": "custom_show_project_details",
+   "fieldname": "custom_finished_item_group",
+   "label": "Finished Item Group",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1
+  },
+  {
    "_assign": null,
    "_comments": null,
    "_liked_by": null,
