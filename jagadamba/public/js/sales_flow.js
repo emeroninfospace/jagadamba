@@ -1,4 +1,4 @@
-/* global frappe, flt, precision */
+/* global frappe, flt, precision, format_currency, format_number, __ */
 (() => {
 	"use strict";
 	frappe.provide("jagadamba.sales_flow");
@@ -137,6 +137,56 @@
 		};
 		const changes = Object.fromEntries(Object.entries(values).filter(([field, value]) =>
 			typeof value === "number" ? flt(doc[field]) !== value : doc[field] !== value));
-		return Object.keys(changes).length ? frm.set_value(changes) : Promise.resolve();
+		const write = Object.keys(changes).length ? frm.set_value(changes) : Promise.resolve();
+		return write.then(() => jagadamba.sales_flow.render_statement(frm));
+	};
+
+	// Read-only preview of the estimation sheet in the estimation department's layout.
+	jagadamba.sales_flow.render_statement = function (frm) {
+		const field = frm.get_field && frm.get_field("custom_estimation_statement");
+		if (!field || !field.$wrapper) return;
+		const doc = frm.doc;
+		const esc = value => frappe.utils.escape_html(value == null ? "" : String(value));
+		const money = value => format_currency(flt(value), doc.currency);
+		const num = value => format_number(flt(value), null, precision("qty", {doctype: "Quotation Estimation Item"}));
+		const rows = (doc.custom_estimation_items || []).map((row, index) => `<tr>
+			<td>${index + 1}</td><td>${esc(row.code)}</td><td>${esc(row.description)}</td><td>${esc(row.uom)}</td>
+			<td class="text-right">${num(row.qty)}</td><td class="text-right">${money(row.rate)}</td>
+			<td class="text-right">${money(row.amount)}</td><td></td></tr>`).join("");
+		const summary = (label, amount, extra = "", difference = "", bold = false) => `<tr${bold ? ' class="bold"' : ""}>
+			<td colspan="${extra ? 4 : 6}">${esc(__(label))}</td>${extra}
+			<td class="text-right">${money(amount)}</td><td class="text-right">${difference}</td></tr>`;
+		const percent = value => `<td class="text-right">%</td><td class="text-right">${num(value)}</td>`;
+		const empty = `<tr><td colspan="8" class="text-muted text-center">${esc(__("Add rows in Estimation Costs to build the sheet."))}</td></tr>`;
+		field.$wrapper.html(`<div class="table-responsive"><table class="table table-bordered table-condensed">
+			<thead><tr><th>${esc(__("Sl. No"))}</th><th>${esc(__("Code"))}</th><th>${esc(__("Description"))}</th>
+			<th>${esc(__("Unit"))}</th><th class="text-right">${esc(__("Qty"))}</th><th class="text-right">${esc(__("Unit Price"))}</th>
+			<th class="text-right">${esc(__("Total Price"))}</th><th class="text-right">${esc(__("Difference Value (Co Net Profit)"))}</th></tr></thead>
+			<tbody>${rows || empty}
+			${summary("Total Estimated Value", doc.custom_total_estimated_value, "", "", true)}
+			${summary("Sale Value without TAX/VAT", doc.custom_sale_value_without_tax, "", money(doc.custom_net_profit), true)}
+			${summary("VAT", doc.custom_vat_amount, percent(doc.custom_vat_percent))}
+			${summary("Tax", doc.custom_tax_amount, percent(doc.custom_tax_percent))}
+			${summary("Total Quoted / Invoice Value", doc.custom_total_quoted_value, "", "", true)}
+			</tbody></table></div>`);
+	};
+
+	// Finished-item group for forms outside the sales flow (BOM, Designing, Documents).
+	jagadamba.sales_flow.load_finished_item_group = async function (frm, type_field) {
+		const doc = frm.doc;
+		const type = type_field ? doc[type_field] : null;
+		const response = await frappe.call({
+			method: "jagadamba.jagadamba.type_settings.get_finished_item_group",
+			args: {type_name: type || null},
+		});
+		if (frm.doc === doc && (!type_field || doc[type_field] === type)) {
+			frm.__jagadamba_finished_item_group = (response && response.message) || "";
+		}
+	};
+
+	jagadamba.sales_flow.finished_item_filters = function (frm, filters = {}) {
+		const result = {disabled: 0, ...filters};
+		if (frm.__jagadamba_finished_item_group) result.item_group = frm.__jagadamba_finished_item_group;
+		return result;
 	};
 })();

@@ -38,40 +38,45 @@
   {
    "fieldname": "enable_estimation",
    "label": "Enable Estimation Costing",
-   "fieldtype": "Check"
+   "fieldtype": "Check",
+   "description": "Shows the Estimation tab (cost table, VAT/Tax and profit) on Quotation and Sales Order."
   },
   {
    "fieldname": "show_additional_items",
    "label": "Show Additional Items",
-   "fieldtype": "Check"
+   "fieldtype": "Check",
+   "description": "Shows the Additional Items table on Quotation."
   },
   {
    "fieldname": "show_vehicle_item",
    "label": "Show Vehicle Item",
-   "fieldtype": "Check"
+   "fieldtype": "Check",
+   "description": "Shows the Vehicle Type field on Lead, Opportunity, Quotation and Sales Order."
   },
   {
    "fieldname": "show_job_item",
    "label": "Show Job Item",
-   "fieldtype": "Check"
+   "fieldtype": "Check",
+   "description": "Shows the Job Item field on Lead, Opportunity, Quotation and Sales Order."
   },
   {
    "fieldname": "show_project_details",
    "label": "Show Project and Revision Details",
-   "fieldtype": "Check"
+   "fieldtype": "Check",
+   "description": "Shows Project, Estimator and Revision fields on Quotation."
   },
   {
    "fieldname": "finished_item_group",
    "label": "Finished Item Group",
    "fieldtype": "Link",
    "options": "Item Group",
-   "description": "Optional item group filter for Vehicle and Job Item links."
+   "description": "Item group used to filter Vehicle, Job and Finished Item links. Leave blank to use the default in Jagadamba Settings."
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-12 12:06:22",
+ "modified": "2026-10-12 13:00:00",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Type",

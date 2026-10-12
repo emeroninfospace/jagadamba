@@ -40,6 +40,7 @@ frappe.ui.form.on("Quotation", {
 		}
 		await prefill_quotation_type(frm);
 		if (frm.is_new()) await recalc_oil_gas_pricing(frm);
+		jagadamba.sales_flow.render_statement(frm);
 
 		if (!frm.is_new()) {
 			frm.add_custom_button(__("Log Revision Note"), function () {

@@ -5,9 +5,17 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "default_finished_item_group",
   "jagadamba_type_cost_center"
  ],
  "fields": [
+  {
+   "fieldname": "default_finished_item_group",
+   "fieldtype": "Link",
+   "label": "Default Finished Item Group",
+   "options": "Item Group",
+   "description": "Used to filter finished items on BOM, Designing and Documents, and on sales documents whose Type has no Finished Item Group."
+  },
   {
    "fieldname": "jagadamba_type_cost_center",
    "fieldtype": "Table",
@@ -19,7 +27,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-09-24 17:50:24.300101",
+ "modified": "2026-10-12 13:00:00",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Jagadamba Settings",

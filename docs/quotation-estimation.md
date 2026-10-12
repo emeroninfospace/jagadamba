@@ -4,28 +4,35 @@ This update implements the quotation cost table in the estimation department req
 
 ## Configure once in Type
 
-A System Manager can change the following on any Type without changing code:
+A System Manager can change the following on any Type without changing code. Each checkbox explains on the Type form what it shows:
 
-- Enable Estimation Costing
-- Show Additional Items
+- Enable Estimation Costing: shows the **Estimation** tab on Quotation and the estimation summary on Sales Order
+- Show Additional Items: shows the **Additional Items** table directly under the Quotation items
 - Show Vehicle Item
 - Show Job Item
 - Show Project and Revision Details
-- Finished Item Group (optional; blank removes the item-group restriction)
+- Finished Item Group (optional; blank uses **Jagadamba Settings > Default Finished Item Group**)
 
-The migration initializes existing Oil & Gas with estimation and job fields, Trailers with Additional Items and vehicle fields, and Trading without estimation. It uses an existing Finished Items group if available. These names occur only in the one-time migration defaults; runtime behavior reads the selected Type's configuration. Renaming a Type does not change its behavior. Later migrations preserve administrator changes. Newly created Types must be configured by the administrator.
+The migration initializes existing Oil & Gas with estimation and job fields, Trailers with Additional Items and vehicle fields, and Trading without estimation. So by default only Trailers shows Additional Items, and only Oil & Gas shows the Estimation tab. These names occur only in the one-time migration defaults; runtime behavior reads the selected Type's configuration. Renaming a Type does not change its behavior. Later migrations preserve administrator changes. Newly created Types must be configured by the administrator.
+
+BOM, Designing and Documents filter their finished-item links by the Type's Finished Item Group, falling back to the default in Jagadamba Settings. No item group or Type name is fixed in the form scripts.
 
 Lead technical sections, Opportunity item links, Quotation, and Sales Order use the same configuration. Type changes hide irrelevant fields but do not delete stored estimation rows or additional items.
+
+## Cost codes
+
+Cost heads (for example M Material, C Consumable, L Labour, SC Subcontract, S&P Surface preparation & Painting, P&P Pickling & Passivation) are kept in the **Estimation Cost Code** master with a description and default unit. Picking a code on a Quotation row fills the description and unit, which stay editable on the row. New codes can be created from the row itself. Codes typed on earlier quotations are turned into master records on migrate.
 
 ## Enter an estimate
 
 1. Create a Quotation and select its customer, company, currency, and Type.
-2. For an estimation-enabled Type, use **Cost Basis: Estimation**.
-3. Add any number of rows under **Estimation Costs**: Code, Description, Unit, Quantity, and Unit Cost. Codes and descriptions are free-form, units come from the UOM master, and there are no fixed categories, sample quantities, rates, or tax percentages in the application.
-4. Total Cost is Quantity × Unit Cost, rounded to the field's currency precision. Total Estimated Value is the sum of rounded row costs.
-5. Enter Sale Value without TAX/VAT and the applicable percentages. Net Profit is Sale Value minus Total Estimated Value.
+2. Open the **Estimation** tab. For an estimation-enabled Type, **Cost Basis** defaults to Estimation.
+3. Add any number of rows under **Estimation Costs**: Code, Description, Unit, Qty and Unit Price. There are no fixed categories, sample quantities, rates, or tax percentages in the application.
+4. Total Price is Qty × Unit Price, rounded to the field's currency precision. Total Estimated Value is the sum of rounded row totals.
+5. Under **Estimation Summary**, enter Sale Value without TAX/VAT and the VAT and Tax percentages. Difference Value (Co Net Profit) is Sale Value minus Total Estimated Value.
 6. Select **Tax Basis**: Sale Value, or Sale Value + VAT. Blank legacy values retain the previous compound-tax behavior.
-7. When changing or deleting rows, amounts and totals recalculate. Server validation recomputes values on save and rejects negative row costs, invalid numbers, and percentages outside 0–100.
+7. The **Estimation Sheet** at the bottom of the tab shows the whole calculation in the estimation department's layout (Sl. No, Code, Description, Unit, Qty, Unit Price, Total Price, Difference Value, then Total Estimated Value, Sale Value, VAT, Tax and Total Quoted / Invoice Value) and updates as rows change.
+8. When changing or deleting rows, amounts and totals recalculate. Server validation recomputes values on save and rejects negative row costs, invalid numbers, and percentages outside 0–100.
 
 All amounts use the document currency. The estimate is an internal costing worksheet. It does not automatically change ERPNext's standard Items, sales tax rows, discounts, Grand Total, or accounting entries. Maintain the customer-facing items and accounting taxes in those standard fields. The cost table and profit are hidden from standard printing by default; custom print formats should be checked separately.
 

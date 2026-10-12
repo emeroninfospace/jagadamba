@@ -79,7 +79,7 @@ def create_bom_from_project(project):
 
 	finished_item = proj.oil_gas_item or proj.custom_vehicle_type or None
 	if not finished_item:
-		frappe.throw("Please set Vehicle Type or Oil & Gas Item on the Project before creating a BOM.")
+		frappe.throw(frappe._("Please set the Vehicle Type or Job Item on the Project before creating a BOM."))
 
 	bom = frappe.new_doc("BOM")
 	bom.item = finished_item
