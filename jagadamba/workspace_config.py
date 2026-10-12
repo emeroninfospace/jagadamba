@@ -1,4 +1,9 @@
-"""Workspace audiences. Navigation roles never grant document permissions."""
+"""Default workspace audiences, seeded into Workspaces and Jagadamba Workspace Profiles.
+
+After installation the live audience is whatever is configured on each Workspace and
+Jagadamba Workspace Profile record; this module only supplies first-install defaults.
+Navigation roles never grant document permissions.
+"""
 
 MANAGERS = ("System Manager", "Management")
 AUDIENCES = {
@@ -10,6 +15,9 @@ AUDIENCES = {
     "design": ("Design Engineer", "Engineering Head"),
     "accounting": ("Finance Manager", "Accounts User", "Accounts Manager"),
     "hr": ("HR User", "HR Manager"),
+    "quality": ("Quality Engineer", "Quality Manager"),
+    "logistics": ("Delivery Manager", "Delivery User"),
+    "maintenance": ("Maintenance Manager", "Maintenance User"),
     "overview": tuple(),
 }
 WORKSPACES = {
@@ -18,6 +26,7 @@ WORKSPACES = {
     "Project Desk": "projects", "Project Overview": "projects",
     "Procurement Desk": "procurement", "Stores": "stores", "Design": "design",
     "Accounting Overview": "accounting", "HR Overview": "hr",
+    "Quality Desk": "quality", "Logistics Desk": "logistics", "Maintenance Desk": "maintenance",
 }
 
 

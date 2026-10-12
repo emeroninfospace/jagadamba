@@ -27,7 +27,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-08-29 15:35:11.686755",
+ "modified": "2026-10-12 10:00:00",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Type",
@@ -163,6 +163,31 @@
   },
   {
    "role": "Stores User",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "Delivery Manager",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "Delivery User",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "Maintenance Manager",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "Maintenance User",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "Quality Manager",
    "read": 1,
    "select": 1
   }

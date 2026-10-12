@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"jg-design\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Design Dashboard\",\"col\":12}},{\"id\":\"9kasQq4Wal\",\"type\":\"card\",\"data\":{\"card_name\":\"BOM\",\"col\":4}},{\"id\":\"rlvz7FPEV-\",\"type\":\"card\",\"data\":{\"card_name\":\"Design Work\",\"col\":4}}]",
+ "content": "[{\"id\":\"55e1198542\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Design Dashboard\",\"col\":12}},{\"id\":\"788b0334ab\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Access</b></span>\",\"col\":12}},{\"id\":\"10e52cd4eb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Documents\",\"col\":3}},{\"id\":\"52dc1d0ee2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Designing\",\"col\":3}},{\"id\":\"980dc205bd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Order Confirmation Sheet\",\"col\":3}},{\"id\":\"18bdad9091\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"BOM\",\"col\":3}},{\"id\":\"850d1c8773\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"55d1596128\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Documents, Reports & Masters</b></span>\",\"col\":12}},{\"id\":\"43cec7420e\",\"type\":\"card\",\"data\":{\"card_name\":\"Design Work\",\"col\":4}},{\"id\":\"aa329339ea\",\"type\":\"card\",\"data\":{\"card_name\":\"BOM\",\"col\":4}},{\"id\":\"698a388bd6\",\"type\":\"card\",\"data\":{\"card_name\":\"Design Reports\",\"col\":4}}]",
  "creation": "2026-09-25 14:37:38.811139",
  "custom_blocks": [
   {
@@ -22,7 +22,7 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Design Work",
-   "link_count": 2,
+   "link_count": 3,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -30,7 +30,7 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Documents",
+   "label": "Drawings",
    "link_count": 0,
    "link_to": "Documents",
    "link_type": "DocType",
@@ -50,8 +50,18 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Order Confirmation Sheet",
+   "link_count": 0,
+   "link_to": "Order Confirmation Sheet",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "BOM",
-   "link_count": 4,
+   "link_count": 5,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -95,9 +105,78 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Operation",
+   "link_count": 0,
+   "link_to": "Operation",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Design Reports",
+   "link_count": 5,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "BOM Explorer",
+   "link_count": 0,
+   "link_to": "BOM Explorer",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "BOM Search",
+   "link_count": 0,
+   "link_to": "BOM Search",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "BOM Stock Report",
+   "link_count": 0,
+   "link_to": "BOM Stock Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "BOM Operations Time",
+   "link_count": 0,
+   "link_to": "BOM Operations Time",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "BOM Variance Report",
+   "link_count": 0,
+   "link_to": "BOM Variance Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2026-09-25 15:33:06.566322",
+ "modified": "2026-10-12 10:00:00",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Design",
@@ -121,6 +200,50 @@
   }
  ],
  "sequence_id": 6.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Documents",
+   "link_to": "Documents",
+   "stats_filter": "{\"workflow_state\": \"Draft\"}",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "doc_view": "List",
+   "format": "{} In Progress",
+   "label": "Designing",
+   "link_to": "Designing",
+   "stats_filter": "{\"status\": [\"in\", [\"Design In Progress\", \"Sent to Customer\"]]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "format": "{} With Design",
+   "label": "Order Confirmation Sheet",
+   "link_to": "Order Confirmation Sheet",
+   "stats_filter": "{\"status\": \"Sent to Design\"}",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "format": "{} Default",
+   "label": "BOM",
+   "link_to": "BOM",
+   "stats_filter": "{\"is_active\": 1, \"is_default\": 1}",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Item",
+   "link_to": "Item",
+   "type": "DocType"
+  }
+ ],
  "title": "Design"
 }

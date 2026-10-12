@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"jg-procurement\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Procurement Dashboard\",\"col\":12}},{\"id\":\"l5MxcTfFqo\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Material Request\",\"col\":3}},{\"id\":\"iev07AnrXi\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Purchase Order\",\"col\":3}},{\"id\":\"Ok5OFE_kiE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier Quotation\",\"col\":3}},{\"id\":\"R9lEpoivkZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier\",\"col\":3}},{\"id\":\"F9BXY20-Kz\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\",\"col\":4}},{\"id\":\"G4B_tP5bMu\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"177jj_Eoug\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}}]",
+ "content": "[{\"id\":\"baec9458a7\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Procurement Dashboard\",\"col\":12}},{\"id\":\"9003ce5377\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Access</b></span>\",\"col\":12}},{\"id\":\"9bb896700b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Material Request\",\"col\":3}},{\"id\":\"46a57ef012\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier Quotation\",\"col\":3}},{\"id\":\"c058b561a6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Purchase Order\",\"col\":3}},{\"id\":\"a3d9740c89\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"GRN\",\"col\":3}},{\"id\":\"da7e5fc89f\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Purchase Invoice\",\"col\":3}},{\"id\":\"bff124a06a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier\",\"col\":3}},{\"id\":\"243fdf1edc\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Documents, Reports & Masters</b></span>\",\"col\":12}},{\"id\":\"265cdc6a93\",\"type\":\"card\",\"data\":{\"card_name\":\"Purchasing\",\"col\":4}},{\"id\":\"0a8bf9599f\",\"type\":\"card\",\"data\":{\"card_name\":\"Procurement Reports\",\"col\":4}},{\"id\":\"df5347104f\",\"type\":\"card\",\"data\":{\"card_name\":\"Procurement Masters\",\"col\":4}}]",
  "creation": "2026-09-25 14:49:28.214858",
  "custom_blocks": [
   {
@@ -21,8 +21,8 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Operations",
-   "link_count": 3,
+   "label": "Purchasing",
+   "link_count": 6,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -33,6 +33,16 @@
    "label": "Material Request",
    "link_count": 0,
    "link_to": "Material Request",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Request for Quotation",
+   "link_count": 0,
+   "link_to": "Request for Quotation",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -60,18 +70,9 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Masters",
-   "link_count": 2,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Item",
+   "label": "Purchase Receipt",
    "link_count": 0,
-   "link_to": "Item",
+   "link_to": "Purchase Receipt",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -79,9 +80,9 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Supplier",
+   "label": "Purchase Invoice",
    "link_count": 0,
-   "link_to": "Supplier",
+   "link_to": "Purchase Invoice",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -89,8 +90,8 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Reports",
-   "link_count": 3,
+   "label": "Procurement Reports",
+   "link_count": 9,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -108,9 +109,49 @@
   {
    "hidden": 0,
    "is_query_report": 1,
-   "label": "Supplier-Wise Sales Analytics",
+   "label": "Procurement Tracker",
    "link_count": 0,
-   "link_to": "Supplier-Wise Sales Analytics",
+   "link_to": "Procurement Tracker",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Purchase Analytics",
+   "link_count": 0,
+   "link_to": "Purchase Analytics",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Purchase Order Trends",
+   "link_count": 0,
+   "link_to": "Purchase Order Trends",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Requested Items to Order and Receive",
+   "link_count": 0,
+   "link_to": "Requested Items to Order and Receive",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Supplier Quotation Comparison",
+   "link_count": 0,
+   "link_to": "Supplier Quotation Comparison",
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
@@ -124,9 +165,98 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Items To Be Requested",
+   "link_count": 0,
+   "link_to": "Items To Be Requested",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Material Requests for which Supplier Quotations are not created",
+   "link_count": 0,
+   "link_to": "Material Requests for which Supplier Quotations are not created",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Procurement Masters",
+   "link_count": 6,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Supplier",
+   "link_count": 0,
+   "link_to": "Supplier",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Supplier Group",
+   "link_count": 0,
+   "link_to": "Supplier Group",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Item",
+   "link_count": 0,
+   "link_to": "Item",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Item Price",
+   "link_count": 0,
+   "link_to": "Item Price",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Price List",
+   "link_count": 0,
+   "link_to": "Price List",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project Budget",
+   "link_count": 0,
+   "link_to": "Project Budget",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2026-09-25 15:44:04.448521",
+ "modified": "2026-10-12 10:00:00",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Procurement Desk",
@@ -155,27 +285,48 @@
  "sequence_id": 9.0,
  "shortcuts": [
   {
-   "color": "Grey",
+   "color": "Cyan",
    "doc_view": "List",
+   "format": "{} Pending",
    "label": "Material Request",
    "link_to": "Material Request",
-   "stats_filter": "[]",
+   "stats_filter": "{\"status\": [\"in\", [\"Pending\", \"Partially Ordered\"]], \"docstatus\": 1}",
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Yellow",
    "doc_view": "List",
-   "label": "Purchase Order",
-   "link_to": "Purchase Order",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
+   "format": "{} Open",
    "label": "Supplier Quotation",
    "link_to": "Supplier Quotation",
-   "stats_filter": "[]",
+   "stats_filter": "{\"status\": \"Submitted\"}",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "format": "{} To Receive",
+   "label": "Purchase Order",
+   "link_to": "Purchase Order",
+   "stats_filter": "{\"status\": [\"in\", [\"To Receive and Bill\", \"To Receive\"]]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "format": "{} To Bill",
+   "label": "GRN",
+   "link_to": "Purchase Receipt",
+   "stats_filter": "{\"status\": \"To Bill\"}",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "format": "{} Unpaid",
+   "label": "Purchase Invoice",
+   "link_to": "Purchase Invoice",
+   "stats_filter": "{\"status\": [\"in\", [\"Unpaid\", \"Overdue\", \"Partly Paid\"]]}",
    "type": "DocType"
   },
   {
@@ -183,7 +334,6 @@
    "doc_view": "List",
    "label": "Supplier",
    "link_to": "Supplier",
-   "stats_filter": "[]",
    "type": "DocType"
   }
  ],

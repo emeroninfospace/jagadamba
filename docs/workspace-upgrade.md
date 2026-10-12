@@ -1,6 +1,56 @@
 # Jagadamba workspace upgrade
 
-This change targets Frappe/ERPNext v15 and the app's existing twelve exported workspaces. It has not been deployed to a client site. HRMS remains necessary for the existing Employee customizations and HR features; the overview omits unavailable or unreadable document types.
+This change targets Frappe/ERPNext v15. It has not been deployed to a client site. HRMS remains necessary for the existing Employee customizations and HR features; the overview omits unavailable or unreadable document types.
+
+## Role-based desks (dynamic)
+
+Every dashboard is driven by a **Jagadamba Workspace Profile** record (Desk → search "Jagadamba Workspace Profile"). Nothing about which documents, fields, alerts or audiences a dashboard shows is hard-coded in the page script; a System Manager edits the profile and the change applies on the next refresh.
+
+Each profile holds:
+
+- **Headline, eyebrow, subtitle and accent colour** for the animated hero.
+- **Home Workspace, Landing Roles and Landing Priority.** After login, a user without a Default Workspace on their User record opens the home workspace of the lowest-priority profile whose landing roles they hold. A Default Workspace set on the User always wins.
+- **Dashboard Roles.** Who may load the dashboard (System Manager and Management always can). Document permissions still apply to every number.
+- **Sources** (one row per section): document type, date field, status field, "top by" field, amount and second amount fields, base filters and an *attention* filter (for example overdue invoices). Filters are JSON and accept `@today`, `@today+N`, `@today-N` and `@user`. Field names are validated against the DocType when saved and against the viewer's permitted fields when loaded.
+
+Shipped defaults live in `jagadamba/workspace_profiles.json`. They are inserted only when a profile is missing, so edited profiles are never overwritten by migrate. Fields the site does not have (for example without HRMS) are dropped from the seed.
+
+Default landing, matched to the ERP user list:
+
+| Landing roles | Lands on | Priority |
+| --- | --- | --- |
+| Management, System Manager | Jagadamba | 10 |
+| Sales Executive / User / Manager | Sales Desk | 20 |
+| Finance Manager, Accounts Manager / User | Accounting Overview | 25 |
+| HR Manager / User | HR Overview | 25 |
+| Procurement Engineer, Purchase Manager / User | Procurement Desk | 30 |
+| Production Engineer, Manufacturing Manager / User | Production | 30 |
+| Quality Engineer, Quality Manager | Quality Desk | 35 |
+| Project Engineer, Projects Manager / User | Project Desk | 40 |
+| Design Engineer, Engineering Head | Design | 40 |
+| Stores User, Stock Manager / User | Stores | 45 |
+| Delivery Manager / User | Logistics Desk | 50 |
+| Maintenance Manager / User | Maintenance Desk | 50 |
+
+So a user with Sales Executive + Design Engineer + Project Engineer lands on Sales Desk, Stores User + Procurement Engineer lands on Procurement Desk, and Production Engineer + Design Engineer lands on Production. Users still see every other workspace their roles allow in the sidebar.
+
+## Dashboard contents
+
+Each section shows: a KPI card with animated count, change against the previous period of equal length, value total and sparkline; an attention chip (current state, regardless of period) that opens the matching list; a status donut; monthly count or value columns; the top five by the configured field; business-unit mix; and recent records with party, amount and status. Every chart element drills into the filtered List view. Quick-create buttons appear for document types the user may create. Period options are this month, last month, this quarter, this year and custom (up to 367 days).
+
+The Accounting desk now shows booked sales and purchase invoices with receivable/payable outstanding and overdue counts, customer receipts, supplier payments and journal entries. HR shows new joiners (with visas expiring in 30 days), leave, attendance, expense claims and salary slips.
+
+## New and updated workspaces
+
+- New: **Quality Desk**, **Logistics Desk**, **Maintenance Desk** (with matching Custom HTML Blocks and profiles).
+- Every workspace has a Quick Access row of shortcuts with live counts (for example "3 To Bill", "5 Pending") and cards for documents, reports and masters. Accounting and HR, which previously only had the summary block, now carry full shortcut, report and master cards (General Ledger, Trial Balance, P&L, Balance Sheet, Cash Flow, AR/AP, Gross Profit, UAE VAT 201, Monthly Attendance Sheet, Leave Balance, Salary Register and more).
+- All report and DocType links were checked against ERPNext v15, HRMS v15 and Frappe v15. Links to DocTypes or reports that a site does not have are hidden by Frappe.
+
+## Form layout
+
+Lead's header is regrouped into three columns: name, lead details (owner, status, source, type) and customer & business unit (customer, company, Type, Vehicle Type, Job Item). Sales Order, Opportunity and Purchase Receipt now keep Type, Vehicle Type and Job Item together.
+
+## Earlier changes (previous upgrade)
 
 ## What changes
 
@@ -9,7 +59,7 @@ This change targets Frappe/ERPNext v15 and the app's existing twelve exported wo
 - Workspace and Custom HTML Block roles replace sidebar DOM hiding, prototype patching, repeated observers and changes to users' default workspace settings.
 - User defaults and private/standard workspaces remain under Frappe's normal navigation rules. Set **Default Workspace** on a User to choose their landing page.
 - All new dashboard data queries use `frappe.get_list`, with the current user's document, row and field permissions. No cross-user data cache is introduced. Workspace roles do not grant transaction permissions.
-- Each readable document source runs at most five grouped/list queries, independent of record count or number of months. Recent records are limited to six. Project-linked documents without a company field use the user's readable projects. Large project lists should be profiled on client data before production rollout.
+- Each readable document source runs at most eight grouped/list queries (totals, previous period, status, business unit, top five, trend, recent, attention), independent of record count or number of months. Recent records are limited to six. Project-linked documents without a company field use the user's readable projects. Large project lists should be profiled on client data before production rollout.
 - Amounts use company-currency fields. Invoice and order totals include drafts and exclude cancelled records; these are activity summaries, not booked revenue, gross profit or ledger balances.
 - Dates use each displayed source date field (for example, planned start for Work Orders and expected start for Projects). Undated documents are not included in period summaries. Custom periods are limited to 367 inclusive days.
 - Sources with no safe company scope, an unreadable date field, or no business-unit field for the selected unit are omitted rather than displaying an unfiltered total.
@@ -30,6 +80,9 @@ System Manager and Management can access each dashboard but still need the under
 | Design | Design Engineer, Engineering Head |
 | Accounting Overview | Finance Manager, Accounts User, Accounts Manager |
 | HR Overview | HR User, HR Manager |
+| Quality Desk | Quality Engineer, Quality Manager |
+| Logistics Desk | Delivery Manager, Delivery User |
+| Maintenance Desk | Maintenance Manager, Maintenance User |
 | Jagadamba | Union of the above audiences |
 
 The Type master receives read/select permissions for these audiences; only the existing System Manager permission grants edits. No business transaction roles or user assignments are created. Role policy lives in `jagadamba/workspace_config.py`; update both exported roles and API policy together if changing audiences. The migration hook fills only empty role tables on Jagadamba-owned workspaces and preserves already configured audiences. Standard app JSON synchronization can refresh the exported app layouts; retain a backup of client-specific edits before migration.
@@ -56,14 +109,13 @@ Standalone exported Number Cards are retained, but old embedded cards/charts are
 
 Completed locally:
 
-- 19 Python unit/boundary tests, using mocks rather than a live database.
-- DOM tests for rendering, literal text safety, list filters, idempotent mounting, stale response rejection, error recovery, custom dates and detached blocks.
+- 26 Python unit/boundary tests, using mocks rather than a live database (including role-based landing for each department in the user list).
+- Chromium browser test (desktop, mobile, dark, reduced motion) and DOM tests for rendering, literal text safety, list filters, idempotent mounting, stale response rejection, error recovery, custom dates and detached blocks.
 - Python compile checks, JavaScript syntax checks and JSON/export reference checks.
 
 Not completed locally:
 
 - A running Frappe/ERPNext/HRMS site, real SQL execution and real user-permission enforcement.
-- Browser visual screenshots, mobile layout and reduced-motion rendering. Playwright is available but the Chromium download failed. A browser test is included for an environment with Chromium installed.
 - Financial reconciliation, workflow end-to-end tests, performance measurements on client data, or a complete audit of every app method.
 
 ```bash
@@ -72,7 +124,7 @@ python -m compileall -q jagadamba
 node --check jagadamba/public/js/workspace_dashboard.js
 # With jsdom available in your Node environment:
 node tests/workspace_dashboard.dom.cjs
-# With Playwright and its Chromium browser available:
+# With Playwright and its Chromium browser available (CHROMIUM_PATH optional):
 node tests/workspace_dashboard.browser.cjs
 ```
 

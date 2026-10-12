@@ -1,0 +1,150 @@
+{
+ "actions": [],
+ "creation": "2026-10-12 10:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "links": [],
+ "modified": "2026-10-12 10:00:00",
+ "modified_by": "Administrator",
+ "module": "Jagadamba",
+ "owner": "Administrator",
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "allow_rename": 0,
+ "autoname": "field:scope",
+ "naming_rule": "By fieldname",
+ "fields": [
+  {
+   "fieldname": "scope",
+   "fieldtype": "Data",
+   "label": "Dashboard Key",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1,
+   "description": "Used by the Custom HTML Block, e.g. jagadamba.workspace.mount(root_element, \"sales\")."
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Headline",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "eyebrow",
+   "fieldtype": "Data",
+   "label": "Eyebrow"
+  },
+  {
+   "fieldname": "subtitle",
+   "fieldtype": "Data",
+   "label": "Subtitle"
+  },
+  {
+   "fieldname": "column_break_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "accent_color",
+   "fieldtype": "Color",
+   "label": "Accent Colour"
+  },
+  {
+   "fieldname": "home_workspace",
+   "fieldtype": "Link",
+   "label": "Home Workspace",
+   "options": "Workspace",
+   "in_list_view": 1,
+   "description": "Users with a landing role open this workspace after login, unless their User record sets a Default Workspace."
+  },
+  {
+   "fieldname": "landing_priority",
+   "fieldtype": "Int",
+   "label": "Landing Priority",
+   "default": "50",
+   "description": "When a user matches several profiles, the lowest number wins."
+  },
+  {
+   "fieldname": "section_break_roles",
+   "fieldtype": "Section Break",
+   "label": "Audience"
+  },
+  {
+   "fieldname": "roles",
+   "fieldtype": "Table",
+   "label": "Dashboard Roles",
+   "options": "Has Role",
+   "description": "Roles allowed to load this dashboard. System Manager and Management are always allowed. Document permissions still apply to every number."
+  },
+  {
+   "fieldname": "column_break_roles",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "landing_roles",
+   "fieldtype": "Table",
+   "label": "Landing Roles",
+   "options": "Has Role",
+   "description": "Users with one of these roles land on the Home Workspace."
+  },
+  {
+   "fieldname": "section_break_sources",
+   "fieldtype": "Section Break",
+   "label": "Dashboard Sections"
+  },
+  {
+   "fieldname": "sources",
+   "fieldtype": "Table",
+   "label": "Sources",
+   "options": "Jagadamba Dashboard Source"
+  }
+ ],
+ "name": "Jagadamba Workspace Profile",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Management"
+  }
+ ],
+ "title_field": "title",
+ "show_title_field_in_link": 0,
+ "track_changes": 1,
+ "field_order": [
+  "scope",
+  "title",
+  "eyebrow",
+  "subtitle",
+  "column_break_main",
+  "enabled",
+  "accent_color",
+  "home_workspace",
+  "landing_priority",
+  "section_break_roles",
+  "roles",
+  "column_break_roles",
+  "landing_roles",
+  "section_break_sources",
+  "sources"
+ ]
+}
