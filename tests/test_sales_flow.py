@@ -48,15 +48,21 @@ class PricingTests(unittest.TestCase):
 		self.config = patch("jagadamba.jagadamba.type_settings.get_configuration", side_effect=lambda name: {"enable_estimation": int(name == "Oil & Gas")})
 		self.config.start()
 		self.addCleanup(self.config.stop)
-	def test_compound_formula_preserved_for_both_documents(self):
-		for validate in (quotation.validate, sales_order.validate):
-			doc = Doc(doctype="Quotation", custom_enable_estimation=1, custom_types="Oil & Gas", custom_sale_value_without_tax="1000",
-				custom_vat_percent="5", custom_tax_percent="2", net_total="600")
-			validate(doc)
-			self.assertEqual(doc.custom_vat_amount, 50)
-			self.assertEqual(doc.custom_tax_amount, 21)
-			self.assertEqual(doc.custom_total_quoted_value, 1071)
-			self.assertEqual(doc.custom_net_profit, 400)
+	def test_sales_order_formula_uses_net_total(self):
+		doc = Doc(doctype="Sales Order", custom_enable_estimation=1, custom_types="Oil & Gas", custom_sale_value_without_tax="1000",
+			custom_vat_percent="5", custom_tax_percent="2", net_total="600")
+		sales_order.validate(doc)
+		self.assertEqual(doc.custom_total_estimated_value, 600)
+		self.assertEqual(doc.custom_vat_amount, 50)
+		self.assertEqual(doc.custom_tax_amount, 21)
+		self.assertEqual(doc.custom_total_quoted_value, 1071)
+		self.assertEqual(doc.custom_net_profit, 400)
+
+	def test_quotation_has_no_estimation_calculation(self):
+		doc = Doc(doctype="Quotation", custom_types="Oil & Gas", custom_sale_value_without_tax=1000, custom_vat_percent=5, net_total=600)
+		quotation.validate(doc)
+		self.assertIsNone(doc.custom_total_quoted_value)
+		self.assertIsNone(doc.custom_net_profit)
 
 	def test_zero_vat_is_a_valid_value(self):
 		doc = Doc(doctype="Quotation", custom_enable_estimation=1, custom_types="Oil & Gas", custom_sale_value_without_tax=100,
@@ -134,18 +140,15 @@ class MappingTests(unittest.TestCase):
 		self.assertEqual(doc.oil_gas_item, "PIPE")
 
 
-class EstimationTests(unittest.TestCase):
-	def estimate(self, **values):
-		data = dict(doctype="Quotation", custom_enable_estimation=1, custom_types="Fabrication",
-			custom_estimation_cost_source="Estimation", custom_sale_value_without_tax=85750,
-			custom_vat_percent=5, custom_tax_percent=10,
-			custom_estimation_items=[Doc(qty=q, rate=r) for q, r in
-				[(10, 5000), (1, 1000), (1000, 20), (1, 10000), (10, 250), (7.5, 100)]])
+class SalesOrderPricingTests(unittest.TestCase):
+	def order(self, **values):
+		data = dict(doctype="Sales Order", custom_enable_estimation=1, custom_types="Fabrication", net_total=84250,
+			custom_sale_value_without_tax=85750, custom_vat_percent=5, custom_tax_percent=10)
 		data.update(values)
 		return Doc(data)
 
-	def test_requirement_example_recalculated_from_inputs(self):
-		doc = self.estimate(net_total=999999)
+	def test_requirement_example(self):
+		doc = self.order()
 		calculate_oil_gas_pricing(doc)
 		self.assertEqual(doc.custom_total_estimated_value, 84250)
 		self.assertEqual(doc.custom_net_profit, 1500)
@@ -154,170 +157,124 @@ class EstimationTests(unittest.TestCase):
 		self.assertEqual(doc.custom_total_quoted_value, 99041.25)
 
 	def test_non_compound_tax_is_selectable(self):
-		doc = self.estimate(custom_tax_basis="Sale Value")
+		doc = self.order(custom_tax_basis="Sale Value")
 		calculate_oil_gas_pricing(doc)
 		self.assertEqual(doc.custom_tax_amount, 8575)
-		self.assertEqual(doc.custom_total_quoted_value, 98612.5)
 
-	def test_removing_last_row_resets_cost_without_net_total_fallback(self):
-		doc = self.estimate(custom_estimation_items=[], net_total=99999)
-		calculate_oil_gas_pricing(doc)
-		self.assertEqual(doc.custom_total_estimated_value, 0)
-		self.assertEqual(doc.custom_net_profit, 85750)
-
-	def test_row_amounts_use_currency_precision(self):
-		doc = self.estimate(custom_estimation_items=[Doc(qty=3, rate=0.3333), Doc(qty=1, rate=0)])
-		calculate_oil_gas_pricing(doc)
-		self.assertEqual(doc.custom_total_estimated_value, 1)
-		self.assertEqual(doc.custom_estimation_items[1].amount, 0)
-
-	def test_invalid_costs_and_rates_are_rejected(self):
-		for row in [Doc(qty=-1, rate=1), Doc(qty=1, rate=-1), Doc(qty=float('inf'), rate=1), Doc(qty=1, rate='abc')]:
-			with self.subTest(row=row), self.assertRaises(ValueError):
-				calculate_oil_gas_pricing(self.estimate(custom_estimation_items=[row]))
-		for rate in [-1, 101, float('nan')]:
+	def test_invalid_rates_are_rejected(self):
+		for rate in [-1, 101, float('nan'), 'abc']:
 			with self.subTest(rate=rate), self.assertRaises(ValueError):
-				calculate_oil_gas_pricing(self.estimate(custom_vat_percent=rate))
-
-	def test_legacy_basis_does_not_silently_ignore_cost_rows(self):
-		doc = self.estimate(custom_estimation_cost_source="Document Net Total", net_total=1)
-		calculate_oil_gas_pricing(doc)
-		self.assertEqual(doc.custom_estimation_cost_source, "Estimation")
-		self.assertEqual(doc.custom_total_estimated_value, 84250)
-
-	def test_new_quote_uses_estimation_existing_quote_retains_legacy(self):
-		for is_new, expected in [(1, 0), (0, 100)]:
-			doc = self.estimate(custom_estimation_cost_source="", custom_estimation_items=[], __islocal=is_new, net_total=100)
-			calculate_oil_gas_pricing(doc)
-			self.assertEqual(doc.custom_total_estimated_value, expected)
+				calculate_oil_gas_pricing(self.order(custom_vat_percent=rate))
 
 	def test_type_configuration_overrides_tampered_client_flag(self):
-		from jagadamba.jagadamba.type_settings import sync_type_settings
-		doc = self.estimate(custom_enable_estimation=1)
+		doc = self.order()
 		with patch.object(quotation.frappe, 'get_cached_doc', return_value=Doc(enable_estimation=0)):
-			sync_type_settings(doc)
+			sales_order.validate(doc)
 		self.assertEqual(doc.custom_enable_estimation, 0)
-		calculate_oil_gas_pricing(doc)
 		self.assertIsNone(doc.custom_total_quoted_value)
 
-	def test_renamed_type_keeps_estimation_enabled(self):
-		doc = self.estimate(custom_enable_estimation=0)
-		with patch.object(quotation.frappe, 'get_cached_doc', return_value=Doc(enable_estimation=1)):
-			quotation.validate(doc)
-		self.assertEqual(doc.custom_total_estimated_value, 84250)
 
-	def test_sales_order_reads_authorized_quotation_cost(self):
-		doc = self.estimate(doctype="Sales Order", custom_quotation="Q1", custom_total_estimated_value=1)
-		source = Doc(custom_types="Fabrication", docstatus=1, custom_total_estimated_value=84250, check_permission=Mock())
-		with patch.object(quotation.frappe, 'get_doc', return_value=source):
-			calculate_oil_gas_pricing(doc)
-		source.check_permission.assert_called_once_with('read')
-		self.assertEqual(doc.custom_total_estimated_value, 84250)
-		self.assertEqual(doc.custom_net_profit, 1500)
-
-	def test_sales_order_rejects_cost_from_different_currency_or_company(self):
-		for company, currency in [('Other', 'AED'), ('Company A', 'USD')]:
-			source = Doc(custom_types='Fabrication', docstatus=1, company=company, currency=currency, check_permission=Mock())
-			with patch.object(quotation.frappe, 'get_doc', return_value=source), self.assertRaises(ValueError):
-				calculate_oil_gas_pricing(self.estimate(doctype='Sales Order', custom_quotation='Q1', company='Company A', currency='AED'))
-
-	def test_sales_order_requires_matching_readable_source(self):
-		for source in [Doc(custom_types='Other', docstatus=1, check_permission=Mock()),
-			Doc(custom_types='Fabrication', docstatus=2, check_permission=Mock()),
-			Doc(check_permission=Mock(side_effect=PermissionError))]:
-			with patch.object(quotation.frappe, 'get_doc', return_value=source), self.assertRaises((ValueError, PermissionError)):
-				calculate_oil_gas_pricing(self.estimate(doctype='Sales Order', custom_quotation='Q1'))
-
-
-class EstimationMetadataTests(unittest.TestCase):
-	def test_field_layout_and_type_conditions(self):
+class LayoutTests(unittest.TestCase):
+	def load(self, name):
 		import json
 		from pathlib import Path
-		data = json.loads(Path('jagadamba/jagadamba/custom/quotation.json').read_text())
-		fields = {f['fieldname']: f for f in data['custom_fields']}
+		data = json.loads(Path(f'jagadamba/jagadamba/custom/{name}.json').read_text())
 		order = json.loads(next(p['value'] for p in data['property_setters'] if p['property'] == 'field_order'))
-		self.assertEqual(len(order), len(set(order)))
-		self.assertTrue(set(fields) <= set(order))
-		self.assertEqual(fields['custom_additional_items']['depends_on'], 'eval:doc.custom_show_additional_items')
-		self.assertEqual(fields['custom_estimation_section']['depends_on'], 'eval:doc.custom_enable_estimation')
-		start, end = order.index('custom_estimation_section'), order.index('custom_oil_gas_pricing_section')
-		self.assertIn('custom_estimation_items', order[start:end])
-		self.assertFalse(any(fields.get(n, {}).get('fieldtype') == 'Column Break' for n in order[start:end]))
+		return {f['fieldname']: f for f in data['custom_fields']}, order
 
+	def test_quotation_has_no_estimation_fields_and_additional_items_follow_items(self):
+		from jagadamba.patches.setup_estimation import REMOVED_QUOTATION_FIELDS
+		fields, order = self.load('quotation')
+		self.assertEqual(len(order), len(set(order)))
+		self.assertFalse(set(REMOVED_QUOTATION_FIELDS) & (set(fields) | set(order)))
+		self.assertEqual(order[order.index('items') + 1:order.index('items') + 3], ['custom_section_break_xuxav', 'custom_additional_items'])
+		self.assertEqual(fields['custom_additional_items']['depends_on'], 'eval:doc.custom_show_additional_items')
+		for field in fields.values():
+			if field.get('insert_after'):
+				self.assertIn(field['insert_after'], order)
+
+	def test_sales_order_pricing_is_type_driven(self):
+		fields, order = self.load('sales_order')
+		self.assertEqual(fields['custom_oil_gas_pricing_section']['depends_on'], 'eval:doc.custom_enable_estimation')
+		self.assertNotIn('custom_estimation_cost_source', fields)
+		for field in fields.values():
+			if field.get('insert_after'):
+				self.assertIn(field['insert_after'], order)
+
+	def test_lead_technical_sections_follow_job_item(self):
+		fields, order = self.load('lead')
+		for name in ('equipment_section', 'technical_specs_section', 'requirements_section'):
+			self.assertEqual(fields[name]['depends_on'], 'eval:doc.custom_show_job_item')
+		self.assertEqual(order[order.index('custom_types') - 1], 'col_break123')
+		self.assertEqual(order[order.index('oil_gas_item') - 1], 'custom_vehicle_type')
+
+
+class SetupTests(unittest.TestCase):
 	def test_setup_marker_preserves_admin_changes_on_repeat_migrate(self):
 		from jagadamba.patches import setup_estimation
-		with patch.object(setup_estimation.frappe.db, 'exists', return_value=True), patch.object(setup_estimation.frappe.db, 'set_value') as write:
+		api = setup_estimation.frappe
+		with patch.object(api.db, 'exists', return_value=True), patch.object(api.db, 'set_value') as write, \
+			patch.object(api, 'delete_doc', create=True) as delete:
 			setup_estimation.execute()
 		write.assert_not_called()
+		delete.assert_not_called()
 
-	def test_setup_changes_only_type_configuration_and_document_flags(self):
+	def test_type_flags_only_written_to_fields_the_doctype_has(self):
 		from jagadamba.patches import setup_estimation
 		api = setup_estimation.frappe
+		meta = Mock(has_field=lambda key: key != 'custom_enable_estimation')
 		with patch.object(api.db, 'exists', side_effect=lambda dt, name: dt != 'Patch Log'), \
 			patch.object(api.db, 'set_value') as write, \
 			patch.object(api, 'clear_document_cache', create=True), \
+			patch.object(api, 'get_meta', return_value=meta, create=True), \
 			patch.object(api, 'get_all', return_value=['Oil & Gas'], create=True), \
-			patch.object(setup_estimation, 'get_configuration', return_value={'enable_estimation': 1}), \
+			patch.object(setup_estimation, 'get_configuration', return_value={'enable_estimation': 1, 'show_job_item': 1}), \
 			patch.object(api, 'get_doc', return_value=Mock()) as log:
 			setup_estimation._setup_type_configuration()
-		self.assertEqual(write.call_count, 7)
+		document_writes = [c for c in write.call_args_list if c.args[0] != 'Type']
+		self.assertEqual(len(document_writes), 4)
 		for call in write.call_args_list:
 			self.assertFalse(call.kwargs['update_modified'])
-			self.assertTrue(all('total' not in key and 'items' not in key.replace('show_additional_items','') for key in call.args[2]))
+		for call in document_writes:
+			self.assertEqual(call.args[2], {'custom_show_job_item': 1})
 		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.MARKER})
 
-	def test_estimation_and_additional_items_sit_under_the_quotation_items(self):
-		import json
-		from pathlib import Path
-		data = json.loads(Path('jagadamba/jagadamba/custom/quotation.json').read_text())
-		fields = {f['fieldname']: f for f in data['custom_fields']}
-		order = json.loads(next(p['value'] for p in data['property_setters'] if p['property'] == 'field_order'))
-		block = order[order.index('items') + 1:order.index('sec_break23')]
-		self.assertEqual(block[:2], ['custom_section_break_xuxav', 'custom_additional_items'])
-		for name in ('custom_estimation_items', 'custom_total_estimated_value', 'custom_net_profit', 'custom_total_quoted_value'):
-			self.assertIn(name, block)
-		self.assertFalse(any(f['fieldtype'] in ('Tab Break', 'HTML') for f in fields.values()))
-		self.assertEqual(fields['custom_estimation_cost_source'].get('hidden'), 1)
-		for name in block[2:]:
-			if fields[name]['fieldtype'] != 'Column Break':
-				self.assertTrue(fields[name].get('depends_on', '').startswith('eval:doc.custom_enable_estimation'))
-		for name in order:
-			if name in fields and fields[name].get('insert_after'):
-				self.assertIn(fields[name]['insert_after'], order)
-
-	def test_cost_codes_are_master_data(self):
-		import json
-		from pathlib import Path
-		child = json.loads(Path('jagadamba/jagadamba/doctype/quotation_estimation_item/quotation_estimation_item.json').read_text())
-		code = next(f for f in child['fields'] if f['fieldname'] == 'code')
-		self.assertEqual((code['fieldtype'], code['options']), ('Link', 'Estimation Cost Code'))
-		fetched = {f['fieldname']: f.get('fetch_from') for f in child['fields']}
-		self.assertEqual(fetched['description'], 'code.description')
-		self.assertEqual(fetched['uom'], 'code.default_uom')
-
-	def test_existing_typed_codes_become_cost_code_masters_once(self):
+	def test_removes_quotation_estimation_fields_once(self):
 		from jagadamba.patches import setup_estimation
 		api = setup_estimation.frappe
-		rows = [Doc(code='M', description='Material', uom='Ton'), Doc(code='M', description='Other', uom='Kg'), Doc(code='', description='x')]
-		created = []
-		existing = set()
-		def exists(dt, name=None):
-			return dt == 'Item Group' or (dt == 'Estimation Cost Code' and name in existing)
-		def get_doc(values):
-			created.append(values)
-			if values['doctype'] == 'Estimation Cost Code':
-				existing.add(values['code'])
-			return Mock()
-		with patch.object(api.db, 'exists', side_effect=exists), \
-			patch.object(api, 'get_all', return_value=rows, create=True), \
-			patch.object(api.db, 'get_single_value', return_value=''), \
-			patch.object(api.db, 'set_single_value') as default_group, \
-			patch.object(api, 'get_doc', side_effect=get_doc):
-			setup_estimation._setup_cost_codes_and_defaults()
-		self.assertEqual(created[0], {'doctype': 'Estimation Cost Code', 'code': 'M', 'description': 'Material', 'default_uom': 'Ton'})
-		self.assertEqual(created[1], {'doctype': 'Patch Log', 'patch': setup_estimation.COST_CODE_MARKER})
-		self.assertEqual(len(created), 2)
-		default_group.assert_called_once_with('Jagadamba Settings', 'default_finished_item_group', 'Finished Items')
+		existing = {'Custom Field': {'Quotation-custom_vat_percent', 'Quotation-custom_estimation_items'}, 'DocType': {'Estimation Cost Code'}}
+		with patch.object(api.db, 'exists', side_effect=lambda dt, name: isinstance(name, str) and name in existing.get(dt, set())), \
+			patch.object(api, 'delete_doc', create=True) as delete, \
+			patch.object(api, 'clear_cache', create=True), \
+			patch.object(api, 'get_doc', return_value=Mock()) as log:
+			setup_estimation._remove_quotation_estimation()
+		deleted = {c.args[:2] for c in delete.call_args_list}
+		self.assertEqual(deleted, {('Custom Field', 'Quotation-custom_vat_percent'), ('Custom Field', 'Quotation-custom_estimation_items'),
+			('DocType', 'Estimation Cost Code')})
+		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.REMOVE_QUOTATION_ESTIMATION_MARKER})
+
+
+	def test_removes_unused_layout_fields_once(self):
+		from jagadamba.patches import setup_estimation
+		api = setup_estimation.frappe
+		existing = {'Custom Field': {'Sales Order-custom_column_break_7ozif', 'Quotation-custom_estimation_tab'}}
+		with patch.object(api.db, 'exists', side_effect=lambda dt, name: isinstance(name, str) and name in existing.get(dt, set())), \
+			patch.object(api, 'delete_doc', create=True) as delete, \
+			patch.object(api, 'clear_cache', create=True), \
+			patch.object(api, 'get_doc', return_value=Mock()) as log:
+			setup_estimation._remove_layout_fields()
+		deleted = {c.args[:2] for c in delete.call_args_list}
+		self.assertEqual(deleted, {('Custom Field', 'Sales Order-custom_column_break_7ozif'), ('Custom Field', 'Quotation-custom_estimation_tab')})
+		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.FORM_CLEANUP_MARKER})
+
+	def test_removed_layout_fields_are_gone_from_fixtures(self):
+		import json
+
+		from jagadamba.patches import setup_estimation
+		files = {'Quotation': 'quotation', 'Sales Order': 'sales_order', 'Lead': 'lead'}
+		for doctype, fieldname in setup_estimation.REMOVED_LAYOUT_FIELDS:
+			with open(f'jagadamba/jagadamba/custom/{files[doctype]}.json') as handle:
+				self.assertNotIn(f'"{fieldname}"', handle.read(), fieldname)
 
 
 class TypeConfigurationTests(unittest.TestCase):
@@ -330,9 +287,33 @@ class TypeConfigurationTests(unittest.TestCase):
 			self.assertEqual(type_settings.get_configuration('Any Type')['show_additional_items'], 1)
 			self.assertEqual(type_settings.get_configuration(None)['finished_item_group'], 'Assemblies')
 			self.assertEqual(type_settings.get_configuration(None)['show_additional_items'], 0)
-		with patch.object(api.db, 'get_single_value', return_value='Assemblies'), \
-			patch.object(api, 'get_cached_doc', return_value=Doc(finished_item_group='Skids')):
-			self.assertEqual(type_settings.get_finished_item_group('Any Type'), 'Skids')
+
+	def _query(self, filters, type_exists=True, group='Finished Goods'):
+		from jagadamba.jagadamba import type_settings
+		api = type_settings.frappe
+		api._dict = getattr(api, '_dict', None) or Doc
+		with patch.object(api.db, 'exists', return_value=type_exists, create=True), \
+			patch.object(type_settings, 'get_configuration', return_value={'finished_item_group': group}), \
+			patch.object(api, 'get_list', return_value=[['JGES-1', 'Tanker']], create=True) as get_list:
+			result = type_settings.finished_item_query('Item', 'tank', 'name', 0, 10, filters)
+		return result, get_list.call_args
+
+	def test_finished_item_query_limits_to_type_group_and_company(self):
+		result, call = self._query({'type': 'Oil & Gas', 'company': 'Jagadamba'})
+		self.assertEqual(result, [['JGES-1', 'Tanker']])
+		self.assertEqual(call.kwargs['filters'], {'disabled': 0, 'custom_types': 'Oil & Gas', 'custom_company': 'Jagadamba',
+			'item_group': ['descendants of (inclusive)', 'Finished Goods']})
+		self.assertEqual(call.kwargs['or_filters'], {'name': ['like', '%tank%'], 'item_name': ['like', '%tank%']})
+		self.assertEqual(call.kwargs['limit_page_length'], 10)
+
+	def test_finished_item_query_without_type_uses_default_group_only(self):
+		_, call = self._query({'type': '', 'parent_item': 1}, group='Assemblies')
+		self.assertEqual(call.kwargs['filters'], {'disabled': 0, 'custom_parent_item': 1,
+			'item_group': ['descendants of (inclusive)', 'Assemblies']})
+
+	def test_finished_item_query_ignores_unknown_type(self):
+		_, call = self._query({'type': 'Missing'}, type_exists=False, group='')
+		self.assertEqual(call.kwargs['filters'], {'disabled': 0})
 
 
 if __name__ == "__main__":

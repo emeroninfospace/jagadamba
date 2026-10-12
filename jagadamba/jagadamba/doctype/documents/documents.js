@@ -1,15 +1,5 @@
 frappe.ui.form.on("Documents", {
 	refresh(frm) {
-		jagadamba.sales_flow.load_finished_item_group(frm, "type");
-		const type_filters = (extra) => {
-			const filters = jagadamba.sales_flow.finished_item_filters(frm, extra);
-			if (frm.doc.type) filters.custom_types = frm.doc.type;
-			return { filters: filters };
-		};
-		frm.set_query("item", () => type_filters());
-		frm.set_query("vehicle_type", () => type_filters({ custom_parent_item: 1 }));
-		frm.set_query("oil_gas_item", () => type_filters());
-
 		if (!frm.is_new() && frm.doc.project) {
 			const needsType = !frm.doc.type;
 			const needsVehicle = !frm.doc.vehicle_type && !frm.doc.oil_gas_item;
@@ -34,10 +24,6 @@ frappe.ui.form.on("Documents", {
 				);
 			}
 		}
-	},
-
-	type(frm) {
-		return jagadamba.sales_flow.load_finished_item_group(frm, "type");
 	},
 
 	project(frm) {
