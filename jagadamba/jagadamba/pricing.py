@@ -33,6 +33,9 @@ def calculate_oil_gas_pricing(doc):
 		frappe.throw(frappe._("Select a valid Cost Basis."))
 
 	if doc.doctype == "Quotation":
+		if rows:
+			# Cost Basis is hidden on Quotation: entered cost lines always drive the estimate.
+			basis = doc.custom_estimation_cost_source = "Estimation"
 		total = 0
 		for row in rows:
 			qty = _number(row.qty, frappe._("Quantity"))
@@ -41,8 +44,6 @@ def calculate_oil_gas_pricing(doc):
 				frappe.throw(frappe._("Estimation quantity and unit cost cannot be negative."))
 			row.amount = flt(qty * rate, _precision(row, "amount"))
 			total += row.amount
-		if basis == "Document Net Total" and rows:
-			frappe.throw(frappe._("Select Estimation as Cost Basis to include the cost rows."))
 	elif basis == "Estimation":
 		# Read the current authorized source on save; do not trust a supplied read-only total.
 		if not doc.get("custom_quotation"):

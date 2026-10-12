@@ -1,8 +1,10 @@
-/* global frappe, flt, precision, format_currency, format_number, __ */
+/* global frappe, flt, precision */
 (() => {
 	"use strict";
 	frappe.provide("jagadamba.sales_flow");
 	const states = new WeakMap();
+	// Sub-groups count as finished items too (e.g. Finished Items > Pressure Vessels).
+	const finished_group = group => ["descendants of (inclusive)", group];
 	const empty = value => value === undefined || value === null || value === "";
 
 	// Each document owns its pending requests; nothing is cached across documents/users.
@@ -101,7 +103,7 @@
 		const filters = {disabled: 0};
 		if (frm.doc.custom_types) filters.custom_types = frm.doc.custom_types;
 		if (frm.doc.company) filters.custom_company = frm.doc.company;
-		if (finished && frm.doc.custom_finished_item_group) filters.item_group = frm.doc.custom_finished_item_group;
+		if (finished && frm.doc.custom_finished_item_group) filters.item_group = finished_group(frm.doc.custom_finished_item_group);
 		return filters;
 	};
 
@@ -119,7 +121,7 @@
 			}
 			frm.refresh_field("custom_estimation_items");
 		}
-		const basis = doc.custom_estimation_cost_source || (rows.length || (doc.doctype === "Quotation" && frm.is_new()) ? "Estimation" : "Document Net Total");
+		const basis = (doc.doctype === "Quotation" && rows.length && "Estimation") || doc.custom_estimation_cost_source || (rows.length || (doc.doctype === "Quotation" && frm.is_new()) ? "Estimation" : "Document Net Total");
 		const cost = rounded(basis === "Estimation" ? total : flt(doc.net_total), "custom_total_estimated_value");
 		const sale = flt(doc.custom_sale_value_without_tax);
 		const vat = rounded(sale * flt(doc.custom_vat_percent) / 100, "custom_vat_amount");
@@ -137,38 +139,7 @@
 		};
 		const changes = Object.fromEntries(Object.entries(values).filter(([field, value]) =>
 			typeof value === "number" ? flt(doc[field]) !== value : doc[field] !== value));
-		const write = Object.keys(changes).length ? frm.set_value(changes) : Promise.resolve();
-		return write.then(() => jagadamba.sales_flow.render_statement(frm));
-	};
-
-	// Read-only preview of the estimation sheet in the estimation department's layout.
-	jagadamba.sales_flow.render_statement = function (frm) {
-		const field = frm.get_field && frm.get_field("custom_estimation_statement");
-		if (!field || !field.$wrapper) return;
-		const doc = frm.doc;
-		const esc = value => frappe.utils.escape_html(value == null ? "" : String(value));
-		const money = value => format_currency(flt(value), doc.currency);
-		const num = value => format_number(flt(value), null, precision("qty", {doctype: "Quotation Estimation Item"}));
-		const rows = (doc.custom_estimation_items || []).map((row, index) => `<tr>
-			<td>${index + 1}</td><td>${esc(row.code)}</td><td>${esc(row.description)}</td><td>${esc(row.uom)}</td>
-			<td class="text-right">${num(row.qty)}</td><td class="text-right">${money(row.rate)}</td>
-			<td class="text-right">${money(row.amount)}</td><td></td></tr>`).join("");
-		const summary = (label, amount, extra = "", difference = "", bold = false) => `<tr${bold ? ' class="bold"' : ""}>
-			<td colspan="${extra ? 4 : 6}">${esc(__(label))}</td>${extra}
-			<td class="text-right">${money(amount)}</td><td class="text-right">${difference}</td></tr>`;
-		const percent = value => `<td class="text-right">%</td><td class="text-right">${num(value)}</td>`;
-		const empty = `<tr><td colspan="8" class="text-muted text-center">${esc(__("Add rows in Estimation Costs to build the sheet."))}</td></tr>`;
-		field.$wrapper.html(`<div class="table-responsive"><table class="table table-bordered table-condensed">
-			<thead><tr><th>${esc(__("Sl. No"))}</th><th>${esc(__("Code"))}</th><th>${esc(__("Description"))}</th>
-			<th>${esc(__("Unit"))}</th><th class="text-right">${esc(__("Qty"))}</th><th class="text-right">${esc(__("Unit Price"))}</th>
-			<th class="text-right">${esc(__("Total Price"))}</th><th class="text-right">${esc(__("Difference Value (Co Net Profit)"))}</th></tr></thead>
-			<tbody>${rows || empty}
-			${summary("Total Estimated Value", doc.custom_total_estimated_value, "", "", true)}
-			${summary("Sale Value without TAX/VAT", doc.custom_sale_value_without_tax, "", money(doc.custom_net_profit), true)}
-			${summary("VAT", doc.custom_vat_amount, percent(doc.custom_vat_percent))}
-			${summary("Tax", doc.custom_tax_amount, percent(doc.custom_tax_percent))}
-			${summary("Total Quoted / Invoice Value", doc.custom_total_quoted_value, "", "", true)}
-			</tbody></table></div>`);
+		return Object.keys(changes).length ? frm.set_value(changes) : Promise.resolve();
 	};
 
 	// Finished-item group for forms outside the sales flow (BOM, Designing, Documents).
@@ -186,7 +157,7 @@
 
 	jagadamba.sales_flow.finished_item_filters = function (frm, filters = {}) {
 		const result = {disabled: 0, ...filters};
-		if (frm.__jagadamba_finished_item_group) result.item_group = frm.__jagadamba_finished_item_group;
+		if (frm.__jagadamba_finished_item_group) result.item_group = finished_group(frm.__jagadamba_finished_item_group);
 		return result;
 	};
 })();
