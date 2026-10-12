@@ -107,7 +107,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-09-25 15:44:37.129754",
+ "modified": "2026-10-12 17:30:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Project Desk",
@@ -133,7 +133,20 @@
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [],
+ "roles": [
+  {
+   "role": "Management"
+  },
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Project Engineer"
+  },
+  {
+   "role": "Engineering Head"
+  }
+ ],
  "sequence_id": 7.0,
  "shortcuts": [],
  "title": "Project Desk"

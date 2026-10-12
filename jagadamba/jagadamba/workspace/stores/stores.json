@@ -131,7 +131,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-09-25 15:33:09.579117",
+ "modified": "2026-10-12 17:30:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Stores",
@@ -153,7 +153,17 @@
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [],
+ "roles": [
+  {
+   "role": "Management"
+  },
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Stores User"
+  }
+ ],
  "sequence_id": 43.0,
  "shortcuts": [
   {
