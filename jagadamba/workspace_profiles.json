@@ -1,0 +1,781 @@
+[
+ {
+  "scope": "overview",
+  "title": "Your operations, at a glance",
+  "eyebrow": "Jagadamba · Operations hub",
+  "subtitle": "Oil & Gas · Trailers · Trading",
+  "accent_color": "#087f8c",
+  "home_workspace": "Jagadamba",
+  "landing_priority": 10,
+  "landing_roles": [
+   "Management",
+   "System Manager"
+  ],
+  "sources": [
+   {
+    "source_doctype": "Sales Order",
+    "label": "Sales Order",
+    "date_field": "transaction_date",
+    "status_field": "status",
+    "party_field": "customer",
+    "amount_field": "base_grand_total",
+    "amount_label": "Order value",
+    "alert_label": "Delivery overdue",
+    "color": "#4f46e5",
+    "alert_filters": "{\"docstatus\": 1, \"per_delivered\": [\"<\", 100], \"delivery_date\": [\"<\", \"@today\"], \"status\": [\"not in\", [\"Closed\", \"On Hold\", \"Completed\"]]}"
+   },
+   {
+    "source_doctype": "Purchase Order",
+    "label": "Purchase Order",
+    "date_field": "transaction_date",
+    "status_field": "status",
+    "party_field": "supplier",
+    "amount_field": "base_grand_total",
+    "amount_label": "Order value",
+    "alert_label": "Receipt overdue",
+    "color": "#0f9d76",
+    "alert_filters": "{\"docstatus\": 1, \"per_received\": [\"<\", 100], \"schedule_date\": [\"<\", \"@today\"], \"status\": [\"not in\", [\"Closed\", \"On Hold\", \"Completed\", \"Delivered\"]]}"
+   },
+   {
+    "source_doctype": "Work Order",
+    "label": "Work Order",
+    "date_field": "planned_start_date",
+    "status_field": "status",
+    "party_field": "production_item",
+    "alert_label": "Past planned end",
+    "color": "#d97706",
+    "alert_filters": "{\"docstatus\": 1, \"status\": [\"in\", [\"Not Started\", \"In Process\"]], \"planned_end_date\": [\"<\", \"@today\"]}"
+   },
+   {
+    "source_doctype": "Project",
+    "label": "Project",
+    "date_field": "expected_start_date",
+    "status_field": "status",
+    "party_field": "customer",
+    "amount_field": "estimated_costing",
+    "amount_label": "Estimated cost",
+    "secondary_amount_field": "total_purchase_cost",
+    "secondary_amount_label": "Purchase cost",
+    "alert_label": "Past expected end",
+    "color": "#2563eb",
+    "alert_filters": "{\"status\": \"Open\", \"expected_end_date\": [\"<\", \"@today\"]}"
+   },
+   {
+    "source_doctype": "Sales Invoice",
+    "label": "Sales Invoice",
+    "date_field": "posting_date",
+    "status_field": "status",
+    "party_field": "customer",
+    "amount_field": "base_grand_total",
+    "amount_label": "Invoiced",
+    "secondary_amount_field": "outstanding_amount",
+    "secondary_amount_label": "Outstanding",
+    "alert_label": "Overdue",
+    "color": "#0e8a7d",
+    "extra_filters": "{\"docstatus\": 1}",
+    "alert_filters": "{\"docstatus\": 1, \"outstanding_amount\": [\">\", 0], \"due_date\": [\"<\", \"@today\"]}"
+   },
+   {
+    "source_doctype": "Material Request",
+    "label": "Material Request",
+    "date_field": "transaction_date",
+    "status_field": "status",
+    "party_field": "material_request_type",
+    "alert_label": "Awaiting order",
+    "color": "#0891b2",
+    "alert_filters": "{\"docstatus\": 1, \"status\": [\"in\", [\"Pending\", \"Partially Ordered\"]]}"
+   }
+  ]
+ },
+ {
+  "scope": "sales",
+  "title": "Turn enquiries into orders",
+  "eyebrow": "Sales · Commercial desk",
+  "subtitle": "Leads, quotations and orders across every business unit",
+  "accent_color": "#4f46e5",
+  "home_workspace": "Sales Desk",
+  "landing_priority": 20,
+  "landing_roles": [
+   "Sales Executive",
+   "Sales Manager",
+   "Sales User"
+  ],
+  "sources": [
+   {
+    "source_doctype": "Lead",
+    "label": "Lead",
+    "date_field": "creation",
+    "status_field": "status",
+    "party_field": "source",
+    "alert_label": "To follow up",
+    "color": "#8b5cf6",
+    "alert_filters": "{\"status\": [\"in\", [\"Lead\", \"Open\", \"Replied\"]]}"
+   },
+   {
+    "source_doctype": "Opportunity",
+    "label": "Opportunity",
+    "date_field": "transaction_date",
+    "status_field": "status",
+    "party_field": "sales_stage",
+    "amount_field": "base_opportunity_amount",
+    "amount_label": "Pipeline value",
+    "alert_label": "Open",
+    "color": "#0ea5e9",
+    "alert_filters": "{\"status\": [\"in\", [\"Open\", \"Replied\"]]}"
+   },
+   {
+    "source_doctype": "Quotation",
+    "label": "Quotation",
+    "date_field": "transaction_date",
+    "status_field": "status",
+    "party_field": "party_name",
+    "amount_field": "base_grand_total",
+    "amount_label": "Quoted value",
+    "alert_label": "Expired, still open",
+    "color": "#f59e0b",
+    "alert_filters": "{\"docstatus\": 1, \"status\": \"Open\", \"valid_till\": [\"<\", \"@today\"]}"
+   },
+   {
+    "source_doctype": "Sales Order",
+    "label": "Sales Order",
+    "date_field": "transaction_date",
+    "status_field": "status",
+    "party_field": "customer",
+    "amount_field": "base_grand_total",
+    "amount_label": "Order value",
+    "alert_label": "Delivery overdue",
+    "color": "#4f46e5",
+    "alert_filters": "{\"docstatus\": 1, \"per_delivered\": [\"<\", 100], \"delivery_date\": [\"<\", \"@today\"], \"status\": [\"not in\", [\"Closed\", \"On Hold\", \"Completed\"]]}"
+   },
+   {
+    "source_doctype": "Order Confirmation Sheet",
+    "label": "Order Confirmation Sheet",
+    "date_field": "date",
+    "status_field": "status",
+    "party_field": "customer",
+    "alert_label": "With design",
+    "color": "#14b8a6",
+    "alert_filters": "{\"docstatus\": [\"!=\", 2], \"status\": \"Sent to Design\"}"
+   }
+  ]
+ },
+ {
+  "scope": "accounting",
+  "title": "Cash, receivables and payables",
+  "eyebrow": "Finance · Accounts desk",
+  "subtitle": "Booked invoices, payments and journals in company currency",
+  "accent_color": "#0e8a7d",
+  "home_workspace": "Accounting Overview",
+  "landing_priority": 25,
+  "landing_roles": [
+   "Finance Manager",
+   "Accounts Manager",
+   "Accounts User"
+  ],
+  "sources": [
+   {
+    "source_doctype": "Sales Invoice",
+    "label": "Sales Invoice",
+    "date_field": "posting_date",
+    "status_field": "status",
+    "party_field": "customer",
+    "amount_field": "base_grand_total",
+    "amount_label": "Invoiced",
+    "secondary_amount_field": "outstanding_amount",
+    "secondary_amount_label": "Outstanding",
+    "alert_label": "Overdue",
+    "color": "#0e8a7d",
+    "extra_filters": "{\"docstatus\": 1}",
+    "alert_filters": "{\"docstatus\": 1, \"outstanding_amount\": [\">\", 0], \"due_date\": [\"<\", \"@today\"]}"
+   },
+   {
+    "source_doctype": "Purchase Invoice",
+    "label": "Purchase Invoice",
+    "date_field": "posting_date",
+    "status_field": "status",
+    "party_field": "supplier",
+    "amount_field": "base_grand_total",
+    "amount_label": "Billed",
+    "secondary_amount_field": "outstanding_amount",
+    "secondary_amount_label": "Payable",
+    "alert_label": "Overdue to pay",
+    "color": "#c2410c",
+    "extra_filters": "{\"docstatus\": 1}",
+    "alert_filters": "{\"docstatus\": 1, \"outstanding_amount\": [\">\", 0], \"due_date\": [\"<\", \"@today\"]}"
+   },
+   {
+    "source_doctype": "Payment Entry",
+    "label": "Customer Receipts",
+    "date_field": "posting_date",
+    "status_field": "mode_of_payment",
+    "party_field": "party",
+    "amount_field": "base_paid_amount",
+    "amount_label": "Received",
+    "alert_label": "Draft receipts",
+    "color": "#16a34a",
+    "extra_filters": "{\"docstatus\": 1, \"payment_type\": \"Receive\"}",
+    "alert_filters": "{\"docstatus\": 0, \"payment_type\": \"Receive\"}"
+   },
+   {
+    "source_doctype": "Payment Entry",
+    "label": "Supplier Payments",
+    "date_field": "posting_date",
+    "status_field": "mode_of_payment",
+    "party_field": "party",
+    "amount_field": "base_paid_amount",
+    "amount_label": "Paid",
+    "alert_label": "Draft payments",
+    "color": "#dc2626",
+    "extra_filters": "{\"docstatus\": 1, \"payment_type\": \"Pay\"}",
+    "alert_filters": "{\"docstatus\": 0, \"payment_type\": \"Pay\"}"
+   },
+   {
+    "source_doctype": "Journal Entry",
+    "label": "Journal Entry",
+    "date_field": "posting_date",
+    "status_field": "voucher_type",
+    "amount_field": "total_debit",
+    "amount_label": "Total debit",
+    "alert_label": "Drafts to post",
+    "color": "#64748b",
+    "extra_filters": "{\"docstatus\": 1}",
+    "alert_filters": "{\"docstatus\": 0}"
+   }
+  ]
+ },
+ {
+  "scope": "hr",
+  "title": "People at the centre",
+  "eyebrow": "People · HR desk",
+  "subtitle": "Headcount, leave, attendance, claims and payroll",
+  "accent_color": "#db2777",
+  "home_workspace": "HR Overview",
+  "landing_priority": 25,
+  "landing_roles": [
+   "HR Manager",
+   "HR User"
+  ],
+  "sources": [
+   {
+    "source_doctype": "Employee",
+    "label": "New Joiners",
+    "date_field": "date_of_joining",
+    "status_field": "status",
+    "party_field": "department",
+    "alert_label": "Visa expiring in 30 days",
+    "color": "#db2777",
+    "alert_filters": "{\"status\": \"Active\", \"custom_visa_expiry_date\": [\"between\", [\"@today\", \"@today+30\"]]}"
+   },
+   {
+    "source_doctype": "Leave Application",
+    "label": "Leave Application",
+    "date_field": "from_date",
+    "status_field": "status",
+    "party_field": "leave_type",
+    "alert_label": "Awaiting approval",
+    "color": "#f59e0b",
+    "alert_filters": "{\"status\": \"Open\", \"docstatus\": 0}"
+   },
+   {
+    "source_doctype": "Attendance",
+    "label": "Attendance",
+    "date_field": "attendance_date",
+    "status_field": "status",
+    "party_field": "department",
+    "color": "#0ea5e9",
+    "extra_filters": "{\"docstatus\": 1}"
+   },
+   {
+    "source_doctype": "Expense Claim",
+    "label": "Expense Claim",
+    "date_field": "posting_date",
+    "status_field": "approval_status",
+    "party_field": "department",
+    "amount_field": "total_claimed_amount",
+    "amount_label": "Claimed",
+    "alert_label": "Awaiting approval",
+    "color": "#8b5cf6",
+    "alert_filters": "{\"approval_status\": \"Draft\", \"docstatus\": 0}"
+   },
+   {
+    "source_doctype": "Salary Slip",
+    "label": "Salary Slip",
+    "date_field": "posting_date",
+    "status_field": "status",
+    "party_field": "department",
+    "amount_field": "base_net_pay",
+    "amount_label": "Net pay",
+    "alert_label": "Draft slips",
+    "color": "#16a34a",
+    "alert_filters": "{\"docstatus\": 0}"
+   }
+  ]
+ },
+ {
+  "scope": "procurement",
+  "title": "Plan. Purchase. Deliver.",
+  "eyebrow": "Procurement · Supply desk",
+  "subtitle": "Requests, supplier quotes, orders and receipts",
+  "accent_color": "#0f9d76",
+  "home_workspace": "Procurement Desk",
+  "landing_priority": 30,
+  "landing_roles": [
+   "Procurement Engineer",
+   "Purchase Manager",
+   "Purchase User"
+  ],
+  "sources": [
+   {
+    "source_doctype": "Material Request",
+    "label": "Material Request",
+    "date_field": "transaction_date",
+    "status_field": "status",
+    "party_field": "material_request_type",
+    "alert_label": "Awaiting order",
+    "color": "#0891b2",
+    "alert_filters": "{\"docstatus\": 1, \"status\": [\"in\", [\"Pending\", \"Partially Ordered\"]]}"
+   },
+   {
+    "source_doctype": "Supplier Quotation",
+    "label": "Supplier Quotation",
+    "date_field": "transaction_date",
+    "status_field": "status",
+    "party_field": "supplier",
+    "amount_field": "base_grand_total",
+    "amount_label": "Quoted value",
+    "alert_label": "Expired quotes",
+    "color": "#f59e0b",
+    "alert_filters": "{\"docstatus\": 1, \"status\": \"Submitted\", \"valid_till\": [\"<\", \"@today\"]}"
+   },
+   {
+    "source_doctype": "Purchase Order",
+    "label": "Purchase Order",
+    "date_field": "transaction_date",
+    "status_field": "status",
+    "party_field": "supplier",
+    "amount_field": "base_grand_total",
+    "amount_label": "Order value",
+    "alert_label": "Receipt overdue",
+    "color": "#0f9d76",
+    "alert_filters": "{\"docstatus\": 1, \"per_received\": [\"<\", 100], \"schedule_date\": [\"<\", \"@today\"], \"status\": [\"not in\", [\"Closed\", \"On Hold\", \"Completed\", \"Delivered\"]]}"
+   },
+   {
+    "source_doctype": "Purchase Receipt",
+    "label": "Goods Receipt Notes",
+    "date_field": "posting_date",
+    "status_field": "status",
+    "party_field": "supplier",
+    "amount_field": "base_grand_total",
+    "amount_label": "Received value",
+    "alert_label": "To bill",
+    "color": "#7c3aed",
+    "alert_filters": "{\"docstatus\": 1, \"status\": \"To Bill\"}"
+   }
+  ]
+ },
+ {
+  "scope": "production",
+  "title": "Keep production moving",
+  "eyebrow": "Manufacturing · Production desk",
+  "subtitle": "Work orders, job cards, plans and quality checks",
+  "accent_color": "#d97706",
+  "home_workspace": "Production",
+  "landing_priority": 30,
+  "landing_roles": [
+   "Production Engineer",
+   "Manufacturing Manager",
+   "Manufacturing User"
+  ],
+  "sources": [
+   {
+    "source_doctype": "Work Order",
+    "label": "Work Order",
+    "date_field": "planned_start_date",
+    "status_field": "status",
+    "party_field": "production_item",
+    "alert_label": "Past planned end",
+    "color": "#d97706",
+    "alert_filters": "{\"docstatus\": 1, \"status\": [\"in\", [\"Not Started\", \"In Process\"]], \"planned_end_date\": [\"<\", \"@today\"]}"
+   },
+   {
+    "source_doctype": "Job Card",
+    "label": "Job Card",
+    "date_field": "posting_date",
+    "status_field": "status",
+    "party_field": "workstation",
+    "alert_label": "Open or in progress",
+    "color": "#ea580c",
+    "alert_filters": "{\"status\": [\"in\", [\"Open\", \"Work In Progress\", \"On Hold\"]]}"
+   },
+   {
+    "source_doctype": "Production Plan",
+    "label": "Production Plan",
+    "date_field": "posting_date",
+    "status_field": "status",
+    "alert_label": "In progress",
+    "color": "#0891b2",
+    "alert_filters": "{\"docstatus\": 1, \"status\": [\"in\", [\"Not Started\", \"In Process\"]]}"
+   },
+   {
+    "source_doctype": "Stock Entry",
+    "label": "Manufacturing Entries",
+    "date_field": "posting_date",
+    "status_field": "purpose",
+    "party_field": "stock_entry_type",
+    "alert_label": "Drafts to post",
+    "color": "#7c3aed",
+    "extra_filters": "{\"purpose\": [\"in\", [\"Manufacture\", \"Material Transfer for Manufacture\"]]}",
+    "alert_filters": "{\"docstatus\": 0}"
+   },
+   {
+    "source_doctype": "Quality Inspection",
+    "label": "Quality Inspection",
+    "date_field": "report_date",
+    "status_field": "status",
+    "party_field": "item_code",
+    "alert_label": "Rejected",
+    "color": "#16a34a",
+    "alert_filters": "{\"docstatus\": 1, \"status\": \"Rejected\"}"
+   }
+  ]
+ },
+ {
+  "scope": "quality",
+  "title": "Quality built in",
+  "eyebrow": "Quality · Inspection desk",
+  "subtitle": "Incoming, in-process and outgoing inspections",
+  "accent_color": "#16a34a",
+  "home_workspace": "Quality Desk",
+  "landing_priority": 35,
+  "landing_roles": [
+   "Quality Engineer",
+   "Quality Manager"
+  ],
+  "sources": [
+   {
+    "source_doctype": "Quality Inspection",
+    "label": "Quality Inspection",
+    "date_field": "report_date",
+    "status_field": "status",
+    "party_field": "item_code",
+    "alert_label": "Rejected",
+    "color": "#16a34a",
+    "alert_filters": "{\"docstatus\": 1, \"status\": \"Rejected\"}"
+   },
+   {
+    "source_doctype": "Quality Inspection",
+    "label": "Inspection Stages",
+    "date_field": "report_date",
+    "status_field": "inspection_type",
+    "party_field": "reference_type",
+    "alert_label": "Drafts to submit",
+    "color": "#0d9488",
+    "alert_filters": "{\"docstatus\": 0}"
+   },
+   {
+    "source_doctype": "Job Card",
+    "label": "Job Card",
+    "date_field": "posting_date",
+    "status_field": "status",
+    "party_field": "workstation",
+    "alert_label": "In progress",
+    "color": "#ea580c",
+    "alert_filters": "{\"status\": [\"in\", [\"Work In Progress\", \"On Hold\"]]}"
+   }
+  ]
+ },
+ {
+  "scope": "projects",
+  "title": "Every project in focus",
+  "eyebrow": "Projects · Delivery desk",
+  "subtitle": "Projects, budgets, tasks and engineering releases",
+  "accent_color": "#2563eb",
+  "home_workspace": "Project Desk",
+  "landing_priority": 40,
+  "landing_roles": [
+   "Project Engineer",
+   "Projects Manager",
+   "Projects User"
+  ],
+  "sources": [
+   {
+    "source_doctype": "Project",
+    "label": "Project",
+    "date_field": "expected_start_date",
+    "status_field": "status",
+    "party_field": "customer",
+    "amount_field": "estimated_costing",
+    "amount_label": "Estimated cost",
+    "secondary_amount_field": "total_purchase_cost",
+    "secondary_amount_label": "Purchase cost",
+    "alert_label": "Past expected end",
+    "color": "#2563eb",
+    "alert_filters": "{\"status\": \"Open\", \"expected_end_date\": [\"<\", \"@today\"]}"
+   },
+   {
+    "source_doctype": "Project Budget",
+    "label": "Project Budget",
+    "date_field": "date",
+    "status_field": "workflow_state",
+    "party_field": "customer",
+    "amount_field": "total_budget_amount",
+    "amount_label": "Budget",
+    "secondary_amount_field": "total_purchase_order_amount",
+    "secondary_amount_label": "PO committed",
+    "alert_label": "Awaiting approval",
+    "color": "#7c3aed",
+    "alert_filters": "{\"workflow_state\": [\"like\", \"Pending%\"]}"
+   },
+   {
+    "source_doctype": "Task",
+    "label": "Task",
+    "date_field": "exp_start_date",
+    "status_field": "status",
+    "party_field": "project",
+    "alert_label": "Overdue",
+    "color": "#f59e0b",
+    "alert_filters": "{\"status\": \"Overdue\"}"
+   },
+   {
+    "source_doctype": "Documents",
+    "label": "Documents",
+    "date_field": "date",
+    "status_field": "workflow_state",
+    "party_field": "customer",
+    "alert_label": "Draft drawings",
+    "color": "#db2777",
+    "alert_filters": "{\"workflow_state\": \"Draft\"}"
+   }
+  ]
+ },
+ {
+  "scope": "design",
+  "title": "From drawing to production",
+  "eyebrow": "Engineering · Design desk",
+  "subtitle": "Drawings, design reviews and BOM releases",
+  "accent_color": "#db2777",
+  "home_workspace": "Design",
+  "landing_priority": 40,
+  "landing_roles": [
+   "Design Engineer",
+   "Engineering Head"
+  ],
+  "sources": [
+   {
+    "source_doctype": "Documents",
+    "label": "Drawings",
+    "date_field": "date",
+    "status_field": "workflow_state",
+    "party_field": "customer",
+    "alert_label": "Draft drawings",
+    "color": "#db2777",
+    "alert_filters": "{\"workflow_state\": \"Draft\"}"
+   },
+   {
+    "source_doctype": "Designing",
+    "label": "Designing",
+    "date_field": "date",
+    "status_field": "status",
+    "party_field": "customer",
+    "alert_label": "In progress",
+    "color": "#8b5cf6",
+    "alert_filters": "{\"status\": [\"in\", [\"Design In Progress\", \"Sent to Customer\"]]}"
+   },
+   {
+    "source_doctype": "BOM",
+    "label": "BOM",
+    "date_field": "creation",
+    "status_field": "workflow_state",
+    "party_field": "item",
+    "alert_label": "Awaiting release",
+    "color": "#0891b2",
+    "alert_filters": "{\"workflow_state\": [\"like\", \"Pending%\"]}"
+   },
+   {
+    "source_doctype": "Order Confirmation Sheet",
+    "label": "Order Confirmation Sheet",
+    "date_field": "date",
+    "status_field": "status",
+    "party_field": "customer",
+    "alert_label": "New for design",
+    "color": "#14b8a6",
+    "alert_filters": "{\"status\": \"Sent to Design\"}"
+   }
+  ]
+ },
+ {
+  "scope": "stores",
+  "title": "Keep materials flowing",
+  "eyebrow": "Stores · Inventory desk",
+  "subtitle": "Receipts, issues, transfers and dispatches",
+  "accent_color": "#7c3aed",
+  "home_workspace": "Stores",
+  "landing_priority": 45,
+  "landing_roles": [
+   "Stores User",
+   "Stock Manager",
+   "Stock User"
+  ],
+  "sources": [
+   {
+    "source_doctype": "Purchase Receipt",
+    "label": "Goods Receipt Notes",
+    "date_field": "posting_date",
+    "status_field": "status",
+    "party_field": "supplier",
+    "amount_field": "base_grand_total",
+    "amount_label": "Received value",
+    "alert_label": "To bill",
+    "color": "#7c3aed",
+    "alert_filters": "{\"docstatus\": 1, \"status\": \"To Bill\"}"
+   },
+   {
+    "source_doctype": "Stock Entry",
+    "label": "Stock Entry",
+    "date_field": "posting_date",
+    "status_field": "purpose",
+    "party_field": "stock_entry_type",
+    "alert_label": "Drafts to post",
+    "color": "#0891b2",
+    "alert_filters": "{\"docstatus\": 0}"
+   },
+   {
+    "source_doctype": "Material Request",
+    "label": "Internal Requests",
+    "date_field": "transaction_date",
+    "status_field": "status",
+    "party_field": "material_request_type",
+    "alert_label": "Pending issue",
+    "color": "#f59e0b",
+    "extra_filters": "{\"material_request_type\": [\"in\", [\"Material Transfer\", \"Material Issue\"]]}",
+    "alert_filters": "{\"docstatus\": 1, \"status\": [\"in\", [\"Pending\", \"Partially Received\"]]}"
+   },
+   {
+    "source_doctype": "Delivery Note",
+    "label": "Delivery Note",
+    "date_field": "posting_date",
+    "status_field": "status",
+    "party_field": "customer",
+    "amount_field": "base_grand_total",
+    "amount_label": "Dispatched value",
+    "alert_label": "To bill",
+    "color": "#0284c7",
+    "alert_filters": "{\"docstatus\": 1, \"status\": \"To Bill\"}"
+   }
+  ]
+ },
+ {
+  "scope": "logistics",
+  "title": "On time, every delivery",
+  "eyebrow": "Logistics · Dispatch desk",
+  "subtitle": "Dispatches, delivery trips and inbound receipts",
+  "accent_color": "#0284c7",
+  "home_workspace": "Logistics Desk",
+  "landing_priority": 50,
+  "landing_roles": [
+   "Delivery Manager",
+   "Delivery User"
+  ],
+  "sources": [
+   {
+    "source_doctype": "Delivery Note",
+    "label": "Delivery Note",
+    "date_field": "posting_date",
+    "status_field": "status",
+    "party_field": "customer",
+    "amount_field": "base_grand_total",
+    "amount_label": "Dispatched value",
+    "alert_label": "To bill",
+    "color": "#0284c7",
+    "alert_filters": "{\"docstatus\": 1, \"status\": \"To Bill\"}"
+   },
+   {
+    "source_doctype": "Delivery Trip",
+    "label": "Delivery Trip",
+    "date_field": "departure_time",
+    "status_field": "status",
+    "party_field": "driver",
+    "alert_label": "In transit",
+    "color": "#0d9488",
+    "alert_filters": "{\"status\": \"In Transit\"}"
+   },
+   {
+    "source_doctype": "Sales Order",
+    "label": "Orders to Dispatch",
+    "date_field": "delivery_date",
+    "status_field": "status",
+    "party_field": "customer",
+    "amount_field": "base_grand_total",
+    "amount_label": "Order value",
+    "alert_label": "Late",
+    "color": "#4f46e5",
+    "extra_filters": "{\"docstatus\": 1, \"status\": [\"in\", [\"To Deliver and Bill\", \"To Deliver\"]]}",
+    "alert_filters": "{\"delivery_date\": [\"<\", \"@today\"]}"
+   },
+   {
+    "source_doctype": "Purchase Receipt",
+    "label": "Inbound Receipts",
+    "date_field": "posting_date",
+    "status_field": "status",
+    "party_field": "supplier",
+    "color": "#7c3aed",
+    "extra_filters": "{\"docstatus\": 1}"
+   }
+  ]
+ },
+ {
+  "scope": "maintenance",
+  "title": "Assets that keep running",
+  "eyebrow": "Maintenance · Service desk",
+  "subtitle": "Schedules, visits, warranty claims and repairs",
+  "accent_color": "#475569",
+  "home_workspace": "Maintenance Desk",
+  "landing_priority": 50,
+  "landing_roles": [
+   "Maintenance Manager",
+   "Maintenance User"
+  ],
+  "sources": [
+   {
+    "source_doctype": "Maintenance Visit",
+    "label": "Maintenance Visit",
+    "date_field": "mntc_date",
+    "status_field": "completion_status",
+    "party_field": "customer",
+    "alert_label": "Draft visits",
+    "color": "#475569",
+    "alert_filters": "{\"docstatus\": 0}"
+   },
+   {
+    "source_doctype": "Maintenance Schedule",
+    "label": "Maintenance Schedule",
+    "date_field": "transaction_date",
+    "status_field": "status",
+    "party_field": "customer",
+    "color": "#0891b2"
+   },
+   {
+    "source_doctype": "Warranty Claim",
+    "label": "Warranty Claim",
+    "date_field": "complaint_date",
+    "status_field": "status",
+    "party_field": "customer",
+    "alert_label": "Open claims",
+    "color": "#f59e0b",
+    "alert_filters": "{\"status\": [\"in\", [\"Open\", \"Work In Progress\"]]}"
+   },
+   {
+    "source_doctype": "Asset Repair",
+    "label": "Asset Repair",
+    "date_field": "failure_date",
+    "status_field": "repair_status",
+    "party_field": "asset",
+    "amount_field": "repair_cost",
+    "amount_label": "Repair cost",
+    "alert_label": "Pending repairs",
+    "color": "#dc2626",
+    "alert_filters": "{\"repair_status\": \"Pending\"}"
+   }
+  ]
+ }
+]

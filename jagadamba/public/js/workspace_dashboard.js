@@ -2,71 +2,176 @@
 (() => {
     "use strict";
     frappe.provide("jagadamba.workspace");
-    const TITLES = {
-        overview: ["Your operations, at a glance", "Jagadamba · Operations hub"],
-        sales: ["Turn enquiries into orders", "Sales · Commercial overview"],
-        production: ["Keep production moving", "Manufacturing · Production overview"],
-        projects: ["Every project in focus", "Projects · Delivery overview"],
-        procurement: ["Plan. Purchase. Deliver.", "Procurement · Supply overview"],
-        stores: ["Keep materials flowing", "Stores · Inventory operations"],
-        design: ["From drawing to production", "Engineering · Design overview"],
-        accounting: ["A clear view of invoicing", "Finance · Invoice activity"],
-        hr: ["People at the centre", "People · HR overview"],
-    };
+    const SVG = "http://www.w3.org/2000/svg";
+    // Categorical slots, assigned in fixed order (never cycled past the last slot).
+    const PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"];
+    const PERIODS = [["this_month", "This month"], ["last_month", "Last month"], ["this_quarter", "This quarter"],
+        ["this_year", "This year"], ["custom", "Custom"]];
     const el = (tag, cls, text) => {
         const node = document.createElement(tag);
         if (cls) node.className = cls;
-        if (text !== undefined) node.textContent = text;
+        if (text !== undefined && text !== null) node.textContent = text;
+        return node;
+    };
+    const svg = (tag, attrs = {}) => {
+        const node = document.createElementNS(SVG, tag);
+        Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
+        return node;
+    };
+    const button = (cls, text) => {
+        const node = el("button", cls, text);
+        node.type = "button";
         return node;
     };
     const number = value => Number(value || 0).toLocaleString();
-    const option = (value, label) => new Option(__(label), value);
+    const compact = value => {
+        try {
+            return new Intl.NumberFormat(undefined, {notation: "compact", maximumFractionDigits: 1}).format(Number(value || 0));
+        } catch (e) {
+            return number(value);
+        }
+    };
+    const money = (currency, value) => `${currency ? currency + " " : ""}${compact(value)}`;
+    const reducedMotion = () => !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    const monthLabel = key => {
+        const [year, month] = String(key).split("-").map(Number);
+        if (!year || !month) return String(key);
+        return new Date(year, month - 1, 1).toLocaleString(undefined, {month: "short"});
+    };
+    const tone = label => {
+        const text = String(label || "").toLowerCase();
+        if (/(overdue|reject|cancel|unpaid|stopped|lost|expired|absent|do not|on hold|pending repair)/.test(text)) return "bad";
+        if (/(pending|open|progress|^to |partly|partial|sent|replied|interested|not started|scheduled|transit|half day|on leave)/.test(text)) return "warn";
+        if (/(complete|paid|approved|accepted|closed|released|confirmed|received|delivered|active|present|submitted|converted|transferred|issued|ordered|billed)/.test(text)) return "good";
+        if (/(draft|^lead$)/.test(text)) return "muted";
+        return "info";
+    };
+    const delta = (current, previous) => {
+        current = Number(current || 0);
+        previous = Number(previous || 0);
+        if (!previous) return current ? {text: __("New"), dir: "up"} : {text: "—", dir: "flat"};
+        const change = Math.round((current - previous) / previous * 100);
+        return {text: `${change > 0 ? "▲" : change < 0 ? "▼" : "•"} ${Math.abs(change)}%`, dir: change > 0 ? "up" : change < 0 ? "down" : "flat"};
+    };
+    const countUp = (node, target, format) => {
+        node.dataset.value = String(target);
+        const finish = () => { node.textContent = format(target); };
+        if (reducedMotion() || typeof requestAnimationFrame !== "function" || !target) return finish();
+        const started = performance.now();
+        const step = now => {
+            const progress = Math.min(1, (now - started) / 900);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            node.textContent = format(Math.round(target * eased));
+            if (progress < 1 && node.isConnected) requestAnimationFrame(step);
+            else finish();
+        };
+        node.textContent = format(0);
+        requestAnimationFrame(step);
+    };
+    const greeting = () => {
+        const hour = new Date().getHours();
+        const name = (frappe.boot && frappe.boot.user && frappe.boot.user.first_name) || "";
+        const part = hour < 12 ? __("Good morning") : hour < 17 ? __("Good afternoon") : __("Good evening");
+        return name ? `${part}, ${name}` : part;
+    };
 
     jagadamba.workspace.mount = function (root, scope) {
         if (root.__jagadambaDashboard) return;
         root.__jagadambaDashboard = true;
         const host = root.querySelector(".jg-dashboard");
         if (!host) return;
-        const [title, eyebrow] = TITLES[scope] || TITLES.overview;
+        const state = {unit: "", period: "this_month"};
+
+        // Hero
         const header = el("header", "jg-hero");
-        const intro = el("div");
-        intro.append(el("p", "jg-eyebrow", __(eyebrow)), el("h2", "jg-title", __(title)),
-            el("p", "jg-subtitle", __("Oil & Gas · Trailers · Trading")));
-        const refresh = el("button", "jg-refresh", __("Refresh"));
-        refresh.type = "button";
-        header.append(intro, refresh);
+        const glow = el("div", "jg-hero-glow");
+        glow.setAttribute("aria-hidden", "true");
+        glow.append(el("span"), el("span"), el("span"));
+        const intro = el("div", "jg-hero-text");
+        const eyebrow = el("p", "jg-eyebrow", __("Jagadamba"));
+        const hello = el("p", "jg-greeting", greeting());
+        const title = el("h2", "jg-title", __("Loading your workspace…"));
+        const subtitle = el("p", "jg-subtitle");
+        intro.append(eyebrow, hello, title, subtitle);
+        const side = el("div", "jg-hero-side");
+        const range = el("span", "jg-range");
+        const refresh = button("jg-refresh", __("Refresh"));
+        refresh.setAttribute("aria-label", __("Refresh dashboard"));
+        side.append(range, refresh);
+        const actions = el("div", "jg-actions");
+        header.append(glow, intro, side, actions);
+
+        // Filters
         const toolbar = el("div", "jg-toolbar");
-        const control = (label, node) => {
-            const wrapper = el("label", "jg-control");
-            wrapper.append(el("span", "", __(label)), node);
-            toolbar.append(wrapper);
-            return node;
-        };
-        const company = control("Company", el("select"));
-        const unit = control("Business unit", el("select"));
-        const period = control("Period", el("select"));
-        [["this_month", "This month"], ["last_month", "Last month"], ["this_year", "This year"],
-            ["custom", "Custom dates"]].forEach(([value, label]) => period.add(option(value, label)));
-        const from = control("From", el("input"));
-        const to = control("To", el("input"));
+        const companyWrap = el("label", "jg-control");
+        const company = el("select");
+        company.setAttribute("aria-label", __("Company"));
+        companyWrap.append(el("span", "", __("Company")), company);
+        const unitWrap = el("div", "jg-control");
+        const units = el("div", "jg-chips");
+        units.setAttribute("role", "group");
+        units.setAttribute("aria-label", __("Business unit"));
+        unitWrap.append(el("span", "", __("Business unit")), units);
+        const periodWrap = el("div", "jg-control");
+        const periods = el("div", "jg-chips");
+        periods.setAttribute("role", "group");
+        periods.setAttribute("aria-label", __("Period"));
+        periodWrap.append(el("span", "", __("Period")), periods);
+        const datesWrap = el("div", "jg-control jg-dates");
+        const from = el("input");
+        const to = el("input");
         from.type = to.type = "date";
-        from.parentElement.hidden = to.parentElement.hidden = true;
-        if (scope === "hr") unit.parentElement.hidden = true;
+        from.setAttribute("aria-label", __("From"));
+        to.setAttribute("aria-label", __("To"));
+        datesWrap.append(el("span", "", __("From – To")), el("div", "jg-date-pair"));
+        datesWrap.lastChild.append(from, to);
+        datesWrap.hidden = true;
+        toolbar.append(companyWrap, unitWrap, periodWrap, datesWrap);
+        if (scope === "hr") unitWrap.hidden = true;
+
         const status = el("p", "jg-status");
         status.setAttribute("role", "status");
         status.setAttribute("aria-live", "polite");
         const content = el("div", "jg-content");
         const footnote = el("p", "jg-footnote");
-        host.replaceChildren(header, toolbar, status, content, footnote);
+        const tooltip = el("div", "jg-tooltip");
+        tooltip.setAttribute("role", "tooltip");
+        tooltip.hidden = true;
+        host.replaceChildren(header, toolbar, status, content, footnote, tooltip);
         let requestId = 0;
-        const populate = (select, rows, selected, emptyLabel) => {
-            select.replaceChildren();
-            if (emptyLabel) select.add(option("", emptyLabel));
-            rows.forEach(row => select.add(option(row.name || row, row.name || row)));
-            select.value = selected || "";
+
+        const chip = (group, value, label, onPick) => {
+            const node = button("jg-chip", __(label));
+            node.dataset.value = value;
+            node.addEventListener("click", () => onPick(value));
+            group.append(node);
+            return node;
         };
-        const openList = (section, extra = []) => {
-            const filters = section.filters.map(row => row.slice(1));
+        const markChips = (group, value) => group.querySelectorAll(".jg-chip").forEach(node => {
+            node.setAttribute("aria-pressed", String(node.dataset.value === value));
+        });
+        PERIODS.forEach(([value, label]) => chip(periods, value, label, pickPeriod));
+        markChips(periods, state.period);
+
+        const showTip = (event, lines) => {
+            tooltip.replaceChildren(...lines.map((line, index) => el(index ? "span" : "strong", "", line)));
+            tooltip.hidden = false;
+            const box = host.getBoundingClientRect();
+            const x = (event.clientX || 0) - box.left + 14;
+            const y = (event.clientY || 0) - box.top + 14;
+            tooltip.style.left = `${Math.min(x, Math.max(0, box.width - 200))}px`;
+            tooltip.style.top = `${y}px`;
+        };
+        const hideTip = () => { tooltip.hidden = true; };
+        const hover = (node, lines) => {
+            node.addEventListener("mousemove", event => showTip(event, lines));
+            node.addEventListener("mouseleave", hideTip);
+            node.addEventListener("focus", event => showTip(event, lines));
+            node.addEventListener("blur", hideTip);
+        };
+
+        const openList = (section, extra = [], base = section.filters) => {
+            const filters = base.map(row => row.slice(1));
             extra.forEach(([field, operator, value]) => {
                 for (let i = filters.length - 1; i >= 0; i--) {
                     if (filters[i][0] === field) filters.splice(i, 1);
@@ -77,7 +182,8 @@
             const lower = filters.find(row => row[0] === section.date_field && row[1] === ">=");
             const upper = filters.find(row => row[0] === section.date_field && row[1] === "<");
             filters.forEach(([field, operator, value]) => {
-                if (field !== section.date_field) routeOptions[field] = operator === "=" ? value : [operator, value];
+                if (field === section.date_field && (operator === ">=" || operator === "<") && lower && upper) return;
+                routeOptions[field] = operator === "=" ? value : [operator, value];
             });
             if (lower && upper) {
                 const lastSecond = new Date(new Date(`${upper[2]}T00:00:00Z`).getTime() - 1000)
@@ -86,85 +192,287 @@
             }
             frappe.set_route("List", section.doctype, "List", routeOptions);
         };
-        const bars = (label, rows, onClick) => {
-            const panel = el("section", "jg-chart");
-            panel.append(el("h4", "jg-panel-title", __(label)));
-            if (!rows.length) {
-                panel.append(el("p", "jg-empty", __("No activity in this period.")));
-                return panel;
-            }
-            const max = Math.max(1, ...rows.map(row => Number(row.value)));
-            rows.forEach(row => {
-                const bar = el(onClick ? "button" : "div", "jg-bar-row");
-                if (onClick) {
-                    bar.type = "button";
-                    bar.addEventListener("click", () => onClick(row));
-                }
-                const caption = el("span", "jg-bar-caption");
-                caption.append(el("span", "", __(String(row.label || "Unassigned"))), el("strong", "", number(row.value)));
-                const track = el("span", "jg-bar-track");
-                const fill = el("span", "jg-bar-fill");
-                fill.style.width = `${Math.max(0, Number(row.value)) / max * 100}%`;
-                track.append(fill);
-                bar.append(caption, track);
-                panel.append(bar);
-            });
-            return panel;
+        const drill = (section, field, label) => openList(section, [[field, label ? "=" : "is", label || "not set"]]);
+
+        const sparkline = (rows, color) => {
+            const values = rows.map(row => Number(row.amount || row.value || 0));
+            const chart = svg("svg", {viewBox: "0 0 100 28", preserveAspectRatio: "none", class: "jg-spark", "aria-hidden": "true"});
+            if (values.length < 2) return chart;
+            const max = Math.max(1, ...values);
+            const points = values.map((value, index) => `${(index / (values.length - 1) * 100).toFixed(1)},${(26 - value / max * 24).toFixed(1)}`);
+            chart.append(svg("polyline", {points: `0,28 ${points.join(" ")} 100,28`, fill: color, "fill-opacity": "0.12", stroke: "none"}),
+                svg("polyline", {points: points.join(" "), fill: "none", stroke: color, "stroke-width": "2",
+                    "vector-effect": "non-scaling-stroke", "stroke-linejoin": "round", "stroke-linecap": "round", class: "jg-spark-line"}));
+            return chart;
         };
-        const render = data => {
-            const metrics = el("div", "jg-metrics");
-            data.sections.forEach(section => {
-                const metric = el("button", "jg-metric");
-                metric.type = "button";
-                metric.append(el("span", "jg-metric-label", __(section.doctype)),
-                    el("strong", "jg-metric-number", number(section.total)),
-                    el("span", "jg-metric-hint", __("View records →")));
-                metric.addEventListener("click", () => openList(section));
-                metrics.append(metric);
+
+        const metric = (section, data, index) => {
+            const card = el("article", "jg-metric");
+            card.style.setProperty("--jg-tone", section.color || PALETTE[index % PALETTE.length]);
+            card.style.animationDelay = `${index * 60}ms`;
+            const main = button("jg-metric-main");
+            const top = el("span", "jg-metric-top");
+            const change = delta(section.total, section.previous_total);
+            const chipNode = el("span", `jg-delta jg-delta-${change.dir}`, change.text);
+            chipNode.title = __("Compared with {0} – {1}", [data.previous_start, data.previous_end]);
+            top.append(el("span", "jg-dot"), el("span", "jg-metric-label", __(section.label)), chipNode);
+            const count = el("strong", "jg-metric-number");
+            countUp(count, Number(section.total || 0), number);
+            main.append(top, count);
+            if (section.amount !== null && section.amount !== undefined) {
+                const amount = el("span", "jg-metric-amount");
+                amount.append(el("b", "", money(data.currency, section.amount)), el("span", "", ` ${__(section.amount_label)}`));
+                amount.title = `${data.currency || ""} ${number(section.amount)}`;
+                main.append(amount);
+            } else {
+                main.append(el("span", "jg-metric-amount", __("records in period")));
+            }
+            main.append(sparkline(section.trend, card.style.getPropertyValue("--jg-tone")));
+            main.addEventListener("click", () => openList(section));
+            main.setAttribute("aria-label", `${__(section.label)}: ${number(section.total)}. ${__("Open list")}`);
+            card.append(main);
+            if (section.alert) {
+                const alert = button(`jg-alert ${section.alert.count ? "is-hot" : "is-calm"}`);
+                alert.append(el("b", "", number(section.alert.count)), el("span", "", ` ${__(section.alert.label)}`),
+                    el("span", "jg-arrow", "→"));
+                alert.addEventListener("click", () => openList(section, [], section.alert.filters));
+                card.append(alert);
+            }
+            return card;
+        };
+
+        const panel = (label, extraClass) => {
+            const node = el("section", `jg-panel ${extraClass || ""}`.trim());
+            node.append(el("h4", "jg-panel-title", __(label)));
+            return node;
+        };
+        const empty = text => el("p", "jg-empty", __(text));
+
+        const donut = (section) => {
+            const node = panel("Status", "jg-panel-donut");
+            const rows = section.statuses.filter(row => Number(row.value) > 0);
+            if (!rows.length) return node.append(empty("No activity in this period.")), node;
+            const total = rows.reduce((sum, row) => sum + Number(row.value), 0);
+            const wrap = el("div", "jg-donut-wrap");
+            const chart = svg("svg", {viewBox: "0 0 120 120", class: "jg-donut", role: "img",
+                "aria-label": __("Status breakdown")});
+            const radius = 46, circumference = 2 * Math.PI * radius, gap = rows.length > 1 ? 2 : 0;
+            chart.append(svg("circle", {cx: 60, cy: 60, r: radius, class: "jg-donut-track"}));
+            let offset = 0;
+            const legend = el("div", "jg-legend");
+            rows.slice(0, PALETTE.length).forEach((row, index) => {
+                const length = Number(row.value) / total * circumference;
+                const color = PALETTE[index];
+                const arc = svg("circle", {cx: 60, cy: 60, r: radius, class: "jg-donut-seg", stroke: color,
+                    "stroke-dashoffset": String(-offset), transform: "rotate(-90 60 60)", tabindex: "0"});
+                arc.style.strokeDasharray = `${Math.max(0, length - gap)} ${circumference}`;
+                arc.style.animationDelay = `${index * 80}ms`;
+                const label = String(row.label || __("Not set"));
+                const share = Math.round(Number(row.value) / total * 100);
+                hover(arc, [__(label), `${number(row.value)} · ${share}%`]);
+                arc.addEventListener("click", () => drill(section, section.status_field, row.label));
+                chart.append(arc);
+                offset += length;
+                const item = button("jg-legend-item");
+                const swatch = el("span", "jg-swatch");
+                swatch.style.background = color;
+                item.append(swatch, el("span", "jg-legend-label", __(label)), el("b", "", number(row.value)));
+                item.addEventListener("click", () => drill(section, section.status_field, row.label));
+                legend.append(item);
             });
-            content.append(metrics);
-            if (!data.sections.length) content.append(el("p", "jg-empty",
-                __("No accessible sections for these filters. Check your company, business unit, and document permissions.")));
-            data.sections.forEach(section => {
-                const card = el("section", "jg-section");
-                const heading = el("div", "jg-section-heading");
-                const headingText = el("div");
-                headingText.append(el("h3", "", __(section.doctype)),
-                    el("p", "jg-date-basis", `${__("Date basis")}: ${__(frappe.model.unscrub(section.date_field))}`));
-                heading.append(headingText);
-                if (section.amount !== null && section.amount !== undefined && data.currency) {
-                    const value = el("div", "jg-value");
-                    value.append(el("strong", "", `${data.currency} ${number(section.amount)}`),
-                        el("small", "", __(section.amount_note)));
-                    heading.append(value);
+            const centre = svg("text", {x: 60, y: 58, "text-anchor": "middle", class: "jg-donut-total"});
+            centre.textContent = compact(total);
+            const caption = svg("text", {x: 60, y: 74, "text-anchor": "middle", class: "jg-donut-caption"});
+            caption.textContent = __("total");
+            chart.append(centre, caption);
+            wrap.append(chart, legend);
+            node.append(wrap);
+            return node;
+        };
+
+        const columns = (section, data) => {
+            const useAmount = section.amount !== null && section.amount !== undefined;
+            const node = panel(useAmount ? `Monthly ${String(section.amount_label || "value").toLowerCase()}` : "Monthly activity", "jg-panel-trend");
+            const rows = section.trend;
+            if (!rows.some(row => Number(useAmount ? row.amount : row.value))) return node.append(empty("No activity in this period.")), node;
+            const width = 320, height = 150, base = 128, pad = 6;
+            const chart = svg("svg", {viewBox: `0 0 ${width} ${height}`, class: "jg-columns", role: "img",
+                "aria-label": __("Monthly trend")});
+            const values = rows.map(row => Number((useAmount ? row.amount : row.value) || 0));
+            const max = Math.max(1, ...values);
+            [0.5, 1].forEach(fraction => chart.append(svg("line", {x1: 0, x2: width, y1: base - (base - 18) * fraction,
+                y2: base - (base - 18) * fraction, class: "jg-grid"})));
+            chart.append(svg("line", {x1: 0, x2: width, y1: base, y2: base, class: "jg-axis"}));
+            const slot = width / rows.length;
+            const barWidth = Math.max(6, Math.min(34, slot - 10));
+            rows.forEach((row, index) => {
+                const value = values[index];
+                const barHeight = Math.max(value ? 3 : 0, value / max * (base - 18));
+                const x = index * slot + (slot - barWidth) / 2;
+                const hit = svg("rect", {x: index * slot, y: 0, width: slot, height: base, class: "jg-hit", tabindex: "0"});
+                const bar = svg("path", {class: "jg-col", d: roundedTop(x, base - barHeight, barWidth, barHeight, Math.min(4, barWidth / 2))});
+                bar.style.animationDelay = `${index * 40}ms`;
+                const lines = [`${monthLabel(row.label)} ${String(row.label).slice(0, 4)}`, `${number(row.value)} ${__("records")}`];
+                if (useAmount) lines.push(`${data.currency || ""} ${number(row.amount)}`);
+                hover(hit, lines);
+                chart.append(bar, hit);
+                if (rows.length <= 7 || index === rows.length - 1 || index === 0) {
+                    const text = svg("text", {x: index * slot + slot / 2, y: base + 16, "text-anchor": "middle", class: "jg-tick"});
+                    text.textContent = monthLabel(row.label);
+                    chart.append(text);
                 }
-                card.append(heading);
-                const grid = el("div", "jg-chart-grid");
-                if (section.status_field) grid.append(bars("Status breakdown", section.statuses, row =>
-                    openList(section, [[section.status_field, row.label ? "=" : "is", row.label || "not set"]])));
-                grid.append(bars("Monthly activity", section.trend));
-                if (section.divisions.length) grid.append(bars("Business-unit mix", section.divisions));
-                card.append(grid);
-                const recent = el("div", "jg-recent");
-                recent.append(el("h4", "jg-panel-title", __("Recent records")));
-                section.recent.forEach(row => {
-                    const link = el("a", "jg-record");
-                    link.href = `/app/${frappe.router.slug(section.doctype)}/${encodeURIComponent(row.name)}`;
-                    link.append(el("span", "jg-record-name", row.name),
-                        el("span", "jg-record-date", String(row[section.date_field] || "").slice(0, 10)),
-                        el("span", "jg-badge", __(row[section.status_field] || "")));
-                    recent.append(link);
-                });
-                if (!section.recent.length) recent.append(el("p", "jg-empty", __("No records for these dates.")));
-                card.append(recent);
-                content.append(card);
+                if (value === max) {
+                    const peak = svg("text", {x: index * slot + slot / 2, y: Math.max(10, base - barHeight - pad), "text-anchor": "middle", class: "jg-peak"});
+                    peak.textContent = compact(value);
+                    chart.append(peak);
+                }
             });
+            node.append(chart);
+            return node;
+        };
+        function roundedTop(x, y, w, h, r) {
+            if (h <= 0) return "";
+            r = Math.min(r, h);
+            return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`;
+        }
+
+        const ranking = (label, section, rows, field, data) => {
+            const node = panel(label, "jg-panel-rank");
+            if (!rows.length) return node.append(empty("No activity in this period.")), node;
+            const useAmount = rows.some(row => row.amount !== undefined && row.amount !== null);
+            const max = Math.max(1, ...rows.map(row => Number(useAmount ? row.amount : row.value) || 0));
+            rows.forEach((row, index) => {
+                const item = button("jg-rank-row");
+                item.style.animationDelay = `${index * 50}ms`;
+                const caption = el("span", "jg-rank-caption");
+                const shown = useAmount ? money(data.currency, row.amount) : number(row.value);
+                caption.append(el("span", "jg-rank-name", __(String(row.label || "Not set"))), el("strong", "", shown));
+                const track = el("span", "jg-track");
+                const fill = el("span", "jg-fill");
+                fill.style.width = `${Math.max(2, Number(useAmount ? row.amount : row.value) / max * 100)}%`;
+                track.append(fill);
+                item.append(caption, track);
+                item.title = useAmount ? `${number(row.value)} ${__("records")} · ${data.currency || ""} ${number(row.amount)}`
+                    : `${number(row.value)} ${__("records")}`;
+                if (field) item.addEventListener("click", () => drill(section, field, row.label));
+                node.append(item);
+            });
+            return node;
+        };
+
+        const recentList = (section, data) => {
+            const node = panel("Recent records", "jg-panel-recent");
+            if (!section.recent.length) return node.append(empty("No records for these dates.")), node;
+            section.recent.forEach((row, index) => {
+                const link = el("a", "jg-record");
+                link.style.animationDelay = `${index * 40}ms`;
+                link.href = `/app/${frappe.router.slug(section.doctype)}/${encodeURIComponent(row.name)}`;
+                const left = el("span", "jg-record-main");
+                left.append(el("span", "jg-record-name", row.name));
+                if (section.party_field && row[section.party_field]) left.append(el("span", "jg-record-party", String(row[section.party_field])));
+                link.append(left, el("span", "jg-record-date", String(row[section.date_field] || "").slice(0, 10)));
+                if (section.amount_field && row[section.amount_field] !== undefined) {
+                    link.append(el("span", "jg-record-amount", money(data.currency, row[section.amount_field])));
+                }
+                if (section.status_field) {
+                    const value = row[section.status_field];
+                    link.append(el("span", `jg-badge jg-tone-${tone(value)}`, __(value || "—")));
+                }
+                node.append(link);
+            });
+            return node;
+        };
+
+        const sectionCard = (section, data, index) => {
+            const card = el("section", "jg-section");
+            card.style.setProperty("--jg-tone", section.color || PALETTE[index % PALETTE.length]);
+            card.style.animationDelay = `${120 + index * 70}ms`;
+            const heading = el("div", "jg-section-heading");
+            const headingText = el("div");
+            headingText.append(el("h3", "", __(section.label)),
+                el("p", "jg-date-basis", `${__(section.doctype)} · ${__("Date basis")}: ${section.date_label || __(frappe.model.unscrub(section.date_field))}`));
+            heading.append(headingText);
+            const values = el("div", "jg-values");
+            if (section.amount !== null && section.amount !== undefined && data.currency) {
+                const value = el("div", "jg-value");
+                value.append(el("small", "", __(section.amount_label)), el("strong", "", `${data.currency} ${number(section.amount)}`));
+                values.append(value);
+            }
+            if (section.secondary_amount !== null && section.secondary_amount !== undefined && data.currency) {
+                const value = el("div", "jg-value");
+                value.append(el("small", "", __(section.secondary_amount_label)), el("strong", "", `${data.currency} ${number(section.secondary_amount)}`));
+                values.append(value);
+            }
+            const open = button("jg-open", __("Open list →"));
+            open.addEventListener("click", () => openList(section));
+            values.append(open);
+            heading.append(values);
+            card.append(heading);
+            const grid = el("div", "jg-panel-grid");
+            if (section.status_field) grid.append(donut(section));
+            grid.append(columns(section, data));
+            if (section.party_field) grid.append(ranking(`${__("Top")} ${section.party_label || frappe.model.unscrub(section.party_field)}`, section, section.top, section.party_field, data));
+            if (section.divisions.length) grid.append(ranking("Business-unit mix", section, section.divisions, null, data));
+            card.append(grid, recentList(section, data));
+            return card;
+        };
+
+        const renderActions = data => {
+            actions.replaceChildren();
+            const seen = new Set();
+            data.sections.forEach(section => {
+                if (seen.has(section.doctype)) return;
+                seen.add(section.doctype);
+                if (!(frappe.model.can_create && frappe.model.can_create(section.doctype))) return;
+                const action = button("jg-action", `+ ${__(section.doctype)}`);
+                action.addEventListener("click", () => frappe.new_doc(section.doctype));
+                actions.append(action);
+            });
+        };
+
+        const render = data => {
+            if (data.accent) host.style.setProperty("--jg-accent", data.accent);
+            eyebrow.textContent = __(data.eyebrow || "Jagadamba");
+            title.textContent = __(data.title || "Workspace");
+            subtitle.textContent = __(data.subtitle || "");
+            range.textContent = `${data.start} → ${data.end}`;
+            renderActions(data);
+            const metrics = el("div", "jg-metrics");
+            data.sections.forEach((section, index) => metrics.append(metric(section, data, index)));
+            content.append(metrics);
+            if (!data.sections.length) content.append(empty(
+                "No accessible sections for these filters. Check your company, business unit, and document permissions."));
+            const sections = el("div", "jg-sections");
+            data.sections.forEach((section, index) => sections.append(sectionCard(section, data, index)));
+            content.append(sections);
             footnote.textContent = __(data.note);
         };
+
+        const skeleton = () => {
+            const metrics = el("div", "jg-metrics jg-skeleton");
+            for (let i = 0; i < 4; i++) metrics.append(el("div", "jg-skel-card"));
+            const block = el("div", "jg-skel-block");
+            content.replaceChildren(metrics, block);
+        };
+
+        const populateCompany = (rows, selected) => {
+            company.replaceChildren();
+            rows.forEach(row => company.add(new Option(row.name, row.name)));
+            company.value = selected || "";
+        };
+        const populateUnits = values => {
+            if (state.unit && !values.includes(state.unit)) state.unit = "";
+            units.replaceChildren();
+            chip(units, "", "All", pickUnit);
+            values.forEach(value => chip(units, value, value, pickUnit));
+            markChips(units, state.unit);
+        };
+
         async function load() {
-            if (period.value === "custom" && (!from.value || !to.value)) return;
+            if (state.period === "custom" && (!from.value || !to.value)) return;
             const id = ++requestId;
-            content.replaceChildren();
+            hideTip();
+            skeleton();
             footnote.textContent = "";
             status.textContent = __("Loading your workspace…");
             host.setAttribute("aria-busy", "true");
@@ -172,17 +480,19 @@
             try {
                 const response = await frappe.call({
                     method: "jagadamba.jagadamba.workspace_dashboard.get_dashboard",
-                    args: {scope, company: company.value || null, business_unit: unit.value || null,
-                        period: period.value, date_from: from.value || null, date_to: to.value || null},
+                    args: {scope, company: company.value || null, business_unit: state.unit || null,
+                        period: state.period, date_from: from.value || null, date_to: to.value || null},
                 });
                 if (id !== requestId || !host.isConnected) return;
                 const data = response.message;
-                populate(company, data.companies, data.company);
-                populate(unit, data.business_units, unit.value, "All business units");
-                status.textContent = `${data.start} — ${data.end} · ${__("Updated")} ${new Date().toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"})}`;
+                populateCompany(data.companies, data.company);
+                populateUnits(data.business_units || []);
+                content.replaceChildren();
+                status.textContent = `${__("Updated")} ${new Date().toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"})}`;
                 render(data);
             } catch (error) {
                 if (id !== requestId || !host.isConnected) return;
+                content.replaceChildren();
                 status.textContent = __("Unable to load this workspace. Check your access and filters, then click Refresh.");
             } finally {
                 if (id === requestId) {
@@ -191,9 +501,16 @@
                 }
             }
         }
-        period.addEventListener("change", () => {
-            const custom = period.value === "custom";
-            from.parentElement.hidden = to.parentElement.hidden = !custom;
+        function pickUnit(value) {
+            state.unit = value;
+            markChips(units, value);
+            load();
+        }
+        function pickPeriod(value) {
+            state.period = value;
+            markChips(periods, value);
+            const custom = value === "custom";
+            datesWrap.hidden = !custom;
             if (custom && (!from.value || !to.value)) {
                 ++requestId;
                 content.replaceChildren();
@@ -202,8 +519,8 @@
                 refresh.disabled = false;
                 host.setAttribute("aria-busy", "false");
             } else load();
-        });
-        [company, unit, from, to].forEach(input => input.addEventListener("change", load));
+        }
+        [company, from, to].forEach(input => input.addEventListener("change", load));
         refresh.addEventListener("click", load);
         load();
     };

@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"jg-projects\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Project Dashboard\",\"col\":12}},{\"id\":\"8gXsOyIjyW\",\"type\":\"card\",\"data\":{\"card_name\":\"Project & Budget\",\"col\":4}},{\"id\":\"UXy6gdPOWz\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
+ "content": "[{\"id\":\"ba541481ac\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Project Dashboard\",\"col\":12}},{\"id\":\"7c55f01d09\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Access</b></span>\",\"col\":12}},{\"id\":\"8b87d9bae7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project\",\"col\":3}},{\"id\":\"00e6a1b55c\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project Budget\",\"col\":3}},{\"id\":\"39a5a77083\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Task\",\"col\":3}},{\"id\":\"663f937e6a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Timesheet\",\"col\":3}},{\"id\":\"d4f3693041\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Documents\",\"col\":3}},{\"id\":\"e106fc63aa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Order\",\"col\":3}},{\"id\":\"1b692bd65e\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Documents, Reports & Masters</b></span>\",\"col\":12}},{\"id\":\"ba22c49cdf\",\"type\":\"card\",\"data\":{\"card_name\":\"Project & Budget\",\"col\":4}},{\"id\":\"566bf58a44\",\"type\":\"card\",\"data\":{\"card_name\":\"Project Reports\",\"col\":4}},{\"id\":\"070b59e900\",\"type\":\"card\",\"data\":{\"card_name\":\"Linked Documents\",\"col\":4}}]",
  "creation": "2026-09-25 15:08:00.505039",
  "custom_blocks": [
   {
@@ -22,7 +22,7 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Project & Budget",
-   "link_count": 3,
+   "link_count": 6,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -50,6 +50,36 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Task",
+   "link_count": 0,
+   "link_to": "Task",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Timesheet",
+   "link_count": 0,
+   "link_to": "Timesheet",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Documents",
+   "link_count": 0,
+   "link_to": "Documents",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Project Type",
    "link_count": 0,
    "link_to": "Project Type",
@@ -60,8 +90,8 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Reports",
-   "link_count": 4,
+   "label": "Project Reports",
+   "link_count": 7,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -79,9 +109,9 @@
   {
    "hidden": 0,
    "is_query_report": 1,
-   "label": "Project Profitability",
+   "label": "Project Summary",
    "link_count": 0,
-   "link_to": "Project Profitability",
+   "link_to": "Project Summary",
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
@@ -89,9 +119,9 @@
   {
    "hidden": 0,
    "is_query_report": 1,
-   "label": "Project Summary",
+   "label": "Project Profitability",
    "link_count": 0,
-   "link_to": "Project Summary",
+   "link_to": "Project Profitability",
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
@@ -105,9 +135,108 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Delayed Tasks Summary",
+   "link_count": 0,
+   "link_to": "Delayed Tasks Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Daily Timesheet Summary",
+   "link_count": 0,
+   "link_to": "Daily Timesheet Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Project Billing Summary",
+   "link_count": 0,
+   "link_to": "Project Billing Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Linked Documents",
+   "link_count": 6,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sales Order",
+   "link_count": 0,
+   "link_to": "Sales Order",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Order Confirmation Sheet",
+   "link_count": 0,
+   "link_to": "Order Confirmation Sheet",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Designing",
+   "link_count": 0,
+   "link_to": "Designing",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Material Request",
+   "link_count": 0,
+   "link_to": "Material Request",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Purchase Order",
+   "link_count": 0,
+   "link_to": "Purchase Order",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Work Order",
+   "link_count": 0,
+   "link_to": "Work Order",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2026-09-25 15:44:37.129754",
+ "modified": "2026-10-12 10:00:00",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Project Desk",
@@ -137,6 +266,59 @@
   }
  ],
  "sequence_id": 7.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "format": "{} Open",
+   "label": "Project",
+   "link_to": "Project",
+   "stats_filter": "{\"status\": \"Open\"}",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "doc_view": "List",
+   "format": "{} Pending",
+   "label": "Project Budget",
+   "link_to": "Project Budget",
+   "stats_filter": "{\"workflow_state\": [\"like\", \"Pending%\"]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "format": "{} Open",
+   "label": "Task",
+   "link_to": "Task",
+   "stats_filter": "{\"status\": [\"in\", [\"Open\", \"Working\", \"Overdue\"]]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Timesheet",
+   "link_to": "Timesheet",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "format": "{} Draft",
+   "label": "Documents",
+   "link_to": "Documents",
+   "stats_filter": "{\"workflow_state\": \"Draft\"}",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "format": "{} Pending",
+   "label": "Sales Order",
+   "link_to": "Sales Order",
+   "stats_filter": "{\"status\": [\"in\", [\"To Deliver and Bill\", \"To Deliver\", \"To Bill\"]]}",
+   "type": "DocType"
+  }
+ ],
  "title": "Project Desk"
 }

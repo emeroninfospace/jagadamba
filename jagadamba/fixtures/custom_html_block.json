@@ -11,6 +11,12 @@
     "role": "Accounts User"
    },
    {
+    "role": "Delivery Manager"
+   },
+   {
+    "role": "Delivery User"
+   },
+   {
     "role": "Design Engineer"
    },
    {
@@ -24,6 +30,12 @@
    },
    {
     "role": "HR User"
+   },
+   {
+    "role": "Maintenance Manager"
+   },
+   {
+    "role": "Maintenance User"
    },
    {
     "role": "Management"
@@ -59,6 +71,9 @@
     "role": "Quality Engineer"
    },
    {
+    "role": "Quality Manager"
+   },
+   {
     "role": "Sales Executive"
    },
    {
@@ -82,7 +97,8 @@
   ],
   "html": "<div class=\"jg-dashboard\"></div>",
   "style": "@import url('/assets/jagadamba/css/workspace_dashboard.css');",
-  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"overview\"));"
+  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"overview\"));",
+  "modified": "2026-10-12 10:00:00"
  },
  {
   "doctype": "Custom HTML Block",
@@ -107,7 +123,8 @@
   ],
   "html": "<div class=\"jg-dashboard\"></div>",
   "style": "@import url('/assets/jagadamba/css/workspace_dashboard.css');",
-  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"sales\"));"
+  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"sales\"));",
+  "modified": "2026-10-12 10:00:00"
  },
  {
   "doctype": "Custom HTML Block",
@@ -135,7 +152,8 @@
   ],
   "html": "<div class=\"jg-dashboard\"></div>",
   "style": "@import url('/assets/jagadamba/css/workspace_dashboard.css');",
-  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"production\"));"
+  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"production\"));",
+  "modified": "2026-10-12 10:00:00"
  },
  {
   "doctype": "Custom HTML Block",
@@ -163,7 +181,8 @@
   ],
   "html": "<div class=\"jg-dashboard\"></div>",
   "style": "@import url('/assets/jagadamba/css/workspace_dashboard.css');",
-  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"projects\"));"
+  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"projects\"));",
+  "modified": "2026-10-12 10:00:00"
  },
  {
   "doctype": "Custom HTML Block",
@@ -188,7 +207,8 @@
   ],
   "html": "<div class=\"jg-dashboard\"></div>",
   "style": "@import url('/assets/jagadamba/css/workspace_dashboard.css');",
-  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"procurement\"));"
+  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"procurement\"));",
+  "modified": "2026-10-12 10:00:00"
  },
  {
   "doctype": "Custom HTML Block",
@@ -213,7 +233,8 @@
   ],
   "html": "<div class=\"jg-dashboard\"></div>",
   "style": "@import url('/assets/jagadamba/css/workspace_dashboard.css');",
-  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"stores\"));"
+  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"stores\"));",
+  "modified": "2026-10-12 10:00:00"
  },
  {
   "doctype": "Custom HTML Block",
@@ -235,7 +256,8 @@
   ],
   "html": "<div class=\"jg-dashboard\"></div>",
   "style": "@import url('/assets/jagadamba/css/workspace_dashboard.css');",
-  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"design\"));"
+  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"design\"));",
+  "modified": "2026-10-12 10:00:00"
  },
  {
   "doctype": "Custom HTML Block",
@@ -260,7 +282,8 @@
   ],
   "html": "<div class=\"jg-dashboard\"></div>",
   "style": "@import url('/assets/jagadamba/css/workspace_dashboard.css');",
-  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"accounting\"));"
+  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"accounting\"));",
+  "modified": "2026-10-12 10:00:00"
  },
  {
   "doctype": "Custom HTML Block",
@@ -282,6 +305,76 @@
   ],
   "html": "<div class=\"jg-dashboard\"></div>",
   "style": "@import url('/assets/jagadamba/css/workspace_dashboard.css');",
-  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"hr\"));"
+  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"hr\"));",
+  "modified": "2026-10-12 10:00:00"
+ },
+ {
+  "doctype": "Custom HTML Block",
+  "name": "Quality Dashboard",
+  "private": 0,
+  "roles": [
+   {
+    "role": "System Manager"
+   },
+   {
+    "role": "Management"
+   },
+   {
+    "role": "Quality Engineer"
+   },
+   {
+    "role": "Quality Manager"
+   }
+  ],
+  "html": "<div class=\"jg-dashboard\"></div>",
+  "style": "@import url('/assets/jagadamba/css/workspace_dashboard.css');",
+  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"quality\"));",
+  "modified": "2026-10-12 10:00:00"
+ },
+ {
+  "doctype": "Custom HTML Block",
+  "name": "Logistics Dashboard",
+  "private": 0,
+  "roles": [
+   {
+    "role": "System Manager"
+   },
+   {
+    "role": "Management"
+   },
+   {
+    "role": "Delivery Manager"
+   },
+   {
+    "role": "Delivery User"
+   }
+  ],
+  "html": "<div class=\"jg-dashboard\"></div>",
+  "style": "@import url('/assets/jagadamba/css/workspace_dashboard.css');",
+  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"logistics\"));",
+  "modified": "2026-10-12 10:00:00"
+ },
+ {
+  "doctype": "Custom HTML Block",
+  "name": "Maintenance Dashboard",
+  "private": 0,
+  "roles": [
+   {
+    "role": "System Manager"
+   },
+   {
+    "role": "Management"
+   },
+   {
+    "role": "Maintenance Manager"
+   },
+   {
+    "role": "Maintenance User"
+   }
+  ],
+  "html": "<div class=\"jg-dashboard\"></div>",
+  "style": "@import url('/assets/jagadamba/css/workspace_dashboard.css');",
+  "script": "frappe.require(\"/assets/jagadamba/js/workspace_dashboard.js\", () => jagadamba.workspace.mount(root_element, \"maintenance\"));",
+  "modified": "2026-10-12 10:00:00"
  }
 ]

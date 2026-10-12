@@ -18,7 +18,7 @@ if importlib.util.find_spec("frappe") is None:
     frappe.session = types.SimpleNamespace(user="user@example.com")
     frappe.db = Mock()
     frappe.defaults = Mock()
-    for name in ("get_roles", "get_list", "has_permission", "get_meta", "throw"):
+    for name in ("get_roles", "get_list", "get_all", "get_cached_doc", "has_permission", "get_meta", "throw"):
         setattr(frappe, name, Mock())
     model = types.ModuleType("frappe.model")
     model.get_permitted_fields = Mock()
@@ -38,6 +38,21 @@ from jagadamba.jagadamba import workspace_dashboard as dashboard
 from jagadamba.workspace_config import WORKSPACES, roles_for
 
 
+class Row(dict):
+    """Minimal stand-in for a Frappe child row: attribute and .get access."""
+    __getattr__ = dict.get
+
+
+def source(**values):
+    base = {"name": "row-1", "enabled": 1, "source_doctype": "Quotation", "label": "Quotation",
+            "date_field": "transaction_date", "status_field": "status", "amount_field": "base_grand_total"}
+    return Row({**base, **values})
+
+
+def profile(scope, roles, sources=()):
+    return Row(name=scope, enabled=1, title="T", roles=[Row(role=role) for role in roles], sources=list(sources))
+
+
 def fail(message, exception=ValueError):
     raise exception(message)
 
@@ -55,15 +70,45 @@ class DashboardBoundaryTests(unittest.TestCase):
         self.addCleanup(patcher.stop)
         return patcher.start()
 
+    def use_profiles(self):
+        profiles = {scope: profile(scope, roles_for(scope)) for scope in ("sales", "hr", "overview")}
+        self.stub("db", new=types.SimpleNamespace(exists=lambda doctype, name=None: name in profiles))
+        self.stub("get_cached_doc", side_effect=lambda doctype, name: profiles[name])
+        return profiles
+
     def test_sales_role_cannot_read_hr(self):
+        self.use_profiles()
         with self.assertRaises(PermissionError):
             dashboard.check_scope("hr")
         dashboard.check_scope("sales")
         dashboard.check_scope("overview")
 
+    def test_profile_roles_are_dynamic(self):
+        profiles = self.use_profiles()
+        profiles["hr"]["roles"].append(Row(role="Sales Executive"))
+        dashboard.check_scope("hr")
+
+    def test_disabled_profile_rejected(self):
+        profiles = self.use_profiles()
+        profiles["sales"]["enabled"] = 0
+        with self.assertRaises(ValueError):
+            dashboard.check_scope("sales")
+
     def test_unknown_scope_rejected(self):
+        self.use_profiles()
         with self.assertRaises(ValueError):
             dashboard.check_scope("tabSalary Slip")
+
+    def test_filter_tokens_and_unreadable_filter_fields(self):
+        parsed = dashboard.configured_filters('{"due_date": ["between", ["@today", "@today+30"]], "docstatus": 1}',
+                                              {"due_date"})
+        self.assertEqual(parsed, {"due_date": ["between", ["2026-10-12", "2026-11-11"]], "docstatus": 1})
+        self.assertIsNone(dashboard.configured_filters('{"salary": [">", 0]}', {"due_date"}))
+        self.assertIsNone(dashboard.configured_filters('{"due_date": ["; drop", 1]}', {"due_date"}))
+
+    def test_quarter_and_previous_period(self):
+        self.assertEqual(dashboard.resolve_period("this_quarter"), (date(2026, 10, 1), date(2026, 10, 12)))
+        self.assertEqual(dashboard.previous_period(date(2026, 10, 1), date(2026, 10, 12)), (date(2026, 9, 19), date(2026, 9, 30)))
 
     def test_system_manager_cannot_call_legacy_sql(self):
         self.stub("get_roles", return_value=["System Manager"])
@@ -108,35 +153,42 @@ class DashboardBoundaryTests(unittest.TestCase):
     def test_unreadable_source_makes_no_data_queries(self):
         query = self.stub("get_list")
         with patch.object(dashboard, "readable", return_value=False):
-            self.assertIsNone(dashboard.summary(dashboard.SOURCES["sales"][0], "Allowed", None, date(2026, 10, 1), date(2026, 10, 12)))
+            self.assertIsNone(dashboard.summary(source(), "Allowed", None, date(2026, 10, 1), date(2026, 10, 12)))
         query.assert_not_called()
 
     def test_queries_keep_company_and_row_permissions_and_end_date(self):
         meta = types.SimpleNamespace(has_field=lambda field: field in {"company", "custom_types"},
-            get_field=lambda field: types.SimpleNamespace(fieldtype="Date"))
+            get_field=lambda field: types.SimpleNamespace(fieldtype="Date"), get_label=lambda field: field.title())
         self.stub("get_meta", return_value=meta)
-        responses = [[{"total": 2, "amount": 100}], [], [],
-            [types.SimpleNamespace(date="2026-10-12", value=2)], []]
+        responses = [[{"total": 2, "amount": 100}], [{"total": 1, "amount": 50}], [], [], [],
+            [Row(date="2026-10-12", value=2, amount=100)], [], [{"total": 1}]]
         query = self.stub("get_list", side_effect=responses)
-        fields = ["name", "company", "custom_types", "transaction_date", "status", "base_grand_total"]
+        fields = ["name", "company", "custom_types", "transaction_date", "status", "base_grand_total", "party_name", "valid_till"]
+        row = source(party_field="party_name", alert_filters='{"valid_till": ["<", "@today"]}', alert_label="Expired")
         with patch.object(dashboard, "readable", return_value=True), patch.object(dashboard, "get_permitted_fields", return_value=fields):
-            result = dashboard.summary(dashboard.SOURCES["sales"][0], "Allowed Co", "Trading", date(2026, 10, 1), date(2026, 10, 12))
+            result = dashboard.summary(row, "Allowed Co", "Trading", date(2026, 10, 1), date(2026, 10, 12))
         self.assertEqual(result["total"], 2)
-        self.assertEqual(result["trend"], [{"label": "2026-10", "value": 2}])
-        self.assertEqual(query.call_count, 5)
+        self.assertEqual(result["previous_total"], 1)
+        self.assertEqual(result["trend"], [{"label": "2026-10", "value": 2, "amount": 100}])
+        self.assertEqual(result["alert"]["count"], 1)
+        self.assertIn(["Quotation", "valid_till", "<", "2026-10-12"], result["alert"]["filters"])
+        self.assertEqual(query.call_count, 8)
         for call in query.call_args_list:
             args = call.kwargs
             self.assertNotIn("ignore_permissions", args)
             self.assertIn(["Quotation", "company", "=", "Allowed Co"], args["filters"])
             self.assertIn(["Quotation", "custom_types", "=", "Trading"], args["filters"])
+        period_calls = [call.kwargs for call in query.call_args_list[:1] + query.call_args_list[2:7]]
+        for args in period_calls:
             self.assertIn(["Quotation", "transaction_date", "<", "2026-10-13"], args["filters"])
+        self.assertIn(["Quotation", "transaction_date", "<", "2026-10-01"], query.call_args_list[1].kwargs["filters"])
 
     def test_restricted_amount_is_not_queried(self):
         self.stub("get_meta", return_value=types.SimpleNamespace(has_field=lambda f: f == "company",
-            get_field=lambda f: types.SimpleNamespace(fieldtype="Date")))
-        query = self.stub("get_list", side_effect=[[{"total": 0}], [], []])
+            get_field=lambda f: types.SimpleNamespace(fieldtype="Date"), get_label=lambda f: f))
+        query = self.stub("get_list", side_effect=[[{"total": 0}], [{"total": 0}], [], []])
         with patch.object(dashboard, "readable", return_value=True), patch.object(dashboard, "get_permitted_fields", return_value=["name", "transaction_date"]):
-            result = dashboard.summary(dashboard.SOURCES["sales"][0], "Allowed", None, date(2026, 10, 1), date(2026, 10, 12))
+            result = dashboard.summary(source(), "Allowed", None, date(2026, 10, 1), date(2026, 10, 12))
         self.assertIsNone(result["amount"])
         self.assertFalse(any("sum(" in field for call in query.call_args_list for field in call.kwargs["fields"]))
 
@@ -152,6 +204,69 @@ class WorkspaceExportTests(unittest.TestCase):
             for row in workspace["custom_blocks"]:
                 self.assertIn(row["custom_block_name"], blocks)
             self.assertTrue(all(row["type"] not in ("number_card", "chart") for row in json.loads(workspace["content"])))
+
+
+class ProfileSeedTests(unittest.TestCase):
+    def seeds(self):
+        import json
+        from pathlib import Path
+        return json.loads(Path("jagadamba/workspace_profiles.json").read_text())
+
+    def test_every_block_has_a_seeded_profile_and_home_workspace(self):
+        import json
+        import re
+        from pathlib import Path
+        scopes = {seed["scope"]: seed for seed in self.seeds()}
+        for block in json.loads(Path("jagadamba/fixtures/custom_html_block.json").read_text()):
+            scope = re.search(r'mount\(root_element, "(\w+)"\)', block["script"]).group(1)
+            self.assertIn(scope, scopes)
+            self.assertEqual({row["role"] for row in block["roles"]}, set(roles_for(scope)))
+        for seed in scopes.values():
+            self.assertIn(seed["home_workspace"], WORKSPACES)
+            self.assertTrue(set(seed["landing_roles"]) <= set(roles_for(seed["scope"])) | {"System Manager", "Management"})
+            for row in seed["sources"]:
+                for key in ("extra_filters", "alert_filters"):
+                    if row.get(key):
+                        self.assertIsInstance(json.loads(row[key]), dict)
+
+    def test_user_list_departments_land_on_their_desk(self):
+        seeds = self.seeds()
+        landing = {seed["scope"]: seed["landing_roles"] for seed in seeds}
+        rows = [Row(name=seed["scope"], home_workspace=seed["home_workspace"], landing_priority=seed["landing_priority"])
+                for seed in sorted(seeds, key=lambda seed: (seed["landing_priority"], seed["scope"]))]
+
+        def get_all(doctype, filters=None, fields=None, order_by=None, pluck=None):
+            return landing[filters["parent"]] if doctype == "Has Role" else rows
+
+        expected = {
+            ("Sales Executive", "Design Engineer", "Project Engineer"): "Sales Desk",
+            ("Production Engineer", "Design Engineer"): "Production",
+            ("Production Engineer", "Project Engineer"): "Production",
+            ("Design Engineer",): "Design",
+            ("Quality Engineer",): "Quality Desk",
+            ("Stores User",): "Stores",
+            ("Stores User", "Procurement Engineer"): "Procurement Desk",
+            ("Finance Manager",): "Accounting Overview",
+            ("HR Manager", "HR User"): "HR Overview",
+            ("Delivery Manager", "Delivery User"): "Logistics Desk",
+            ("Maintenance Manager", "Maintenance User"): "Maintenance Desk",
+            ("Management",): "Jagadamba",
+        }
+        with patch.object(dashboard.frappe, "db", new=types.SimpleNamespace(exists=lambda *args: True)), \
+             patch.object(dashboard.frappe, "get_all", side_effect=get_all):
+            for roles, workspace in expected.items():
+                self.assertEqual(dashboard.home_profile(roles).home_workspace, workspace, roles)
+            self.assertIsNone(dashboard.home_profile(["Employee"]))
+
+    def test_seed_cleaning_drops_unsupported_fields(self):
+        from jagadamba import install
+        meta = types.SimpleNamespace(has_field=lambda field: field in {"posting_date", "status", "company"})
+        with patch.object(install.frappe, "db", new=types.SimpleNamespace(exists=lambda *args: True)), \
+             patch.object(install.frappe, "get_meta", return_value=meta):
+            row = install.clean_source({"source_doctype": "X", "date_field": "posting_date", "status_field": "status",
+                                        "amount_field": "missing", "alert_filters": '{"gone": 1}', "alert_label": "Gone"})
+            self.assertEqual(row, {"source_doctype": "X", "date_field": "posting_date", "status_field": "status"})
+            self.assertIsNone(install.clean_source({"source_doctype": "X", "date_field": "missing"}))
 
 
 class WorkspaceMigrationTests(unittest.TestCase):
