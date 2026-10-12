@@ -11,6 +11,7 @@ if importlib.util.find_spec("frappe") is None:
 	frappe._ = lambda message: message
 	frappe.session = types.SimpleNamespace(user="tester@example.com")
 	frappe.db = Mock()
+	frappe.db.get_single_value = Mock(return_value="")
 	frappe.get_doc = Mock()
 	def throw(message):
 		raise ValueError(message)
@@ -256,12 +257,82 @@ class EstimationMetadataTests(unittest.TestCase):
 			patch.object(api, 'get_all', return_value=['Oil & Gas'], create=True), \
 			patch.object(setup_estimation, 'get_configuration', return_value={'enable_estimation': 1}), \
 			patch.object(api, 'get_doc', return_value=Mock()) as log:
-			setup_estimation.execute()
+			setup_estimation._setup_type_configuration()
 		self.assertEqual(write.call_count, 7)
 		for call in write.call_args_list:
 			self.assertFalse(call.kwargs['update_modified'])
 			self.assertTrue(all('total' not in key and 'items' not in key.replace('show_additional_items','') for key in call.args[2]))
 		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.MARKER})
+
+	def test_layout_groups_estimation_in_its_tab_and_additional_items_under_items(self):
+		import json
+		from pathlib import Path
+		data = json.loads(Path('jagadamba/jagadamba/custom/quotation.json').read_text())
+		fields = {f['fieldname']: f for f in data['custom_fields']}
+		order = json.loads(next(p['value'] for p in data['property_setters'] if p['property'] == 'field_order'))
+		self.assertEqual(order[order.index('items') + 1:order.index('items') + 3],
+			['custom_section_break_xuxav', 'custom_additional_items'])
+		tab = order.index('custom_estimation_tab')
+		self.assertEqual(fields['custom_estimation_tab']['fieldtype'], 'Tab Break')
+		estimation = order[tab:order.index('address_and_contact_tab')]
+		for name in ('custom_estimation_items', 'custom_total_estimated_value', 'custom_net_profit',
+			'custom_total_quoted_value', 'custom_estimation_statement'):
+			self.assertIn(name, estimation)
+		for name in estimation:
+			if name in fields and fields[name]['fieldtype'] not in ('Column Break',):
+				self.assertTrue(fields[name].get('depends_on', '').startswith('eval:doc.custom_enable_estimation'))
+		for name in order:
+			if name in fields and fields[name].get('insert_after'):
+				self.assertIn(fields[name]['insert_after'], order)
+
+	def test_cost_codes_are_master_data(self):
+		import json
+		from pathlib import Path
+		child = json.loads(Path('jagadamba/jagadamba/doctype/quotation_estimation_item/quotation_estimation_item.json').read_text())
+		code = next(f for f in child['fields'] if f['fieldname'] == 'code')
+		self.assertEqual((code['fieldtype'], code['options']), ('Link', 'Estimation Cost Code'))
+		fetched = {f['fieldname']: f.get('fetch_from') for f in child['fields']}
+		self.assertEqual(fetched['description'], 'code.description')
+		self.assertEqual(fetched['uom'], 'code.default_uom')
+
+	def test_existing_typed_codes_become_cost_code_masters_once(self):
+		from jagadamba.patches import setup_estimation
+		api = setup_estimation.frappe
+		rows = [Doc(code='M', description='Material', uom='Ton'), Doc(code='M', description='Other', uom='Kg'), Doc(code='', description='x')]
+		created = []
+		existing = set()
+		def exists(dt, name=None):
+			return dt == 'Item Group' or (dt == 'Estimation Cost Code' and name in existing)
+		def get_doc(values):
+			created.append(values)
+			if values['doctype'] == 'Estimation Cost Code':
+				existing.add(values['code'])
+			return Mock()
+		with patch.object(api.db, 'exists', side_effect=exists), \
+			patch.object(api, 'get_all', return_value=rows, create=True), \
+			patch.object(api.db, 'get_single_value', return_value=''), \
+			patch.object(api.db, 'set_single_value') as default_group, \
+			patch.object(api, 'get_doc', side_effect=get_doc):
+			setup_estimation._setup_cost_codes_and_defaults()
+		self.assertEqual(created[0], {'doctype': 'Estimation Cost Code', 'code': 'M', 'description': 'Material', 'default_uom': 'Ton'})
+		self.assertEqual(created[1], {'doctype': 'Patch Log', 'patch': setup_estimation.COST_CODE_MARKER})
+		self.assertEqual(len(created), 2)
+		default_group.assert_called_once_with('Jagadamba Settings', 'default_finished_item_group', 'Finished Items')
+
+
+class TypeConfigurationTests(unittest.TestCase):
+	def test_finished_item_group_falls_back_to_settings_default(self):
+		from jagadamba.jagadamba import type_settings
+		api = type_settings.frappe
+		with patch.object(api.db, 'get_single_value', return_value='Assemblies'), \
+			patch.object(api, 'get_cached_doc', return_value=Doc(show_additional_items=1)):
+			self.assertEqual(type_settings.get_configuration('Any Type')['finished_item_group'], 'Assemblies')
+			self.assertEqual(type_settings.get_configuration('Any Type')['show_additional_items'], 1)
+			self.assertEqual(type_settings.get_configuration(None)['finished_item_group'], 'Assemblies')
+			self.assertEqual(type_settings.get_configuration(None)['show_additional_items'], 0)
+		with patch.object(api.db, 'get_single_value', return_value='Assemblies'), \
+			patch.object(api, 'get_cached_doc', return_value=Doc(finished_item_group='Skids')):
+			self.assertEqual(type_settings.get_finished_item_group('Any Type'), 'Skids')
 
 
 if __name__ == "__main__":

@@ -1,7 +1,8 @@
 frappe.ui.form.on("BOM", {
 	refresh: function (frm) {
+		jagadamba.sales_flow.load_finished_item_group(frm, "custom_types");
 		frm.set_query("item", function () {
-			let filters = { item_group: "Finished Items", disabled: 0 };
+			const filters = jagadamba.sales_flow.finished_item_filters(frm);
 			if (frm.doc.custom_types) filters.custom_types = frm.doc.custom_types;
 			return { filters: filters };
 		});
@@ -39,6 +40,10 @@ frappe.ui.form.on("BOM", {
 				}
 			);
 		}
+	},
+
+	custom_types: function (frm) {
+		return jagadamba.sales_flow.load_finished_item_group(frm, "custom_types");
 	},
 
 	project: function (frm) {

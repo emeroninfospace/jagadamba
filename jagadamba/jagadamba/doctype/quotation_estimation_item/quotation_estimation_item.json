@@ -17,10 +17,11 @@
   {
    "fieldname": "code",
    "label": "Code",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "reqd": 1,
    "in_list_view": 1,
-   "columns": 1
+   "columns": 1,
+   "options": "Estimation Cost Code"
   },
   {
    "fieldname": "description",
@@ -28,7 +29,9 @@
    "fieldtype": "Small Text",
    "reqd": 1,
    "in_list_view": 1,
-   "columns": 3
+   "columns": 3,
+   "fetch_from": "code.description",
+   "fetch_if_empty": 1
   },
   {
    "fieldname": "uom",
@@ -37,11 +40,13 @@
    "options": "UOM",
    "reqd": 1,
    "in_list_view": 1,
-   "columns": 1
+   "columns": 1,
+   "fetch_from": "code.default_uom",
+   "fetch_if_empty": 1
   },
   {
    "fieldname": "qty",
-   "label": "Quantity",
+   "label": "Qty",
    "fieldtype": "Float",
    "reqd": 1,
    "in_list_view": 1,
@@ -49,7 +54,7 @@
   },
   {
    "fieldname": "rate",
-   "label": "Unit Cost",
+   "label": "Unit Price",
    "fieldtype": "Currency",
    "options": "parent.currency",
    "in_list_view": 1,
@@ -57,7 +62,7 @@
   },
   {
    "fieldname": "amount",
-   "label": "Total Cost",
+   "label": "Total Price",
    "fieldtype": "Currency",
    "options": "parent.currency",
    "read_only": 1,
@@ -68,7 +73,7 @@
  "permissions": [],
  "sort_field": "modified",
  "sort_order": "DESC",
- "modified": "2026-10-12 12:06:22",
+ "modified": "2026-10-12 13:00:00",
  "modified_by": "Administrator",
  "owner": "Administrator",
  "creation": "2026-10-12 12:06:22"

@@ -6,7 +6,9 @@ const pending = [];
 const context = vm.createContext({console, Promise, WeakMap, Map, Set,
 	flt: (value, digits) => digits == null ? Number(value || 0) : Number(Number(value || 0).toFixed(digits)), precision: () => 2, __: value => value,
 	setTimeout: () => {},
+	format_currency: value => Number(value || 0).toFixed(2), format_number: value => String(Number(value || 0)),
 	frappe: {
+		utils: {escape_html: value => String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')},
 		provide: () => { context.jagadamba = {sales_flow: {}}; },
 		call: async ({args}) => ({message: {
 			enable_estimation: args.type_name === 'Oil & Gas' ? 1 : 0,
@@ -163,6 +165,30 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 		await task;
 		assert.equal(frm.doc.custom_total_estimated_value,84250);assert.equal(frm.doc.custom_net_profit,1500);
 		assert.equal(frm.doc.custom_total_quoted_value,98612.5);
+	});
+	await test('estimation sheet shows rows, difference value and totals like the requirement',async()=>{
+		let html='';
+		const frm=form('Quotation',{custom_enable_estimation:1,custom_estimation_cost_source:'Estimation',currency:'AED',
+			custom_sale_value_without_tax:85750,custom_vat_percent:5,custom_tax_percent:10,
+			custom_estimation_items:[{code:'M',description:'Material <b>',uom:'Ton',qty:10,rate:5000},{code:'L',description:'Labour',uom:'Hrs',qty:1000,rate:20}]});
+		frm.get_field=name=>name==='custom_estimation_statement'?{$wrapper:{html:value=>{html=value;}}}:null;
+		await flow.recalculate(frm);
+		for (const text of ['Material &lt;b&gt;','50000.00','20000.00','70000.00','85750.00','15750.00','Total Quoted / Invoice Value']) {
+			assert.ok(html.includes(text),text);
+		}
+		assert.ok(!html.includes('<b>'));
+	});
+	await test('engineering forms filter finished items by configured group',async()=>{
+		const original=context.frappe.call;
+		context.frappe.call=async({args})=>({message:args.type_name==='Trailers'?'Trailer Builds':'Finished Goods'});
+		try {
+			const frm=form('BOM',{custom_types:'Trailers'});
+			await flow.load_finished_item_group(frm,'custom_types');
+			assert.deepEqual({...flow.finished_item_filters(frm,{custom_parent_item:1})},{disabled:0,custom_parent_item:1,item_group:'Trailer Builds'});
+			const designing=form('Designing',{});
+			await flow.load_finished_item_group(designing);
+			assert.equal(flow.finished_item_filters(designing).item_group,'Finished Goods');
+		} finally {context.frappe.call=original;}
 	});
 	console.log(`PASS: ${passed} sales-flow regression cases`);
 })().catch(error=>{console.error(error);process.exitCode=1;});
