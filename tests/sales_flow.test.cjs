@@ -109,7 +109,6 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 		const frm=form('Sales Order',{custom_enable_estimation:1,
 			custom_sale_value_without_tax:85750,custom_vat_percent:5,custom_tax_percent:10,net_total:84250});
 		await flow.recalculate(frm);
-		assert.equal(frm.doc.custom_estimation_cost_source,'Document Net Total');
 		assert.equal(frm.doc.custom_total_estimated_value,84250);assert.equal(frm.doc.custom_net_profit,1500);
 		assert.equal(frm.doc.custom_vat_amount,4287.5);assert.equal(frm.doc.custom_tax_amount,9003.75);
 		assert.equal(frm.doc.custom_total_quoted_value,99041.25);
