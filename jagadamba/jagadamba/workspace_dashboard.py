@@ -265,23 +265,146 @@ def summary(source, company, business_unit, start, end):
     }
 
 
-@frappe.whitelist()
-def get_dashboard(scope="overview", company=None, business_unit=None, period="this_month",
-                  date_from=None, date_to=None):
+def month_buckets(start, end):
+    months = {}
+    cursor = start.replace(day=1)
+    while cursor <= end:
+        months[cursor.strftime("%Y-%m")] = 0
+        cursor = add_months(cursor, 1)
+    return months
+
+
+def grouped_date_field(meta, date_field):
+    date_meta = meta.get_field(date_field)
+    is_datetime = date_field in {"creation", "modified"} or (date_meta and date_meta.fieldtype == "Datetime")
+    return f"date({date_field})" if is_datetime else date_field
+
+
+def format_caption(template, values):
+    text = template or ""
+    for key, value in values.items():
+        text = text.replace("{" + key + "}", value)
+    return text
+
+
+def kpi(row, company, business_unit, start, end):
+    """One snapshot card: a count or sum, with an optional second count for the caption."""
+    doctype = row.source_doctype
+    if not readable(doctype):
+        return None
+    meta = frappe.get_meta(doctype)
+    fields = set(get_permitted_fields(doctype)) | {"name", "creation", "modified"}
+    if row.get("not_company_specific"):
+        base = {"docstatus": ["!=", 2]}
+        if business_unit:
+            type_field = business_unit_field(meta)
+            if type_field not in fields:
+                return None
+            base[type_field] = business_unit
+    else:
+        base = source_filters(doctype, company, business_unit)
+    extra = configured_filters(row.get("filters"), fields)
+    if base is None or extra is None:
+        return None
+    window = []
+    if row.get("date_field"):
+        if row.date_field not in fields:
+            return None
+        window = date_window(doctype, row.date_field, start, end)
+    filters = as_filter_list(doctype, {**base, **extra}) + window
+    metrics = ["count(distinct name) as total"]
+    value_field = field_or_none(row.get("value_field"), fields) if row.get("aggregate") == "Sum" else None
+    if row.get("aggregate") == "Sum":
+        if not value_field or (meta.get_field(value_field) and meta.get_field(value_field).fieldtype not in NUMERIC_TYPES):
+            return None
+        metrics.append(f"sum({value_field}) as amount")
+    result = frappe.get_list(doctype, filters=filters, fields=metrics, order_by="", limit_page_length=1)
+    result = result[0] if result else {}
+    count = result.get("total") or 0
+    secondary = None
+    if row.get("secondary_filters"):
+        second = configured_filters(row.secondary_filters, fields)
+        if second is not None:
+            rows = frappe.get_list(doctype, filters=as_filter_list(doctype, {**base, **second}) + window,
+                                   fields=["count(distinct name) as total"], order_by="", limit_page_length=1)
+            secondary = (rows[0].get("total") if rows else 0) or 0
+    caption = format_caption(row.get("caption"), {
+        "count": f"{count:,}", "secondary": f"{secondary or 0:,}",
+        "start": start.strftime("%d %b %Y"), "end": end.strftime("%d %b %Y")})
+    return {"label": row.label, "icon": row.get("icon"), "color": row.get("color"), "doctype": doctype,
+            "aggregate": "Sum" if value_field else "Count",
+            "value": (result.get("amount") or 0) if value_field else count, "count": count,
+            "secondary": secondary, "caption": caption, "filters": filters,
+            "date_field": row.get("date_field") or None}
+
+
+def comparison(profile, company, business_unit, start, end):
+    """Monthly totals for each configured series, e.g. sales against purchases."""
+    labels = list(month_buckets(start, end))
+    series = []
+    for row in profile.get("series") or []:
+        doctype = row.source_doctype
+        if not readable(doctype):
+            continue
+        meta = frappe.get_meta(doctype)
+        fields = set(get_permitted_fields(doctype)) | {"name", "creation", "modified"}
+        base = source_filters(doctype, company, business_unit)
+        extra = configured_filters(row.get("filters"), fields)
+        amount_field = field_or_none(row.amount_field, fields)
+        if base is None or extra is None or row.date_field not in fields or not amount_field:
+            continue
+        filters = as_filter_list(doctype, {**base, **extra}) + date_window(doctype, row.date_field, start, end)
+        trend_field = grouped_date_field(meta, row.date_field)
+        rows = frappe.get_list(doctype, filters=filters, fields=[f"{trend_field} as date", f"sum({amount_field}) as amount"],
+                               group_by=trend_field, order_by="date", limit_page_length=0)
+        months = month_buckets(start, end)
+        for item in rows:
+            key = getdate(item.date).strftime("%Y-%m")
+            months[key] = months.get(key, 0) + (item.get("amount") or 0)
+        series.append({"label": row.label, "color": row.get("color"), "doctype": doctype, "date_field": row.date_field,
+                       "values": [months.get(label, 0) for label in labels], "total": sum(months.values()),
+                       "filters": filters})
+    if not series:
+        return None
+    difference = None
+    if profile.get("difference_label") and len(series) >= 2:
+        difference = {"label": profile.difference_label, "total": series[0]["total"] - series[1]["total"]}
+    return {"title": profile.get("comparison_title") or _("Comparison"), "labels": labels, "series": series,
+            "difference": difference, "start": start, "end": end}
+
+
+def checked_context(scope, company, business_unit):
     profile = check_scope(scope)
-    start, end = resolve_period(period, date_from, date_to)
     allowed = companies()
     company = selected_company(company, allowed)
     units = (frappe.get_list("Type", pluck="name", order_by="name", limit_page_length=0)
              if readable("Type") else [])
     if business_unit and business_unit not in units:
         frappe.throw(_("Select an accessible business unit."), frappe.PermissionError)
+    return profile, allowed, company, units
+
+
+@frappe.whitelist()
+def get_comparison(scope, company=None, business_unit=None, date_from=None, date_to=None):
+    profile, _allowed, company, _units = checked_context(scope, company, business_unit)
+    start, end = resolve_period("custom", date_from, date_to)
+    return comparison(profile, company, business_unit, start, end)
+
+
+@frappe.whitelist()
+def get_dashboard(scope="overview", company=None, business_unit=None, period="this_month",
+                  date_from=None, date_to=None):
+    profile, allowed, company, units = checked_context(scope, company, business_unit)
+    start, end = resolve_period(period, date_from, date_to)
+    kpis = [result for row in profile.get("kpis") or []
+            if (result := kpi(row, company, business_unit, start, end)) is not None]
     sections = [result for source in profile.sources if source.enabled
                 if (result := summary(source, company, business_unit, start, end)) is not None]
     previous_start, previous_end = previous_period(start, end)
     return {
         "scope": scope, "title": profile.title, "eyebrow": profile.eyebrow, "subtitle": profile.subtitle,
-        "accent": profile.accent_color, "company": company, "companies": allowed, "business_units": units,
+        "accent": profile.accent_color, "layout": profile.get("layout") or "Modern", "kpis": kpis,
+        "comparison": comparison(profile, company, business_unit, start, end), "company": company, "companies": allowed, "business_units": units,
         "currency": next((row.get("default_currency") for row in allowed if row.name == company), None),
         "start": start, "end": end, "previous_start": previous_start, "previous_end": previous_end,
         "sections": sections,

@@ -40,6 +40,15 @@ Each section shows: a KPI card with animated count, change against the previous 
 
 The Accounting desk now shows booked sales and purchase invoices with receivable/payable outstanding and overdue counts, customer receipts, supplier payments and journal entries. HR shows new joiners (with visas expiring in 30 days), leave, attendance, expense claims and salary slips.
 
+## Classic overview layout (Accounting)
+
+A profile's **Layout** can be *Modern* (gradient hero) or *Classic*. Classic shows a compact header (company initials, company name, title, today's date, period selector, Refresh) in a paper-toned style that also has a dark version. Any layout can add:
+
+- **Snapshot Cards** (child table): label, icon, colour, document type, Count or Sum of a field, optional period date field, filters, an optional second count and a caption using `{count}`, `{secondary}`, `{start}` and `{end}`. Cards without a date field show the current state. Masters without a Company field (for example Customer) can be marked *Not Company-Specific*. Each card opens the matching list.
+- **Comparison Chart** (child table of series): monthly grouped bars for each series (for example Sales Invoice vs Purchase Invoice net totals), with totals, an optional difference such as **Profit**, a hover tooltip with the month's profit and margin, its own date range with Apply/Reset, and click-through to the month's records.
+
+Accounting Overview ships with Classic and eight cards (Customers, Active Projects, Open Tasks, Payment Received, Receivable, Quotations, Payable, Sales Orders) plus Sales vs Purchase with Profit. Existing profiles that have no cards or chart receive these once on migrate; edited profiles are left alone. Profit here is booked sales minus booked purchases (net of taxes) for the period, not an accounting profit and loss figure.
+
 ## New and updated workspaces
 
 - New: **Quality Desk**, **Logistics Desk**, **Maintenance Desk** (with matching Custom HTML Blocks and profiles).

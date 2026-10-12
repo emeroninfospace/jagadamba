@@ -161,9 +161,9 @@
  },
  {
   "scope": "accounting",
-  "title": "Cash, receivables and payables",
-  "eyebrow": "Finance · Accounts desk",
-  "subtitle": "Booked invoices, payments and journals in company currency",
+  "title": "Business Overview",
+  "eyebrow": "Accounts",
+  "subtitle": "Receivables, payables, payments and invoicing",
   "accent_color": "#0e8a7d",
   "home_workspace": "Accounting Overview",
   "landing_priority": 25,
@@ -240,6 +240,114 @@
     "color": "#64748b",
     "extra_filters": "{\"docstatus\": 1}",
     "alert_filters": "{\"docstatus\": 0}"
+   }
+  ],
+  "layout": "Classic",
+  "comparison_title": "Sales & Purchase Overview",
+  "difference_label": "Profit",
+  "kpis": [
+   {
+    "label": "Customers",
+    "icon": "users",
+    "color": "#3f7d5c",
+    "source_doctype": "Customer",
+    "aggregate": "Count",
+    "not_company_specific": 1,
+    "filters": "{\"disabled\": 0}",
+    "caption": "Registered"
+   },
+   {
+    "label": "Active Projects",
+    "icon": "projects",
+    "color": "#c4643a",
+    "source_doctype": "Project",
+    "aggregate": "Count",
+    "filters": "{\"status\": \"Open\"}",
+    "secondary_filters": "{\"status\": [\"!=\", \"Cancelled\"]}",
+    "caption": "of {secondary} total"
+   },
+   {
+    "label": "Open Tasks",
+    "icon": "tasks",
+    "color": "#4a4a48",
+    "source_doctype": "Task",
+    "aggregate": "Count",
+    "filters": "{\"status\": [\"in\", [\"Open\", \"Working\", \"Pending Review\", \"Overdue\"]]}",
+    "secondary_filters": "{\"status\": \"Overdue\"}",
+    "caption": "{secondary} overdue"
+   },
+   {
+    "label": "Payment Received",
+    "icon": "payment",
+    "color": "#c4643a",
+    "source_doctype": "Payment Entry",
+    "aggregate": "Sum",
+    "value_field": "base_paid_amount",
+    "date_field": "posting_date",
+    "filters": "{\"docstatus\": 1, \"payment_type\": \"Receive\"}",
+    "caption": "{start} – {end}"
+   },
+   {
+    "label": "Receivable",
+    "icon": "receivable",
+    "color": "#3d5a80",
+    "source_doctype": "Sales Invoice",
+    "aggregate": "Sum",
+    "value_field": "outstanding_amount",
+    "filters": "{\"docstatus\": 1, \"outstanding_amount\": [\">\", 0]}",
+    "secondary_filters": "{\"docstatus\": 1, \"outstanding_amount\": [\">\", 0], \"due_date\": [\"<\", \"@today\"]}",
+    "caption": "{count} open invoices · {secondary} overdue"
+   },
+   {
+    "label": "Quotations",
+    "icon": "quotation",
+    "color": "#6b7f3a",
+    "source_doctype": "Quotation",
+    "aggregate": "Sum",
+    "value_field": "base_grand_total",
+    "date_field": "transaction_date",
+    "filters": "{\"docstatus\": 1}",
+    "caption": "{count} submitted"
+   },
+   {
+    "label": "Payable",
+    "icon": "payable",
+    "color": "#a0782c",
+    "source_doctype": "Purchase Invoice",
+    "aggregate": "Sum",
+    "value_field": "outstanding_amount",
+    "filters": "{\"docstatus\": 1, \"outstanding_amount\": [\">\", 0]}",
+    "secondary_filters": "{\"docstatus\": 1, \"outstanding_amount\": [\">\", 0], \"due_date\": [\"<\", \"@today\"]}",
+    "caption": "{count} open bills · {secondary} overdue"
+   },
+   {
+    "label": "Sales Orders",
+    "icon": "order",
+    "color": "#b8433a",
+    "source_doctype": "Sales Order",
+    "aggregate": "Sum",
+    "value_field": "base_grand_total",
+    "date_field": "transaction_date",
+    "filters": "{\"docstatus\": 1}",
+    "caption": "{count} orders"
+   }
+  ],
+  "series": [
+   {
+    "label": "Sales",
+    "color": "#5f9a78",
+    "source_doctype": "Sales Invoice",
+    "date_field": "posting_date",
+    "amount_field": "base_net_total",
+    "filters": "{\"docstatus\": 1}"
+   },
+   {
+    "label": "Purchase",
+    "color": "#cf8a68",
+    "source_doctype": "Purchase Invoice",
+    "date_field": "posting_date",
+    "amount_field": "base_net_total",
+    "filters": "{\"docstatus\": 1}"
    }
   ]
  },

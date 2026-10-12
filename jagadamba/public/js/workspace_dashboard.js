@@ -5,6 +5,24 @@
     const SVG = "http://www.w3.org/2000/svg";
     // Categorical slots, assigned in fixed order (never cycled past the last slot).
     const PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"];
+    // Simple 24px stroke icons for snapshot cards (configurable per card in the profile).
+    const ICONS = {
+        users: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75",
+        projects: "M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z",
+        tasks: "M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11",
+        payment: "M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6",
+        receivable: "M22 12h-4l-3 9L9 3l-3 9H2",
+        quotation: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8",
+        invoice: "M2 5h20v14H2zM2 10h20",
+        order: "M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0",
+        payable: "M21 12V7H5a2 2 0 0 1 0-4h14v4M3 5v14a2 2 0 0 0 2 2h16v-5M18 12a2 2 0 0 0 0 4h4v-4z",
+        stock: "M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16zM3.3 7L12 12l8.7-5M12 22V12",
+        factory: "M2 20h20M4 20V8l6 4V8l6 4V4h4v16",
+        people: "M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8",
+        truck: "M1 3h15v13H1zM16 8h4l3 3v5h-7zM5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5M18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5",
+        tool: "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z",
+        check: "M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4L12 14.01l-3-3",
+    };
     const PERIODS = [["this_month", "This month"], ["last_month", "Last month"], ["this_quarter", "This quarter"],
         ["this_year", "This year"], ["custom", "Custom"]];
     const el = (tag, cls, text) => {
@@ -26,7 +44,9 @@
     const number = value => Number(value || 0).toLocaleString();
     const compact = value => {
         try {
-            return new Intl.NumberFormat(undefined, {notation: "compact", maximumFractionDigits: 1}).format(Number(value || 0));
+            const amount = Number(value || 0);
+            return new Intl.NumberFormat(undefined, {notation: "compact",
+                maximumFractionDigits: Math.abs(amount) >= 1e6 ? 2 : 1}).format(amount);
         } catch (e) {
             return number(value);
         }
@@ -101,6 +121,24 @@
         const actions = el("div", "jg-actions");
         header.append(glow, intro, side, actions);
 
+        // Classic layout header: compact title row with period select and refresh.
+        const classicHead = el("header", "jg-head");
+        classicHead.hidden = true;
+        const badge = el("span", "jg-badge-mark");
+        badge.setAttribute("aria-hidden", "true");
+        const headText = el("div", "jg-head-text");
+        const headEyebrow = el("p", "jg-head-eyebrow");
+        const headTitle = el("h2", "jg-head-title");
+        headText.append(headEyebrow, headTitle);
+        const headSide = el("div", "jg-head-side");
+        const today = el("span", "jg-head-date", new Date().toLocaleDateString(undefined,
+            {weekday: "short", month: "short", day: "numeric", year: "numeric"}));
+        const periodSelect = el("select", "jg-head-period");
+        periodSelect.setAttribute("aria-label", __("Period"));
+        const headRefresh = button("jg-head-refresh", `↻ ${__("Refresh")}`);
+        headSide.append(today, periodSelect, headRefresh);
+        classicHead.append(badge, headText, headSide);
+
         // Filters
         const toolbar = el("div", "jg-toolbar");
         const companyWrap = el("label", "jg-control");
@@ -137,7 +175,7 @@
         const tooltip = el("div", "jg-tooltip");
         tooltip.setAttribute("role", "tooltip");
         tooltip.hidden = true;
-        host.replaceChildren(header, toolbar, status, content, footnote, tooltip);
+        host.replaceChildren(classicHead, header, toolbar, status, content, footnote, tooltip);
         let requestId = 0;
 
         const chip = (group, value, label, onPick) => {
@@ -150,7 +188,12 @@
         const markChips = (group, value) => group.querySelectorAll(".jg-chip").forEach(node => {
             node.setAttribute("aria-pressed", String(node.dataset.value === value));
         });
-        PERIODS.forEach(([value, label]) => chip(periods, value, label, pickPeriod));
+        PERIODS.forEach(([value, label]) => {
+            chip(periods, value, label, pickPeriod);
+            periodSelect.add(new Option(__(label), value));
+        });
+        periodSelect.addEventListener("change", () => pickPeriod(periodSelect.value));
+        headRefresh.addEventListener("click", () => load());
         markChips(periods, state.period);
 
         const showTip = (event, lines) => {
@@ -417,6 +460,177 @@
             return card;
         };
 
+        const heading = (label, extra) => {
+            const node = el("div", "jg-heading");
+            node.append(el("h3", "", __(label)), el("span", "jg-heading-rule"));
+            if (extra) node.append(extra);
+            return node;
+        };
+        const icon = name => {
+            const chart = svg("svg", {viewBox: "0 0 24 24", class: "jg-icon", "aria-hidden": "true"});
+            chart.append(svg("path", {d: ICONS[name] || ICONS.check}));
+            return chart;
+        };
+        const openFilters = (doctype, filters, dateField) => openList({doctype, date_field: dateField, filters}, [], filters);
+
+        const snapshot = (kpis, data) => {
+            const grid = el("div", "jg-snapshot");
+            kpis.forEach((row, index) => {
+                const card = button("jg-kpi");
+                card.style.setProperty("--jg-tone", row.color || PALETTE[index % PALETTE.length]);
+                card.style.animationDelay = `${index * 55}ms`;
+                const label = el("span", "jg-kpi-label");
+                label.append(icon(row.icon), el("span", "", __(row.label)));
+                const value = el("strong", "jg-kpi-value");
+                countUp(value, Number(row.value || 0), row.aggregate === "Sum" ? compact : number);
+                if (row.aggregate === "Sum") value.title = `${data.currency || ""} ${number(row.value)}`;
+                card.append(label, value, el("span", "jg-kpi-caption", row.caption || ""));
+                card.setAttribute("aria-label", `${__(row.label)}: ${row.aggregate === "Sum" ? compact(row.value) : number(row.value)}. ${row.caption || ""}`);
+                card.addEventListener("click", () => openFilters(row.doctype, row.filters, row.date_field));
+                grid.append(card);
+            });
+            return grid;
+        };
+
+        const niceStep = max => {
+            const raw = max / 7;
+            const power = Math.pow(10, Math.floor(Math.log10(raw || 1)));
+            const unit = raw / power;
+            return (unit <= 1 ? 1 : unit <= 2 ? 2 : unit <= 2.5 ? 2.5 : unit <= 5 ? 5 : 10) * power;
+        };
+
+        const comparisonChart = (chart, data) => {
+            const width = 1000, height = 380, left = 64, right = 12, top = 16, bottom = 40;
+            const plotH = height - top - bottom, plotW = width - left - right;
+            const count = chart.labels.length;
+            const max = Math.max(1, ...chart.series.flatMap(series => series.values.map(Number)));
+            const step = niceStep(max);
+            const ceiling = Math.ceil(max / step) * step;
+            const node = svg("svg", {viewBox: `0 0 ${width} ${height}`, class: "jg-compare-svg", role: "img",
+                "aria-label": chart.series.map(series => `${series.label} ${compact(series.total)}`).join(", ")});
+            for (let tick = 0; tick <= ceiling + 1e-9; tick += step) {
+                const y = top + plotH - tick / ceiling * plotH;
+                node.append(svg("line", {x1: left, x2: width - right, y1: y, y2: y, class: tick ? "jg-grid" : "jg-axis"}));
+                const text = svg("text", {x: left - 10, y: y + 4, "text-anchor": "end", class: "jg-tick"});
+                text.textContent = compact(tick);
+                node.append(text);
+            }
+            node.append(svg("line", {x1: left, x2: left, y1: top, y2: top + plotH, class: "jg-axis"}));
+            const slot = plotW / count;
+            const groups = chart.series.length;
+            const barW = Math.max(4, Math.min(58, (slot - 18) / groups - 6));
+            chart.labels.forEach((label, index) => {
+                const groupW = groups * barW + (groups - 1) * 8;
+                let x = left + index * slot + (slot - groupW) / 2;
+                chart.series.forEach((series, seriesIndex) => {
+                    const value = Number(series.values[index] || 0);
+                    const barH = value ? Math.max(2, value / ceiling * plotH) : 0;
+                    const bar = svg("path", {class: "jg-cbar", fill: series.color || PALETTE[seriesIndex],
+                        d: roundedTop(x, top + plotH - barH, barW, barH, Math.min(4, barW / 2))});
+                    bar.style.animationDelay = `${index * 45 + seriesIndex * 20}ms`;
+                    node.append(bar);
+                    x += barW + 8;
+                });
+                const tick = svg("text", {x: left + index * slot + slot / 2, y: height - 14, "text-anchor": "middle", class: "jg-tick jg-month"});
+                tick.textContent = monthLabel(label);
+                node.append(tick);
+                const hit = svg("rect", {x: left + index * slot, y: top, width: slot, height: plotH, class: "jg-hit", tabindex: "0"});
+                const lines = [`${monthLabel(label)} ${String(label).slice(0, 4)}`,
+                    ...chart.series.map(series => `${__(series.label)}: ${compact(series.values[index])}`)];
+                if (chart.difference && groups >= 2) {
+                    const first = Number(chart.series[0].values[index] || 0);
+                    const diff = first - Number(chart.series[1].values[index] || 0);
+                    lines.push(`${__(chart.difference.label)}: ${compact(diff)}${first ? ` (${Math.round(diff / first * 100)}%)` : ""}`);
+                }
+                hover(hit, lines);
+                hit.addEventListener("click", () => {
+                    const series = chart.series[0];
+                    const [year, month] = String(label).split("-").map(Number);
+                    const last = new Date(Date.UTC(year, month, 0)).toISOString().slice(0, 10);
+                    openList({doctype: series.doctype, date_field: series.date_field, filters: series.filters},
+                        [[series.date_field, "between", [`${label}-01`, last]]]);
+                });
+                node.append(hit);
+            });
+            return node;
+        };
+
+        const comparisonPanel = (initial, data) => {
+            const panel = el("section", "jg-compare");
+            const bar = el("div", "jg-compare-bar");
+            const legend = el("div", "jg-compare-legend");
+            initial.series.forEach((series, index) => {
+                const item = el("span", "jg-compare-key");
+                const swatch = el("span", "jg-swatch");
+                swatch.style.background = series.color || PALETTE[index];
+                item.append(swatch, el("span", "", __(series.label)));
+                legend.append(item);
+            });
+            const range = el("div", "jg-compare-range");
+            const start = el("input");
+            const finish = el("input");
+            start.type = finish.type = "date";
+            start.setAttribute("aria-label", __("Chart from"));
+            finish.setAttribute("aria-label", __("Chart to"));
+            const apply = button("jg-compare-apply", __("Apply"));
+            const reset = button("jg-compare-reset", "↺");
+            reset.setAttribute("aria-label", __("Reset chart dates"));
+            range.append(start, el("span", "jg-compare-arrow", "→"), finish, apply, reset);
+            const totals = el("div", "jg-compare-totals");
+            bar.append(legend, range, totals);
+            const plot = el("div", "jg-compare-plot");
+            const note = el("p", "jg-compare-note");
+            panel.append(bar, plot, note);
+            const draw = chart => {
+                totals.replaceChildren();
+                chart.series.forEach((series, index) => {
+                    const total = el("div", "jg-compare-total");
+                    const value = el("strong", "", compact(series.total));
+                    value.style.color = series.color || PALETTE[index];
+                    value.title = `${data.currency || ""} ${number(series.total)}`;
+                    total.append(el("small", "", `${__("Total")} ${__(series.label)}`), value);
+                    totals.append(total);
+                });
+                if (chart.difference) {
+                    const total = el("div", "jg-compare-total jg-compare-diff");
+                    const value = el("strong", "", compact(chart.difference.total));
+                    value.title = `${data.currency || ""} ${number(chart.difference.total)}`;
+                    total.append(el("small", "", __(chart.difference.label)), value);
+                    totals.append(total);
+                }
+                plot.replaceChildren(comparisonChart(chart, data));
+                note.textContent = `${chart.start} → ${chart.end}`;
+            };
+            let chartRequest = 0;
+            apply.addEventListener("click", async () => {
+                if (!start.value || !finish.value) {
+                    note.textContent = __("Choose both chart dates, then click Apply.");
+                    return;
+                }
+                const id = ++chartRequest;
+                note.textContent = __("Loading…");
+                try {
+                    const response = await frappe.call({
+                        method: "jagadamba.jagadamba.workspace_dashboard.get_comparison",
+                        args: {scope, company: company.value || null, business_unit: state.unit || null,
+                            date_from: start.value, date_to: finish.value},
+                    });
+                    if (id !== chartRequest || !panel.isConnected) return;
+                    if (response.message) draw(response.message);
+                    else note.textContent = __("No readable data for these dates.");
+                } catch (error) {
+                    if (id === chartRequest) note.textContent = __("Unable to load the chart. Use a range of at most one year.");
+                }
+            });
+            reset.addEventListener("click", () => {
+                ++chartRequest;
+                start.value = finish.value = "";
+                draw(initial);
+            });
+            draw(initial);
+            return panel;
+        };
+
         const renderActions = data => {
             actions.replaceChildren();
             const seen = new Set();
@@ -431,12 +645,29 @@
         };
 
         const render = data => {
+            const classic = data.layout === "Classic";
+            host.classList.toggle("jg-classic", classic);
+            classicHead.hidden = !classic;
+            header.hidden = classic;
+            periods.parentElement.hidden = classic;
+            if (classic) {
+                const name = String(data.company || "Jagadamba");
+                badge.textContent = name.split(/\s+/).filter(Boolean).slice(0, 2).map(word => word[0]).join("").toUpperCase();
+                headEyebrow.textContent = name;
+                headTitle.textContent = __(data.title || "Overview");
+                periodSelect.value = state.period;
+            }
             if (data.accent) host.style.setProperty("--jg-accent", data.accent);
             eyebrow.textContent = __(data.eyebrow || "Jagadamba");
             title.textContent = __(data.title || "Workspace");
             subtitle.textContent = __(data.subtitle || "");
             range.textContent = `${data.start} → ${data.end}`;
             renderActions(data);
+            if (data.kpis && data.kpis.length) content.append(heading("Snapshot"), snapshot(data.kpis, data));
+            if (data.comparison && data.comparison.series.length) {
+                content.append(heading(data.comparison.title), comparisonPanel(data.comparison, data));
+            }
+            if ((data.kpis && data.kpis.length) || data.comparison) content.append(heading("Details"));
             const metrics = el("div", "jg-metrics");
             data.sections.forEach((section, index) => metrics.append(metric(section, data, index)));
             content.append(metrics);
@@ -509,6 +740,7 @@
         function pickPeriod(value) {
             state.period = value;
             markChips(periods, value);
+            periodSelect.value = value;
             const custom = value === "custom";
             datesWrap.hidden = !custom;
             if (custom && (!from.value || !to.value)) {

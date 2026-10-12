@@ -206,6 +206,56 @@ class WorkspaceExportTests(unittest.TestCase):
             self.assertTrue(all(row["type"] not in ("number_card", "chart") for row in json.loads(workspace["content"])))
 
 
+class OverviewTests(unittest.TestCase):
+    def setUp(self):
+        for name, kwargs in (("throw", {"side_effect": fail}),
+                             ("session", {"new": types.SimpleNamespace(user="staff@example.com")})):
+            patcher = patch.object(dashboard.frappe, name, **kwargs)
+            self.addCleanup(patcher.stop)
+            patcher.start()
+        meta = types.SimpleNamespace(has_field=lambda field: field == "company",
+            get_field=lambda field: types.SimpleNamespace(fieldtype="Currency" if "amount" in field else "Date"))
+        patcher = patch.object(dashboard.frappe, "get_meta", return_value=meta)
+        self.addCleanup(patcher.stop)
+        patcher.start()
+
+    def test_kpi_sum_with_secondary_count_and_caption(self):
+        row = Row(label="Receivable", source_doctype="Sales Invoice", aggregate="Sum", value_field="outstanding_amount",
+                  filters='{"docstatus": 1}', secondary_filters='{"due_date": ["<", "@today"]}',
+                  caption="{count} open invoices · {secondary} overdue")
+        fields = ["company", "outstanding_amount", "docstatus", "due_date"]
+        with patch.object(dashboard, "readable", return_value=True), \
+             patch.object(dashboard, "get_permitted_fields", return_value=fields), \
+             patch.object(dashboard.frappe, "get_list", side_effect=[[{"total": 18, "amount": 147500}], [{"total": 4}]]) as query:
+            result = dashboard.kpi(row, "Allowed Co", None, date(2026, 1, 1), date(2026, 10, 12))
+        self.assertEqual((result["value"], result["count"], result["secondary"]), (147500, 18, 4))
+        self.assertEqual(result["caption"], "18 open invoices · 4 overdue")
+        self.assertIn(["Sales Invoice", "due_date", "<", "2026-10-12"], query.call_args_list[1].kwargs["filters"])
+        self.assertIn(["Sales Invoice", "company", "=", "Allowed Co"], query.call_args_list[1].kwargs["filters"])
+
+    def test_kpi_with_unreadable_sum_field_is_omitted(self):
+        row = Row(label="Receivable", source_doctype="Sales Invoice", aggregate="Sum", value_field="outstanding_amount")
+        with patch.object(dashboard, "readable", return_value=True), \
+             patch.object(dashboard, "get_permitted_fields", return_value=["company"]), \
+             patch.object(dashboard.frappe, "get_list") as query:
+            self.assertIsNone(dashboard.kpi(row, "Allowed Co", None, date(2026, 1, 1), date(2026, 10, 12)))
+        query.assert_not_called()
+
+    def test_comparison_buckets_months_and_difference(self):
+        series = [Row(label="Sales", source_doctype="Sales Invoice", date_field="posting_date", amount_field="base_net_total"),
+                  Row(label="Purchase", source_doctype="Purchase Invoice", date_field="posting_date", amount_field="base_net_total")]
+        profile = Row(series=series, difference_label="Profit", comparison_title="Sales & Purchase")
+        responses = [[Row(date="2026-09-03", amount=100), Row(date="2026-10-01", amount=50)], [Row(date="2026-10-02", amount=30)]]
+        with patch.object(dashboard, "readable", return_value=True), \
+             patch.object(dashboard, "get_permitted_fields", return_value=["company", "posting_date", "base_net_total"]), \
+             patch.object(dashboard.frappe, "get_list", side_effect=responses):
+            result = dashboard.comparison(profile, "Allowed Co", None, date(2026, 9, 1), date(2026, 10, 12))
+        self.assertEqual(result["labels"], ["2026-09", "2026-10"])
+        self.assertEqual(result["series"][0]["values"], [100, 50])
+        self.assertEqual(result["series"][1]["values"], [0, 30])
+        self.assertEqual(result["difference"], {"label": "Profit", "total": 120})
+
+
 class ProfileSeedTests(unittest.TestCase):
     def seeds(self):
         import json
@@ -224,8 +274,8 @@ class ProfileSeedTests(unittest.TestCase):
         for seed in scopes.values():
             self.assertIn(seed["home_workspace"], WORKSPACES)
             self.assertTrue(set(seed["landing_roles"]) <= set(roles_for(seed["scope"])) | {"System Manager", "Management"})
-            for row in seed["sources"]:
-                for key in ("extra_filters", "alert_filters"):
+            for row in seed["sources"] + seed.get("kpis", []) + seed.get("series", []):
+                for key in ("extra_filters", "alert_filters", "filters", "secondary_filters"):
                     if row.get(key):
                         self.assertIsInstance(json.loads(row[key]), dict)
 
