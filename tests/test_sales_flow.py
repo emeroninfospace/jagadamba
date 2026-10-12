@@ -150,7 +150,7 @@ class SalesOrderPricingTests(unittest.TestCase):
 	def test_requirement_example(self):
 		doc = self.order()
 		calculate_oil_gas_pricing(doc)
-		self.assertEqual(doc.custom_estimation_cost_source, "Document Net Total")
+		self.assertEqual(doc.custom_total_estimated_value, 84250)
 		self.assertEqual(doc.custom_net_profit, 1500)
 		self.assertEqual(doc.custom_vat_amount, 4287.50)
 		self.assertEqual(doc.custom_tax_amount, 9003.75)

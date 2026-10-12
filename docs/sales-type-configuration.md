@@ -44,6 +44,8 @@ bench --site SITE clear-cache
 bench restart
 ```
 
+The desk scripts (`desk.js`, `sales_flow.js`) load through `jagadamba.bundle.js`, so `bench build --app jagadamba` gives them a new file name on every change and browsers pick it up without a manual cache clear.
+
 ## Automated validation
 
 ```sh
