@@ -17,11 +17,10 @@
   {
    "fieldname": "code",
    "label": "Code",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "reqd": 1,
    "in_list_view": 1,
-   "columns": 1,
-   "options": "Estimation Cost Code"
+   "columns": 1
   },
   {
    "fieldname": "description",
@@ -29,9 +28,7 @@
    "fieldtype": "Small Text",
    "reqd": 1,
    "in_list_view": 1,
-   "columns": 3,
-   "fetch_from": "code.description",
-   "fetch_if_empty": 1
+   "columns": 3
   },
   {
    "fieldname": "uom",
@@ -40,9 +37,7 @@
    "options": "UOM",
    "reqd": 1,
    "in_list_view": 1,
-   "columns": 1,
-   "fetch_from": "code.default_uom",
-   "fetch_if_empty": 1
+   "columns": 1
   },
   {
    "fieldname": "qty",

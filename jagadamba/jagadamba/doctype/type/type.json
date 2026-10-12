@@ -37,9 +37,9 @@
   },
   {
    "fieldname": "enable_estimation",
-   "label": "Enable Estimation Costing",
+   "label": "Enable Sales Order Pricing",
    "fieldtype": "Check",
-   "description": "Shows the Estimation tab (cost table, VAT/Tax and profit) on Quotation and Sales Order."
+   "description": "Shows Sale Value, VAT, Tax, Difference Value (profit) and Total Quoted Value on Sales Order."
   },
   {
    "fieldname": "show_additional_items",

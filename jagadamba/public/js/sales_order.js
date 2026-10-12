@@ -165,7 +165,6 @@ frappe.ui.form.on("Sales Order", {
 	custom_vat_percent(frm) { recalc_oil_gas_pricing(frm); },
 	custom_tax_percent(frm) { recalc_oil_gas_pricing(frm); },
 	net_total(frm) { return recalc_oil_gas_pricing(frm); },
-	custom_estimation_cost_source(frm) { return recalc_oil_gas_pricing(frm); },
 	custom_tax_basis(frm) { return recalc_oil_gas_pricing(frm); },
 
 });
@@ -177,13 +176,7 @@ function recalc_oil_gas_pricing(frm) {
 
 function prefill_sales_order(frm, overwrite) {
 	const fields = { custom_types: "custom_types", custom_vehicle_type: "custom_vehicle_type", oil_gas_item: "oil_gas_item" };
-	if (overwrite) Object.assign(fields, {
-		custom_sale_value_without_tax: "custom_sale_value_without_tax",
-		custom_vat_percent: "custom_vat_percent", custom_tax_percent: "custom_tax_percent",
-		custom_estimation_cost_source: "custom_estimation_cost_source", custom_total_estimated_value: "custom_total_estimated_value",
-		custom_tax_basis: "custom_tax_basis",
-	});
 	return jagadamba.sales_flow.copy_from_source(frm, {
 		doctype: "Quotation", link_field: "custom_quotation", fields, overwrite,
-	}).then(() => overwrite ? jagadamba.sales_flow.recalculate(frm) : undefined);
+	});
 }

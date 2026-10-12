@@ -39,7 +39,6 @@ frappe.ui.form.on("Quotation", {
 			}
 		}
 		await prefill_quotation_type(frm);
-		if (frm.is_new()) await recalc_oil_gas_pricing(frm);
 
 		if (!frm.is_new()) {
 			frm.add_custom_button(__("Log Revision Note"), function () {
@@ -66,21 +65,9 @@ frappe.ui.form.on("Quotation", {
 
 	custom_types: async function (frm) {
 		await jagadamba.sales_flow.clear_type_items(frm, ["custom_vehicle_type", "oil_gas_item"]);
-		await jagadamba.sales_flow.configure(frm);
-		return recalc_oil_gas_pricing(frm);
+		return jagadamba.sales_flow.configure(frm);
 	},
-	custom_sale_value_without_tax(frm) { recalc_oil_gas_pricing(frm); },
-	custom_vat_percent(frm) { recalc_oil_gas_pricing(frm); },
-	custom_tax_percent(frm) { recalc_oil_gas_pricing(frm); },
-	net_total(frm) { return recalc_oil_gas_pricing(frm); },
-	custom_estimation_cost_source(frm) { return recalc_oil_gas_pricing(frm); },
-	custom_tax_basis(frm) { return recalc_oil_gas_pricing(frm); },
-
 });
-
-function recalc_oil_gas_pricing(frm) {
-	return jagadamba.sales_flow.recalculate(frm);
-}
 
 frappe.ui.form.on("Quotation Additional Item", {
 	item_group(frm, cdt, cdn) {
@@ -100,10 +87,3 @@ function prefill_quotation_type(frm) {
 			oil_gas_item: "custom_finished_item" },
 	});
 }
-
-frappe.ui.form.on("Quotation Estimation Item", {
-	qty(frm) { return jagadamba.sales_flow.recalculate(frm); },
-	rate(frm) { return jagadamba.sales_flow.recalculate(frm); },
-	custom_estimation_items_add(frm) { return jagadamba.sales_flow.recalculate(frm); },
-	custom_estimation_items_remove(frm) { return jagadamba.sales_flow.recalculate(frm); },
-});
