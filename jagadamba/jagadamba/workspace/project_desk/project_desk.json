@@ -111,7 +111,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-12 19:00:00.000000",
+ "modified": "2026-10-13 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Project Desk",
@@ -149,6 +149,9 @@
   },
   {
    "role": "Engineering Head"
+  },
+  {
+   "role": "Finance Manager"
   }
  ],
  "sequence_id": 7.0,
