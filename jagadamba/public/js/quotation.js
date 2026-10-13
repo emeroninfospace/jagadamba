@@ -6,10 +6,11 @@ frappe.ui.form.on("Quotation", {
 			return { filters: jagadamba.sales_flow.item_filters(frm) };
 		});
 
+		// Additional Items list the row's Item Group (and its sub-groups) only, regardless of Type.
 		frm.set_query("item_code", "custom_additional_items", function (doc, cdt, cdn) {
 			const row = locals[cdt][cdn];
-			const filters = jagadamba.sales_flow.item_filters(frm);
-			if (row.item_group) filters.item_group = row.item_group;
+			const filters = { disabled: 0 };
+			if (row.item_group) filters.item_group = ["descendants of (inclusive)", row.item_group];
 			return { filters: filters };
 		});
 	},
