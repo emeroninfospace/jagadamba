@@ -18,7 +18,7 @@
  "is_hidden": 0,
  "label": "Project Overview",
  "links": [],
- "modified": "2026-10-12 19:00:00.000000",
+ "modified": "2026-10-13 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Project Overview",
@@ -39,6 +39,9 @@
   },
   {
    "role": "Engineering Head"
+  },
+  {
+   "role": "Finance Manager"
   }
  ],
  "sequence_id": 4.0,
