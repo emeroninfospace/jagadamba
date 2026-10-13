@@ -166,5 +166,14 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 		await flow.configure(frm,true);await flow.configure(frm,true);
 		assert.equal(frm.doc.custom_enable_estimation,0);
 	});
+	await test('additional items filter by row item group only',async()=>{
+		const queries={};
+		const frm=form('Quotation',{custom_types:'Oil & Gas',company:'Jagadamba'});
+		frm.fields_dict={};frm.set_query=(field,table,fn)=>{queries[field+'.'+table]=fn;};
+		for (const handler of handlers['Quotation.setup']) handler(frm);
+		context.locals={'Quotation Additional Item':{r1:{item_group:'Axles'}}};
+		assert.deepEqual(JSON.parse(JSON.stringify(queries['item_code.custom_additional_items'](frm.doc,'Quotation Additional Item','r1'))),
+			{filters:{disabled:0,item_group:['descendants of (inclusive)','Axles']}});
+	});
 	console.log(`PASS: ${passed} sales-flow regression cases`);
 })().catch(error=>{console.error(error);process.exitCode=1;});
