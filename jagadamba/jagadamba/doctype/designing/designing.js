@@ -82,20 +82,21 @@ frappe.ui.form.on("Designing", {
 		if (!frm.doc.project) return;
 
 		frappe.call({
-			method: "frappe.client.get",
-			args: { doctype: "Project", name: frm.doc.project },
+			method: "jagadamba.jagadamba.doctype.designing.designing.get_project_details",
+			args: { project: frm.doc.project },
 			callback: function (r) {
 				if (!r.message) return;
-				if (r.message.customer) {
-					frm.set_value("customer", r.message.customer);
-					frappe.db.get_value("Customer", r.message.customer, "customer_name", (cr) => {
-						if (cr && cr.customer_name) {
-							frm.set_value("customer_name", cr.customer_name);
-						}
-					});
-				}
+				frm.set_value(r.message);
 			},
 		});
+	},
+
+	oil_gas_item: function (frm) {
+		if (frm.doc.oil_gas_item && !frm.doc.item) frm.set_value("item", frm.doc.oil_gas_item);
+	},
+
+	vehicle_type: function (frm) {
+		if (frm.doc.vehicle_type && !frm.doc.item) frm.set_value("item", frm.doc.vehicle_type);
 	},
 
 	ocs: function (frm) {

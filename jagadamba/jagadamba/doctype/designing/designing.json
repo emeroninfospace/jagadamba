@@ -7,16 +7,20 @@
  "field_order": [
   "naming_series",
   "project",
+  "type",
   "customer",
   "customer_name",
   "sales_order",
   "column_break_1",
   "date",
-  "item",
   "status",
   "ocs",
+  "oil_gas_item",
   "vehicle_type",
+  "item",
   "bom",
+  "show_job_item",
+  "show_vehicle_item",
   "raw_materials_section",
   "raw_materials",
   "design_files_section",
@@ -48,6 +52,16 @@
    "reqd": 1
   },
   {
+   "fetch_from": "project.custom_types",
+   "fetch_if_empty": 1,
+   "fieldname": "type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Type",
+   "options": "Type"
+  },
+  {
    "fieldname": "customer",
    "fieldtype": "Link",
    "label": "Customer",
@@ -73,12 +87,25 @@
    "options": "Order Confirmation Sheet"
   },
   {
+   "depends_on": "eval:doc.show_job_item",
+   "fetch_from": "project.oil_gas_item",
+   "fetch_if_empty": 1,
+   "fieldname": "oil_gas_item",
+   "fieldtype": "Link",
+   "label": "Job Item",
+   "options": "Item"
+  },
+  {
+   "depends_on": "eval:doc.show_vehicle_item",
+   "fetch_from": "project.custom_vehicle_type",
+   "fetch_if_empty": 1,
    "fieldname": "vehicle_type",
    "fieldtype": "Link",
    "label": "Vehicle Type",
    "options": "Item"
   },
   {
+   "description": "Finished item the BOM is created for. Filled from the Job Item or Vehicle Type when left empty.",
    "fieldname": "item",
    "fieldtype": "Link",
    "label": "Item",
@@ -90,6 +117,24 @@
    "fieldtype": "Link",
    "label": "BOM",
    "options": "BOM",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fetch_from": "type.show_job_item",
+   "fieldname": "show_job_item",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Show Job Item",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fetch_from": "type.show_vehicle_item",
+   "fieldname": "show_vehicle_item",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Show Vehicle Type",
    "read_only": 1
   },
   {
@@ -177,7 +222,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-08-31 17:31:30.168871",
+ "modified": "2026-10-15 07:00:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Designing",
@@ -196,6 +241,13 @@
    "role": "System Manager",
    "share": 1,
    "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Design Engineer",
    "write": 1
   }
  ],

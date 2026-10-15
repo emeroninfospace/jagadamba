@@ -118,7 +118,8 @@
 		"Quotation": [["custom_vehicle_type", SALES], ["oil_gas_item", SALES]],
 		"Sales Order": [["custom_vehicle_type", SALES], ["oil_gas_item", SALES]],
 		"BOM": [["item", {}]],
-		"Designing": [["item", {type_field: null}], ["vehicle_type", {type_field: null, parent_item: true}]],
+		"Designing": [["item", {type_field: "type"}], ["oil_gas_item", {type_field: "type"}],
+			["vehicle_type", {type_field: "type", parent_item: true}]],
 		"Documents": [["item", {type_field: "type"}], ["oil_gas_item", {type_field: "type"}],
 			["vehicle_type", {type_field: "type", parent_item: true}]],
 	};
