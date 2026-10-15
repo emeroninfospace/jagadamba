@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\": \"EqrAhCkU0p\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Design</b></span>\", \"col\": 12}}, {\"id\": \"y7UxBNak1M\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Draft Documents\", \"col\": 3}}, {\"id\": \"ysdC40O3NA\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Documents First Release\", \"col\": 3}}, {\"id\": \"oRHJGywfzd\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Documents Final Release\", \"col\": 3}}, {\"id\": \"ej9A1sWmss\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"BOMs Pending Approval\", \"col\": 3}}, {\"id\": \"YvKWuZAYVK\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Rejected Documents\", \"col\": 3}}, {\"id\": \"Dc90iY0hDp\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Active Items\", \"col\": 3}}, {\"id\": \"pyzXJOXQvn\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"BKvkFAupkJ\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"N5P8Z8Pwn8\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Project\", \"col\": 3}}, {\"id\": \"xi3qSnxNzq\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Documents\", \"col\": 3}}, {\"id\": \"vsPhCSBOmD\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"BOM\", \"col\": 3}}, {\"id\": \"uNd3u9Bns2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Item\", \"col\": 3}}, {\"id\": \"UNfTsjT9Xx\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Vehicle Type\", \"col\": 3}}, {\"id\": \"dgFHmulUyO\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Type\", \"col\": 3}}, {\"id\": \"m0e3hYrxqG\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"UOM\", \"col\": 3}}, {\"id\": \"XFiTaNWLav\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Order Confirmation Sheet\", \"col\": 3}}, {\"id\": \"FfyKYT9YRy\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Sales Order\", \"col\": 3}}, {\"id\": \"wQqsM8f1x4\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"BOM Explorer\", \"col\": 3}}, {\"id\": \"cJGVwG6cLI\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"BOM Stock Report\", \"col\": 3}}, {\"id\": \"8myuRSiEQE\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"yz6HMSAvBv\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\", \"col\": 12}}, {\"id\": \"9kasQq4Wal\", \"type\": \"card\", \"data\": {\"card_name\": \"BOM\", \"col\": 4}}, {\"id\": \"rlvz7FPEV-\", \"type\": \"card\", \"data\": {\"card_name\": \"Design Work\", \"col\": 4}}]",
+ "content": "[{\"id\": \"EqrAhCkU0p\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Design</b></span>\", \"col\": 12}}, {\"id\": \"y7UxBNak1M\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Draft Documents\", \"col\": 3}}, {\"id\": \"ysdC40O3NA\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Documents First Release\", \"col\": 3}}, {\"id\": \"oRHJGywfzd\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Documents Final Release\", \"col\": 3}}, {\"id\": \"ej9A1sWmss\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"BOMs Pending Approval\", \"col\": 3}}, {\"id\": \"YvKWuZAYVK\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Rejected Documents\", \"col\": 3}}, {\"id\": \"Dc90iY0hDp\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Active Items\", \"col\": 3}}, {\"id\": \"pyzXJOXQvn\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"BKvkFAupkJ\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick Access</b></span>\", \"col\": 12}}, {\"id\": \"N5P8Z8Pwn8\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Project\", \"col\": 3}}, {\"id\": \"xi3qSnxNzq\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Documents\", \"col\": 3}}, {\"id\": \"vsPhCSBOmD\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"BOM\", \"col\": 3}}, {\"id\": \"uNd3u9Bns2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Item\", \"col\": 3}}, {\"id\": \"UNfTsjT9Xx\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Vehicle Type\", \"col\": 3}}, {\"id\": \"dgFHmulUyO\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Type\", \"col\": 3}}, {\"id\": \"m0e3hYrxqG\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"UOM\", \"col\": 3}}, {\"id\": \"XFiTaNWLav\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Order Confirmation Sheet\", \"col\": 3}}, {\"id\": \"FfyKYT9YRy\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Sales Order\", \"col\": 3}}, {\"id\": \"wQqsM8f1x4\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"BOM Explorer\", \"col\": 3}}, {\"id\": \"cJGVwG6cLI\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"BOM Stock Report\", \"col\": 3}}, {\"id\": \"D6UNsf91wo\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Stock Balance\", \"col\": 3}}, {\"id\": \"J0MaaDuRHN\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Stock Ledger\", \"col\": 3}}, {\"id\": \"RBAgXyXbYv\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Stock Projected Qty\", \"col\": 3}}, {\"id\": \"8myuRSiEQE\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"yz6HMSAvBv\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Reports &amp; Masters</b></span>\", \"col\": 12}}, {\"id\": \"9kasQq4Wal\", \"type\": \"card\", \"data\": {\"card_name\": \"BOM\", \"col\": 4}}, {\"id\": \"rlvz7FPEV-\", \"type\": \"card\", \"data\": {\"card_name\": \"Design Work\", \"col\": 4}}, {\"id\": \"6u8H1IHZhr\", \"type\": \"card\", \"data\": {\"card_name\": \"Stock Reports\", \"col\": 4}}]",
  "creation": "2026-09-25 14:37:38.811139",
  "custom_blocks": [],
  "docstatus": 0,
@@ -90,9 +90,68 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Stock Reports",
+   "link_count": 5,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Stock Balance",
+   "link_count": 0,
+   "link_to": "Stock Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Stock Ledger",
+   "link_count": 0,
+   "link_to": "Stock Ledger",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Stock Projected Qty",
+   "link_count": 0,
+   "link_to": "Stock Projected Qty",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Warehouse Wise Stock Balance",
+   "link_count": 0,
+   "link_to": "Warehouse Wise Stock Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Stock Ageing",
+   "link_count": 0,
+   "link_to": "Stock Ageing",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2026-10-15 07:30:00.000000",
+ "modified": "2026-10-15 08:30:00.000000",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Design",
@@ -226,6 +285,27 @@
    "label": "BOM Stock Report",
    "link_to": "BOM Stock Report",
    "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "label": "Stock Balance",
+   "link_to": "Stock Balance",
+   "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "label": "Stock Ledger",
+   "link_to": "Stock Ledger",
+   "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "label": "Stock Projected Qty",
+   "link_to": "Stock Projected Qty",
    "type": "Report"
   }
  ],
