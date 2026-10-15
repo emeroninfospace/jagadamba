@@ -155,11 +155,11 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 		assert.deepEqual(JSON.parse(JSON.stringify(queries.oil_gas_item())),{query:'jagadamba.jagadamba.type_settings.finished_item_query',filters:{type:'Oil & Gas',company:'Jagadamba'}});
 		frm.doc.custom_types='Trailers';
 		assert.equal(queries.custom_vehicle_type().filters.type,'Trailers');
-		const designing=form('Designing',{});designing.fields_dict={vehicle_type:{}};
-		designing.set_query=(field,fn)=>{queries['designing.'+field]=fn;};
-		for (const handler of handlers['Designing.setup']) handler(designing);
-		assert.deepEqual(JSON.parse(JSON.stringify(queries['designing.vehicle_type']().filters)),{type:'',parent_item:1});
-		assert.equal(queries['designing.item'],undefined);
+		const documents=form('Documents',{type:'Trailers'});documents.fields_dict={vehicle_type:{}};
+		documents.set_query=(field,fn)=>{queries['documents.'+field]=fn;};
+		for (const handler of handlers['Documents.setup']) handler(documents);
+		assert.deepEqual(JSON.parse(JSON.stringify(queries['documents.vehicle_type']().filters)),{type:'Trailers',parent_item:1});
+		assert.equal(handlers['Designing.setup'],undefined);
 	});
 	await test('a new form without type still configures',async()=>{
 		const frm=form('Quotation',{});

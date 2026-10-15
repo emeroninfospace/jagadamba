@@ -14,7 +14,7 @@
    "fieldtype": "Link",
    "label": "Default Finished Item Group",
    "options": "Item Group",
-   "description": "Used to filter finished items on BOM, Designing and Documents, and on sales documents whose Type has no Finished Item Group."
+   "description": "Used to filter finished items on BOM and Documents, and on sales documents whose Type has no Finished Item Group."
   },
   {
    "fieldname": "jagadamba_type_cost_center",
