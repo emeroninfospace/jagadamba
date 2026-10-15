@@ -255,49 +255,6 @@ def create_project(project_name, customer=None, sales_order=None):
 
 
 @frappe.whitelist()
-def get_po_items_for_designing(project):
-	po_items = frappe.db.sql(
-		"""
-		SELECT poi.item_code, poi.item_name, poi.qty, poi.uom, poi.description
-		FROM `tabPurchase Order Item` poi
-		JOIN `tabPurchase Order` po ON po.name = poi.parent
-		WHERE po.project = %s AND po.docstatus = 1
-		""",
-		(project,),
-		as_dict=True,
-	)
-	return po_items
-
-
-@frappe.whitelist()
-def create_bom_from_designing(designing):
-	doc = frappe.get_doc("Designing", designing)
-	if not doc.item:
-		frappe.throw("Please set the Item field before creating a BOM.")
-
-	bom = frappe.new_doc("BOM")
-	bom.item = doc.item
-	bom.project = doc.project
-	bom.quantity = 1
-
-	for rm in doc.raw_materials:
-		uom = rm.uom or frappe.db.get_value("Item", rm.item_code, "stock_uom") or "Nos"
-		bom.append(
-			"items",
-			{
-				"item_code": rm.item_code,
-				"item_name": rm.item_name,
-				"qty": rm.qty or 1,
-				"uom": uom,
-				"stock_uom": uom,
-				"description": rm.description,
-			},
-		)
-
-	return bom
-
-
-@frappe.whitelist()
 def get_child_items_for_parent_items(parent_item_codes):
 	if isinstance(parent_item_codes, str):
 		parent_item_codes = json.loads(parent_item_codes)
@@ -366,7 +323,6 @@ def get_production_dashboard_data(period="this_month", date_from=None, date_to=N
         "job_card_board":      job_card_board,
         "work_orders":         get_work_order_data(project, company),
         "ocs_board":           get_ocs_board(),
-        "designing_board":     get_designing_board(),
         "overdue_job_cards":   get_overdue_job_cards(project, company),
         "project_pipeline":    get_project_pipeline(type, company),
         "operation_load":      get_operation_load(project),
@@ -402,7 +358,7 @@ def get_pipeline_summary(project=None, type=None, company=None):
     if company:
         so_filters["company"] = company
     ocs_filters          = {"docstatus": ["!=", 2], "status": ["not in", ["Cancelled"]]}
-    designing_filters    = {"docstatus": ["!=", 2], "status": ["in", ["Draft", "Design In Progress", "Sent to Customer"]]}
+    bom_draft_filters    = {"docstatus": 0}
     wo_open_filters      = {"docstatus": 1, "status": ["in", ["Not Started", "In Process"]]}
     wo_completed_filters = {"docstatus": 1, "status": ["in", ["Completed", "Closed"]]}
     jc_filters           = {"docstatus": ["!=", 2], "status": ["not in", ["Completed", "Cancelled"]]}
@@ -413,7 +369,7 @@ def get_pipeline_summary(project=None, type=None, company=None):
     if project:
         so_filters["project"]           = project
         ocs_filters["project"]          = project
-        designing_filters["project"]    = project
+        bom_draft_filters["project"]    = project
         wo_open_filters["project"]      = project
         wo_completed_filters["project"] = project
         jc_work_orders = frappe.db.get_all("Work Order", filters={"project": project}, pluck="name")
@@ -424,7 +380,7 @@ def get_pipeline_summary(project=None, type=None, company=None):
         "quotations":             count("Quotation", {"docstatus": ["!=", 2]}),
         "sales_orders":           count("Sales Order", so_filters),
         "ocs_open":               count("Order Confirmation Sheet", ocs_filters),
-        "designing_in_progress":  count("Designing", designing_filters),
+        "boms_in_design":         count("BOM", bom_draft_filters),
         "boms":                   count("BOM", {"docstatus": 1, "is_active": 1}),
         "work_orders_open":       count("Work Order", wo_open_filters),
         "work_orders_completed":  count("Work Order", wo_completed_filters),
@@ -543,21 +499,6 @@ def get_ocs_board():
     return board
 
 
-def get_designing_board():
-    if not frappe.db.table_exists("Designing"):
-        return {}
-    rows = frappe.db.get_all(
-        "Designing",
-        filters={"docstatus": ["!=", 2]},
-        fields=["name", "customer_name", "status", "vehicle_type", "date", "project", "item"],
-        order_by="date desc", limit_page_length=100,
-    )
-    board = {}
-    for r in rows:
-        board.setdefault(r.status or "Draft", []).append(r)
-    return board
-
-
 def get_overdue_job_cards(project=None, company=None):
     if not frappe.db.table_exists("Job Card"):
         return []
@@ -624,9 +565,7 @@ def get_project_pipeline(type=None, company=None):
         if frappe.db.table_exists("Order Confirmation Sheet"):
             ocs = frappe.db.get_value("Order Confirmation Sheet", {"project": p.name, "docstatus": ["!=", 2]}, "name")
 
-        designing = None
-        if frappe.db.table_exists("Designing"):
-            designing = frappe.db.get_value("Designing", {"project": p.name, "docstatus": ["!=", 2]}, ["name", "status"])
+        bom = frappe.db.get_value("BOM", {"project": p.name, "docstatus": ["!=", 2]}, ["name", "docstatus"])
 
         wo = None
         if frappe.db.table_exists("Work Order"):
@@ -635,7 +574,7 @@ def get_project_pipeline(type=None, company=None):
         stage = "Lead / Quotation"
         if so:       stage = "Sales Order"
         if ocs:      stage = "Order Confirmation"
-        if designing:stage = "Design"
+        if bom:      stage = "Design"
         if wo:       stage = "Production"
         if wo and wo[1] in ("Completed", "Closed"): stage = "Completed"
 
@@ -647,8 +586,8 @@ def get_project_pipeline(type=None, company=None):
             "sales_order":      so[0] if so else None,
             "vehicle_type":     vehicle_type,
             "ocs":              ocs,
-            "designing":        designing[0] if designing else None,
-            "designing_status": designing[1] if designing else None,
+            "bom":              bom[0] if bom else None,
+            "bom_status":       ("Submitted" if bom[1] == 1 else "Draft") if bom else None,
             "work_order":       wo[0] if wo else None,
             "wo_status":        wo[1] if wo else None,
             "wo_percent":       round((flt(wo[2]) / flt(wo[3]) * 100), 1) if wo and wo[3] else 0,

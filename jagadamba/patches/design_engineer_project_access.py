@@ -1,4 +1,5 @@
-"""Design Engineers pick the Project on every Designing document, so they need to open Projects."""
+"""The design team attaches drawings to the Project and builds its BOM, so Design Engineers need
+to open and update Projects."""
 import frappe
 from frappe.permissions import add_permission, update_permission_property
 

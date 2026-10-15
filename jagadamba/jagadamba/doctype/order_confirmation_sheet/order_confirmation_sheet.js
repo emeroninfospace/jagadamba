@@ -12,21 +12,6 @@ frappe.ui.form.on("Order Confirmation Sheet", {
 			}
 			return { filters };
 		});
-
-		if (frm.doc.docstatus === 1) {
-			frm.add_custom_button(
-				__("Designing"),
-				() => {
-					frappe.new_doc("Designing", {
-						project: frm.doc.project,
-						sales_order: frm.doc.sales_order,
-						ocs: frm.doc.name,
-						vehicle_type: frm.doc.vehicle_type,
-					});
-				},
-				__("Create")
-			);
-		}
 	},
 
 	sales_order: function (frm) {
