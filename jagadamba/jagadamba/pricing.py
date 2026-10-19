@@ -1,8 +1,9 @@
 """Quotation costing and Sales Order profit and tax summary; ERPNext's sales lines and accounting taxes stay authoritative."""
 import math
+from html import unescape
 
 import frappe
-from frappe.utils import flt
+from frappe.utils import flt, strip_html
 
 
 def _number(value, label):
@@ -45,11 +46,25 @@ def calculate_quotation_costing(doc):
 	(the Job Item's rate) minus it."""
 	if not doc.get("custom_enable_estimation"):
 		return
+	rows = doc.get("custom_costing") or []
+	_validate_costing_items(rows)
 	cost = 0
-	for row in doc.get("custom_costing") or []:
+	for row in rows:
+		if "<" in (row.get("description") or ""):
+			row.description = unescape(strip_html(row.description)).strip()
 		qty = _number(row.get("qty"), frappe._("Costing Qty"))
 		rate = _number(row.get("rate"), frappe._("Costing Unit Price"))
 		row.amount = flt(qty * rate, row.precision("amount"))
 		cost += row.amount
 	doc.custom_total_estimated_value = flt(cost, doc.precision("custom_total_estimated_value"))
 	doc.custom_net_profit = flt(flt(doc.get("net_total")) - doc.custom_total_estimated_value, doc.precision("custom_net_profit"))
+
+
+def _validate_costing_items(rows):
+	items = {row.get("item") for row in rows if row.get("item")}
+	if not items:
+		return
+	stock_items = frappe.get_all("Item", filters={"name": ["in", sorted(items)], "is_stock_item": 1}, pluck="name")
+	if stock_items:
+		frappe.throw(frappe._("Costing lines take non-stock items only (Maintain Stock unchecked): {0}").format(
+			", ".join(sorted(stock_items))))

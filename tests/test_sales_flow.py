@@ -19,6 +19,7 @@ if importlib.util.find_spec("frappe") is None:
 	utils = types.ModuleType("frappe.utils")
 	utils.flt = lambda value, precision=None: round(float(value or 0), precision) if precision is not None else float(value or 0)
 	utils.cint = lambda value: int(value or 0)
+	utils.strip_html = lambda text: __import__("re").sub(r"<[^>]*>", "", text or "")
 	frappe.get_cached_doc = Mock()
 	utils.today = lambda: "2026-10-12"
 	utils.get_fullname = lambda user: "Tester"
@@ -85,6 +86,20 @@ class PricingTests(unittest.TestCase):
 		self.assertEqual(doc.custom_enable_estimation, 0)
 		self.assertIsNone(doc.custom_total_estimated_value)
 		self.assertIsNone(doc.custom_costing[0].amount)
+
+	def test_quotation_costing_description_is_plain_text(self):
+		doc = self.costing(custom_costing=[Doc(item="LAB", description="<div><p>Welding &amp; fit-up</p></div>", qty=1, rate=1)])
+		with patch.object(quotation.frappe, 'get_all', return_value=[], create=True):
+			quotation.validate(doc)
+		self.assertEqual(doc.custom_costing[0].description, "Welding & fit-up")
+
+	def test_quotation_costing_rejects_stock_items(self):
+		doc = self.costing(custom_costing=[Doc(item="PLATE", qty=1, rate=1), Doc(item="LAB", qty=1, rate=1)])
+		with patch.object(quotation.frappe, 'get_all', return_value=["PLATE"], create=True) as get_all:
+			with self.assertRaises(ValueError) as error:
+				quotation.validate(doc)
+		self.assertIn("PLATE", str(error.exception))
+		self.assertEqual(get_all.call_args.kwargs['filters'], {"name": ["in", ["LAB", "PLATE"]], "is_stock_item": 1})
 
 	def test_quotation_costing_rejects_bad_numbers(self):
 		doc = self.costing(custom_costing=[Doc(qty="abc", rate=1)])

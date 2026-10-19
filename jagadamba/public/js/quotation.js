@@ -13,6 +13,11 @@ frappe.ui.form.on("Quotation", {
 			if (row.item_group) filters.item_group = ["descendants of (inclusive)", row.item_group];
 			return { filters: filters };
 		});
+
+		// Costing lines are cost heads (labour, consumables, subcontract …): non-stock items only.
+		frm.set_query("item", "custom_costing", function () {
+			return { filters: { disabled: 0, is_stock_item: 0 } };
+		});
 	},
 
 	refresh: async function (frm) {
@@ -66,6 +71,7 @@ frappe.ui.form.on("Quotation", {
 	},
 });
 frappe.ui.form.on("Quotation Cost Estimate", {
+	item(frm, cdt, cdn) { return set_cost_row_description(cdt, cdn); },
 	qty(frm, cdt, cdn) { return update_cost_row(frm, cdt, cdn); },
 	rate(frm, cdt, cdn) { return update_cost_row(frm, cdt, cdn); },
 	custom_costing_remove(frm) { return recalc_costing(frm); },
@@ -83,6 +89,18 @@ frappe.ui.form.on("Quotation Item", {
 // ERPNext recalculates Net Total in its own handlers, which run after these and may fetch prices first.
 function after_item_totals(frm) {
 	setTimeout(() => frappe.after_ajax(() => recalc_costing(frm)), 0);
+}
+
+// Item descriptions are rich text; the costing line keeps plain text (item name if there is none).
+async function set_cost_row_description(cdt, cdn) {
+	const item = locals[cdt][cdn].item;
+	if (!item) return;
+	const response = await frappe.db.get_value("Item", item, ["item_name", "description"]);
+	const data = response && response.message;
+	const row = locals[cdt] && locals[cdt][cdn];
+	if (!data || !row || row.item !== item) return;
+	const text = frappe.utils.html2text(data.description || "").trim();
+	await frappe.model.set_value(cdt, cdn, "description", text || data.item_name || item);
 }
 
 async function update_cost_row(frm, cdt, cdn) {
