@@ -1,4 +1,4 @@
-"""Sales Order profit and tax summary; ERPNext's sales lines and accounting taxes stay authoritative."""
+"""Quotation and Sales Order profit and tax summary; ERPNext's sales lines and accounting taxes stay authoritative."""
 import math
 
 import frappe
@@ -16,13 +16,32 @@ def _number(value, label):
 
 
 def calculate_oil_gas_pricing(doc):
-	"""Eligibility comes from the Type configuration, never the Type's display name."""
+	"""Sales Order: cost is the order's Net Total and Sale Value is entered.
+	Eligibility comes from the Type configuration, never the Type's display name."""
 	if not doc.get("custom_enable_estimation"):
 		return
-
-	precision = doc.precision
-	doc.custom_total_estimated_value = flt(doc.get("net_total"), precision("custom_total_estimated_value"))
+	cost = doc.get("net_total")
 	sale = _number(doc.get("custom_sale_value_without_tax"), frappe._("Sale Value"))
+	_apply_pricing(doc, cost, sale)
+
+
+def calculate_quotation_costing(doc):
+	"""Quotation: cost is the Costing table and Sale Value is the items' Net Total (the Job Item line)."""
+	if not doc.get("custom_enable_estimation"):
+		return
+	cost = 0
+	for row in doc.get("custom_costing") or []:
+		qty = _number(row.get("qty"), frappe._("Costing Qty"))
+		rate = _number(row.get("rate"), frappe._("Costing Unit Price"))
+		row.amount = flt(qty * rate, row.precision("amount"))
+		cost += row.amount
+	doc.custom_sale_value_without_tax = flt(doc.get("net_total"), doc.precision("custom_sale_value_without_tax"))
+	_apply_pricing(doc, cost, doc.custom_sale_value_without_tax)
+
+
+def _apply_pricing(doc, cost, sale):
+	precision = doc.precision
+	doc.custom_total_estimated_value = flt(cost, precision("custom_total_estimated_value"))
 	vat_percent = _number(doc.get("custom_vat_percent"), frappe._("VAT %"))
 	tax_percent = _number(doc.get("custom_tax_percent"), frappe._("Tax %"))
 	if not 0 <= vat_percent <= 100 or not 0 <= tax_percent <= 100:

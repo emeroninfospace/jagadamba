@@ -6,7 +6,7 @@ Form behavior on Lead, Opportunity, Quotation and Sales Order is driven by the *
 
 A System Manager sets these on each Type. Each checkbox explains on the Type form what it shows:
 
-- Enable Sales Order Pricing: shows Sale Value, VAT %, Tax %, Difference Value (profit) and Total Quoted / Invoice Value on Sales Order
+- Enable Costing and Pricing: shows the **Costing** sheet on Quotation and the Sale Value, VAT %, Tax %, Difference Value (profit) and Total Quoted / Invoice Value summary on Quotation and Sales Order
 - Show Additional Items: shows the **Additional Items** table directly under the Quotation items
 - Show Vehicle Item
 - Show Job Item
@@ -21,17 +21,44 @@ Job Item and Vehicle Type on Lead, Opportunity, Quotation and Sales Order, the s
 
 The server (`type_settings.finished_item_query`) applies these filters, so they work as soon as the form opens, before the Type settings have loaded. An item only appears when its own **Type** and **Company** fields are filled in on the Item.
 
-## Lead
+## Lead and Prospect
 
 The Equipment Details, Technical Specifications and Requirements & Standards sections show for Types with **Show Job Item** ticked (Oil & Gas).
 
-## Quotation
+Lead and Prospect have no **Create > Opportunity** button (Lead also hides **Create > Prospect** and **Add to Prospect**). Quote a Lead with **Create > Quotation**.
 
-Quotation has no estimation table or pricing calculation. Customer-facing items, taxes and totals use ERPNext's standard fields. Migrating removes the earlier estimation custom fields and the Estimation Cost Code master. Values already stored in those Quotation columns and earlier estimation rows are left in the database.
+## Quotation costing (Oil & Gas)
+
+For a Type with **Enable Costing and Pricing** (Oil & Gas), the Quotation shows a **Costing** sheet above the items:
+
+| Column | Meaning |
+| --- | --- |
+| Code | The cost item (Material, Consumable, Labour, Subcontract, Surface Preparation & Painting, Pickling & Passivation …). Description and Unit are fetched from the item and can be edited. |
+| Qty, Unit Price | Entered. |
+| Total Price | Qty × Unit Price. |
+
+Below it:
+
+- **Total Estimated Value** = sum of the Costing rows.
+- **Sale Value without TAX/VAT** = Net Total of the Items table.
+- **Difference Value (Co Net Profit)** = Sale Value − Total Estimated Value.
+- **VAT Amount** = Sale Value × VAT %.
+- **Tax Amount** = (Sale Value + VAT) × Tax %, or Sale Value × Tax % when Tax Basis is Sale Value.
+- **Total Quoted / Invoice Value** = Sale Value + VAT + Tax.
+
+The **Job Item** is the item being manufactured, so selecting it adds it to the Items table (filling an empty row or adding one with qty 1). Enter its selling rate there; that rate drives the Sale Value. Changing the Job Item swaps the item on that row; clearing it leaves the Items table as it is.
+
+The Costing sheet, Total Estimated Value and Difference Value are hidden on prints. The server recalculates every amount on save.
+
+Example: Costing rows of 50,000 + 1,000 + 20,000 + 10,000 + 2,500 + 750 = 84,250. With the Job Item at 85,750, the Difference Value is 1,500; at 5 % VAT and 10 % Tax, VAT is 4,287.50, Tax is 9,003.75 and the Total Quoted Value is 99,041.25.
+
+## Downstream documents
+
+Work Order, Job Card, Material Request, Purchase Order, Purchase Receipt, Purchase Invoice, Sales Invoice and Stock Entry take Type, Vehicle Type and Job Item from their Project, Work Order or Material Request. Opening a form fills only empty fields; choosing a different source overwrites them. The rules live in `sales_flow.js` (`TYPE_SOURCES`).
 
 ## Sales Order pricing
 
-For a Type with Enable Sales Order Pricing, Total Estimated Value is the order's Net Total. Enter Sale Value without TAX/VAT and the VAT and Tax percentages. Difference Value is Sale Value minus Net Total. Tax Basis chooses whether Tax applies to Sale Value or to Sale Value + VAT. Selecting a Quotation copies its Type, Vehicle Type and Job Item.
+For a Type with Enable Costing and Pricing, Total Estimated Value is the order's Net Total. Enter Sale Value without TAX/VAT and the VAT and Tax percentages. Difference Value is Sale Value minus Net Total. Tax Basis chooses whether Tax applies to Sale Value or to Sale Value + VAT. Selecting a Quotation copies its Type, Vehicle Type and Job Item.
 
 ## Deployment
 

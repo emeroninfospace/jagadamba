@@ -2,6 +2,7 @@ import re
 import frappe
 from frappe.utils import today, get_fullname
 
+from jagadamba.jagadamba.pricing import calculate_quotation_costing
 from jagadamba.jagadamba.type_settings import sync_type_settings
 
 
@@ -13,6 +14,7 @@ def before_insert(doc, _method=None):
 
 def validate(doc, _method=None):
 	sync_type_settings(doc)
+	calculate_quotation_costing(doc)
 
 
 def _copy_type_fields_from_opportunity(doc):

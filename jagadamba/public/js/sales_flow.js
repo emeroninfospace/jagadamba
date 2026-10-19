@@ -137,12 +137,62 @@
 		});
 	}
 
+	// Downstream documents take Type, Vehicle Type and Job Item from the document they come from.
+	// Opening a form fills only the empty fields; picking a new source overwrites them.
+	const TYPE_LINK_FIELDS = ["custom_types", "custom_vehicle_type", "oil_gas_item"];
+	jagadamba.sales_flow.inherit_type = async function (frm, doctype, name, overwrite = false) {
+		const doc = frm.doc;
+		if (!name || doc.docstatus !== 0) return;
+		if (!overwrite && doc.custom_types && (doc.custom_vehicle_type || doc.oil_gas_item)) return;
+		const response = await frappe.db.get_value(doctype, name, TYPE_LINK_FIELDS);
+		const source = response && response.message;
+		if (!source || frm.doc !== doc) return;
+		const values = {};
+		for (const field of TYPE_LINK_FIELDS) {
+			if (source[field] && (overwrite || !doc[field]) && doc[field] !== source[field]) values[field] = source[field];
+		}
+		if (Object.keys(values).length) await frm.set_value(values);
+	};
+
+	// [link field, source doctype] in priority order: the first link that is set is the source.
+	const TYPE_SOURCES = {
+		"Work Order": [["project", "Project"]],
+		"Job Card": [["work_order", "Work Order"]],
+		"Material Request": [["work_order", "Work Order"]],
+		"Purchase Receipt": [["project", "Project"]],
+		"Purchase Invoice": [["project", "Project"]],
+		"Sales Invoice": [["project", "Project"]],
+		"Stock Entry": [["project", "Project"], ["work_order", "Work Order"]],
+	};
+	for (const [doctype, sources] of Object.entries(TYPE_SOURCES)) {
+		const events = {
+			refresh(frm) {
+				const source = sources.find(([field]) => frm.doc[field]);
+				if (source) return jagadamba.sales_flow.inherit_type(frm, source[1], frm.doc[source[0]]);
+			},
+		};
+		sources.forEach(([field, source_doctype], index) => {
+			events[field] = frm => {
+				if (sources.slice(0, index).some(([earlier]) => frm.doc[earlier])) return;
+				return jagadamba.sales_flow.inherit_type(frm, source_doctype, frm.doc[field], true);
+			};
+		});
+		frappe.ui.form.on(doctype, events);
+	}
+
+	// Sales Order: cost is the order's Net Total and Sale Value is entered.
+	// Quotation: cost is the Costing table and Sale Value is the items' Net Total.
+	const pricing_basis = doc => doc.doctype === "Quotation"
+		? {cost: (doc.custom_costing || []).reduce((sum, row) => sum + flt(row.amount), 0), sale: doc.net_total}
+		: {cost: doc.net_total, sale: doc.custom_sale_value_without_tax};
+
 	jagadamba.sales_flow.recalculate = function (frm) {
 		const doc = frm.doc;
 		if (doc.docstatus !== 0 || !doc.custom_enable_estimation) return Promise.resolve();
 		const rounded = (value, field) => flt(value, precision(field));
-		const cost = rounded(doc.net_total, "custom_total_estimated_value");
-		const sale = flt(doc.custom_sale_value_without_tax);
+		const basis = pricing_basis(doc);
+		const cost = rounded(basis.cost, "custom_total_estimated_value");
+		const sale = flt(basis.sale);
 		const vat = rounded(sale * flt(doc.custom_vat_percent) / 100, "custom_vat_amount");
 		const tax_basis = doc.custom_tax_basis || "Sale Value + VAT";
 		const tax_base = tax_basis === "Sale Value + VAT" ? sale + vat : sale;
@@ -155,6 +205,7 @@
 			custom_total_quoted_value: rounded(sale + vat + tax, "custom_total_quoted_value"),
 			custom_net_profit: rounded(sale - cost, "custom_net_profit"),
 		};
+		if (doc.doctype === "Quotation") values.custom_sale_value_without_tax = rounded(sale, "custom_sale_value_without_tax");
 		const changes = Object.fromEntries(Object.entries(values).filter(([field, value]) =>
 			typeof value === "number" ? flt(doc[field]) !== value : doc[field] !== value));
 		return Object.keys(changes).length ? frm.set_value(changes) : Promise.resolve();
