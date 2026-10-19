@@ -175,13 +175,23 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 		assert.deepEqual(JSON.parse(JSON.stringify(queries['item_code.custom_additional_items'](frm.doc,'Quotation Additional Item','r1'))),
 			{filters:{disabled:0,item_group:['descendants of (inclusive)','Axles']}});
 	});
-	await test('quotation costing sheet: cost from rows, sale from items net total',async()=>{
+	await test('quotation costing: cost from rows, profit from items net total',async()=>{
 		const rows=[[10,5000],[1,1000],[1000,20],[1,10000],[10,250],[7.5,100]].map(([qty,rate])=>({qty,rate,amount:qty*rate}));
-		const frm=form('Quotation',{custom_enable_estimation:1,custom_costing:rows,net_total:85750,custom_vat_percent:5,custom_tax_percent:10});
-		await flow.recalculate(frm);
-		assert.equal(frm.doc.custom_total_estimated_value,84250);assert.equal(frm.doc.custom_sale_value_without_tax,85750);
-		assert.equal(frm.doc.custom_net_profit,1500);assert.equal(frm.doc.custom_vat_amount,4287.5);
-		assert.equal(frm.doc.custom_tax_amount,9003.75);assert.equal(frm.doc.custom_total_quoted_value,99041.25);
+		const frm=form('Quotation',{custom_enable_estimation:1,custom_costing:rows,net_total:85750,custom_vat_percent:5});
+		await handlers['Quotation Cost Estimate.custom_costing_remove'][0](frm);
+		assert.equal(frm.doc.custom_total_estimated_value,84250);assert.equal(frm.doc.custom_net_profit,1500);
+		assert.ok(frm.writes.every(values=>Object.keys(values).every(key=>!/vat|tax|quoted|sale_value/.test(key))));
+		const count=frm.writes.length;await handlers['Quotation Cost Estimate.custom_costing_remove'][0](frm);
+		assert.equal(frm.writes.length,count,'no rewrite when unchanged');
+	});
+	await test('job item from the lead is added on a new quotation',async()=>{
+		const set=[];context.frappe.model={set_value:async(cdt,cdn,field,value)=>{set.push([cdn,field,value]);}};
+		const frm=form('Quotation',{custom_types:'Oil & Gas',oil_gas_item:'PUMP',quotation_to:'Customer',items:[{doctype:'Quotation Item',name:'i1'}]});
+		frm.doc.custom_show_job_item=1;
+		const original=context.frappe.call;
+		context.frappe.call=async()=>({message:{enable_estimation:1,show_job_item:1}});
+		try { await handlers['Quotation.refresh'][0](frm); } finally {context.frappe.call=original;}
+		assert.deepEqual(set,[['i1','item_code','PUMP']]);
 	});
 	await test('costing row amount is qty x unit price',async()=>{
 		const row={doctype:'Quotation Cost Estimate',name:'c1',qty:1000,rate:20};
@@ -189,7 +199,7 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 		context.locals={'Quotation Cost Estimate':{c1:row}};
 		context.frappe.model={set_value:async(cdt,cdn,field,value)=>{context.locals[cdt][cdn][field]=value;}};
 		await handlers['Quotation Cost Estimate.rate'][0](frm,'Quotation Cost Estimate','c1');
-		assert.equal(row.amount,20000);assert.equal(frm.doc.custom_net_profit,5000);
+		assert.equal(row.amount,20000);assert.equal(frm.doc.custom_total_estimated_value,20000);assert.equal(frm.doc.custom_net_profit,5000);
 	});
 	await test('job item becomes the quoted line in items',async()=>{
 		const set=[];context.frappe.model={set_value:async(cdt,cdn,field,value)=>{set.push([cdn,field,value]);

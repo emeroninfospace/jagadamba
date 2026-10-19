@@ -60,7 +60,7 @@ class PricingTests(unittest.TestCase):
 
 	def costing(self, **values):
 		rows = [(10, 5000), (1, 1000), (1000, 20), (1, 10000), (10, 250), (7.5, 100)]
-		data = dict(doctype="Quotation", custom_types="Oil & Gas", net_total=85750, custom_vat_percent=5, custom_tax_percent=10,
+		data = dict(doctype="Quotation", custom_types="Oil & Gas", net_total=85750,
 			custom_costing=[Doc(qty=qty, rate=rate) for qty, rate in rows])
 		data.update(values)
 		return Doc(data)
@@ -70,17 +70,14 @@ class PricingTests(unittest.TestCase):
 		quotation.validate(doc)
 		self.assertEqual([row.amount for row in doc.custom_costing], [50000, 1000, 20000, 10000, 2500, 750])
 		self.assertEqual(doc.custom_total_estimated_value, 84250)
-		self.assertEqual(doc.custom_sale_value_without_tax, 85750)
 		self.assertEqual(doc.custom_net_profit, 1500)
-		self.assertEqual(doc.custom_vat_amount, 4287.5)
-		self.assertEqual(doc.custom_tax_amount, 9003.75)
-		self.assertEqual(doc.custom_total_quoted_value, 99041.25)
 
-	def test_quotation_sale_value_is_items_net_total_not_typed_value(self):
-		doc = self.costing(custom_sale_value_without_tax=1, net_total=90000)
+	def test_quotation_profit_follows_items_net_total_only(self):
+		doc = self.costing(net_total=90000, custom_vat_percent=5, custom_tax_percent=10)
 		quotation.validate(doc)
-		self.assertEqual(doc.custom_sale_value_without_tax, 90000)
 		self.assertEqual(doc.custom_net_profit, 5750)
+		self.assertIsNone(doc.custom_total_quoted_value)
+		self.assertIsNone(doc.custom_vat_amount)
 
 	def test_quotation_without_costing_type_is_untouched(self):
 		doc = self.costing(custom_types="Trading")
@@ -225,10 +222,11 @@ class LayoutTests(unittest.TestCase):
 				self.assertIn(field['insert_after'], order)
 
 	def test_quotation_costing_is_type_driven_and_kept_off_prints(self):
+		from jagadamba.patches.setup_estimation import REMOVED_QUOTATION_PRICING_FIELDS
 		fields, order = self.load('quotation')
 		costing = order[order.index('custom_section_break_xjxuo'):order.index('items_section')]
-		self.assertEqual(costing[:2], ['custom_section_break_xjxuo', 'custom_costing'])
-		self.assertEqual(costing[-1], 'custom_total_quoted_value')
+		self.assertEqual(costing, ['custom_section_break_xjxuo', 'custom_costing', 'custom_oil_gas_pricing_section',
+			'custom_total_estimated_value', 'custom_column_break_og1', 'custom_net_profit'])
 		for name in costing:
 			if fields[name]['fieldtype'] != 'Column Break':
 				self.assertEqual(fields[name]['depends_on'], 'eval:doc.custom_enable_estimation', name)
@@ -236,13 +234,7 @@ class LayoutTests(unittest.TestCase):
 			self.assertEqual(fields[name]['print_hide'], 1, name)
 		self.assertEqual(fields['custom_costing']['options'], 'Quotation Cost Estimate')
 		self.assertEqual(fields['custom_enable_estimation']['hidden'], 1)
-
-	def test_quotation_pricing_fields_match_sales_order_for_mapping(self):
-		quotation_fields, _ = self.load('quotation')
-		order_fields, _ = self.load('sales_order')
-		for name in ('custom_sale_value_without_tax', 'custom_vat_percent', 'custom_tax_percent', 'custom_tax_basis',
-			'custom_total_estimated_value', 'custom_net_profit', 'custom_total_quoted_value'):
-			self.assertEqual(quotation_fields[name]['fieldtype'], order_fields[name]['fieldtype'], name)
+		self.assertFalse(set(REMOVED_QUOTATION_PRICING_FIELDS) & (set(fields) | set(order)))
 
 	def test_sales_order_pricing_is_type_driven(self):
 		fields, order = self.load('sales_order')
@@ -317,6 +309,29 @@ class SetupTests(unittest.TestCase):
 		deleted = {c.args[:2] for c in delete.call_args_list}
 		self.assertEqual(deleted, {('Custom Field', 'Sales Order-custom_column_break_7ozif'), ('Custom Field', 'Quotation-custom_estimation_tab')})
 		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.FORM_CLEANUP_MARKER})
+
+	def test_quotation_costing_enabled_once_for_oil_and_gas(self):
+		from jagadamba.patches import setup_estimation
+		api = setup_estimation.frappe
+		with patch.object(api.db, 'exists', side_effect=lambda dt, name: dt == 'Type'), \
+			patch.object(api.db, 'set_value') as write, \
+			patch.object(api, 'clear_document_cache', create=True), \
+			patch.object(api, 'get_doc', return_value=Mock()) as log:
+			setup_estimation._enable_quotation_costing()
+		write.assert_called_once_with('Type', 'Oil & Gas', 'enable_estimation', 1, update_modified=False)
+		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.QUOTATION_COSTING_MARKER})
+
+	def test_removes_quotation_pricing_fields_once(self):
+		from jagadamba.patches import setup_estimation
+		api = setup_estimation.frappe
+		existing = {'Custom Field': {'Quotation-custom_vat_percent', 'Quotation-custom_net_profit'}}
+		with patch.object(api.db, 'exists', side_effect=lambda dt, name: isinstance(name, str) and name in existing.get(dt, set())), \
+			patch.object(api, 'delete_doc', create=True) as delete, \
+			patch.object(api, 'clear_cache', create=True), \
+			patch.object(api, 'get_doc', return_value=Mock()) as log:
+			setup_estimation._remove_quotation_pricing()
+		self.assertEqual({c.args[:2] for c in delete.call_args_list}, {('Custom Field', 'Quotation-custom_vat_percent')})
+		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.REMOVE_QUOTATION_PRICING_MARKER})
 
 	def test_removed_layout_fields_are_gone_from_fixtures(self):
 		import json
