@@ -318,6 +318,17 @@ class SetupTests(unittest.TestCase):
 		self.assertEqual(deleted, {('Custom Field', 'Sales Order-custom_column_break_7ozif'), ('Custom Field', 'Quotation-custom_estimation_tab')})
 		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.FORM_CLEANUP_MARKER})
 
+	def test_quotation_costing_enabled_once_for_oil_and_gas(self):
+		from jagadamba.patches import setup_estimation
+		api = setup_estimation.frappe
+		with patch.object(api.db, 'exists', side_effect=lambda dt, name: dt == 'Type'), \
+			patch.object(api.db, 'set_value') as write, \
+			patch.object(api, 'clear_document_cache', create=True), \
+			patch.object(api, 'get_doc', return_value=Mock()) as log:
+			setup_estimation._enable_quotation_costing()
+		write.assert_called_once_with('Type', 'Oil & Gas', 'enable_estimation', 1, update_modified=False)
+		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.QUOTATION_COSTING_MARKER})
+
 	def test_removed_layout_fields_are_gone_from_fixtures(self):
 		import json
 

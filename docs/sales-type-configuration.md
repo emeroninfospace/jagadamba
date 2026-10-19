@@ -13,7 +13,7 @@ A System Manager sets these on each Type. Each checkbox explains on the Type for
 - Show Project and Revision Details
 - Finished Item Group (optional; blank uses **Jagadamba Settings > Default Finished Item Group**)
 
-The first migration set Oil & Gas to show the job item and pricing, Trailers to show Additional Items and the vehicle item, and Trading to show neither. Later migrations keep administrator changes. Renaming a Type does not change its behavior.
+The first migration set Oil & Gas to show the job item and pricing, Trailers to show Additional Items and the vehicle item, and Trading to show neither. Upgrading to the Quotation Costing sheet ticks Enable Costing and Pricing on Oil & Gas once. Later migrations keep administrator changes. Renaming a Type does not change its behavior.
 
 ## Finished-item filters
 
@@ -29,7 +29,7 @@ Lead and Prospect have no **Create > Opportunity** button (Lead also hides **Cre
 
 ## Quotation costing (Oil & Gas)
 
-For a Type with **Enable Costing and Pricing** (Oil & Gas), the Quotation shows a **Costing** sheet above the items:
+For a Type with **Enable Costing and Pricing** (Oil & Gas), the Quotation shows a **Costing** sheet above the items. If it is missing, open **Type > Oil & Gas** and check that box.
 
 | Column | Meaning |
 | --- | --- |

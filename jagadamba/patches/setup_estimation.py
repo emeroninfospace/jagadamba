@@ -8,6 +8,9 @@ MARKER = "jagadamba.setup_dynamic_estimation_v1"
 COST_CODE_MARKER = "jagadamba.setup_estimation_cost_codes_v1"
 REMOVE_QUOTATION_ESTIMATION_MARKER = "jagadamba.remove_quotation_estimation_v1"
 FORM_CLEANUP_MARKER = "jagadamba.form_cleanup_v1"
+QUOTATION_COSTING_MARKER = "jagadamba.enable_quotation_costing_v1"
+# Types that quote manufactured jobs and get the Quotation Costing sheet on first migrate.
+COSTING_TYPES = ("Oil & Gas",)
 # Unused or empty layout fields; dropping them from the fixtures does not delete them on a site.
 REMOVED_LAYOUT_FIELDS = (
 	("Quotation", "custom_column_break_fqddl"), ("Quotation", "custom_column_break_gmu0q"),
@@ -31,6 +34,7 @@ def execute():
 	_setup_finished_item_default()
 	_remove_quotation_estimation()
 	_remove_layout_fields()
+	_enable_quotation_costing()
 
 
 def _setup_type_configuration():
@@ -98,3 +102,15 @@ def _remove_layout_fields():
 	for doctype in {doctype for doctype, _ in REMOVED_LAYOUT_FIELDS}:
 		frappe.clear_cache(doctype=doctype)
 	frappe.get_doc({"doctype": "Patch Log", "patch": FORM_CLEANUP_MARKER}).insert(ignore_permissions=True)
+
+
+def _enable_quotation_costing():
+	"""The Costing sheet follows the Type's Enable Costing and Pricing flag. Tick it once for the
+	job-quoting types so the sheet appears after upgrading; administrators can untick it later."""
+	if frappe.db.exists("Patch Log", {"patch": QUOTATION_COSTING_MARKER}):
+		return
+	for name in COSTING_TYPES:
+		if frappe.db.exists("Type", name):
+			frappe.db.set_value("Type", name, "enable_estimation", 1, update_modified=False)
+			frappe.clear_document_cache("Type", name)
+	frappe.get_doc({"doctype": "Patch Log", "patch": QUOTATION_COSTING_MARKER}).insert(ignore_permissions=True)
