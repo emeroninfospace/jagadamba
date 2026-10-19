@@ -39,7 +39,7 @@
    "fieldname": "enable_estimation",
    "label": "Enable Costing and Pricing",
    "fieldtype": "Check",
-   "description": "Shows the Costing sheet with Sale Value, VAT, Tax, Difference Value (profit) and Total Quoted Value on Quotation, and the same pricing summary on Sales Order."
+   "description": "Shows the Costing table with Total Estimated Value and Net Profit on Quotation, and Sale Value, VAT, Tax, Difference Value (profit) and Total Quoted Value on Sales Order."
   },
   {
    "fieldname": "show_additional_items",

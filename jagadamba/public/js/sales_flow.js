@@ -180,19 +180,12 @@
 		frappe.ui.form.on(doctype, events);
 	}
 
-	// Sales Order: cost is the order's Net Total and Sale Value is entered.
-	// Quotation: cost is the Costing table and Sale Value is the items' Net Total.
-	const pricing_basis = doc => doc.doctype === "Quotation"
-		? {cost: (doc.custom_costing || []).reduce((sum, row) => sum + flt(row.amount), 0), sale: doc.net_total}
-		: {cost: doc.net_total, sale: doc.custom_sale_value_without_tax};
-
 	jagadamba.sales_flow.recalculate = function (frm) {
 		const doc = frm.doc;
 		if (doc.docstatus !== 0 || !doc.custom_enable_estimation) return Promise.resolve();
 		const rounded = (value, field) => flt(value, precision(field));
-		const basis = pricing_basis(doc);
-		const cost = rounded(basis.cost, "custom_total_estimated_value");
-		const sale = flt(basis.sale);
+		const cost = rounded(doc.net_total, "custom_total_estimated_value");
+		const sale = flt(doc.custom_sale_value_without_tax);
 		const vat = rounded(sale * flt(doc.custom_vat_percent) / 100, "custom_vat_amount");
 		const tax_basis = doc.custom_tax_basis || "Sale Value + VAT";
 		const tax_base = tax_basis === "Sale Value + VAT" ? sale + vat : sale;
@@ -205,7 +198,6 @@
 			custom_total_quoted_value: rounded(sale + vat + tax, "custom_total_quoted_value"),
 			custom_net_profit: rounded(sale - cost, "custom_net_profit"),
 		};
-		if (doc.doctype === "Quotation") values.custom_sale_value_without_tax = rounded(sale, "custom_sale_value_without_tax");
 		const changes = Object.fromEntries(Object.entries(values).filter(([field, value]) =>
 			typeof value === "number" ? flt(doc[field]) !== value : doc[field] !== value));
 		return Object.keys(changes).length ? frm.set_value(changes) : Promise.resolve();

@@ -196,21 +196,11 @@
    "dt": "Quotation",
    "name": "Quotation-custom_column_break_og1",
    "doctype": "Custom Field",
-   "insert_after": "custom_net_profit",
+   "insert_after": "custom_total_estimated_value",
    "fieldname": "custom_column_break_og1",
    "label": "",
    "fieldtype": "Column Break",
-   "modified": "2026-10-19 18:00:00"
-  },
-  {
-   "dt": "Quotation",
-   "name": "Quotation-custom_column_break_og2",
-   "doctype": "Custom Field",
-   "insert_after": "custom_vat_amount",
-   "fieldname": "custom_column_break_og2",
-   "label": "",
-   "fieldtype": "Column Break",
-   "modified": "2026-10-19 18:00:00"
+   "modified": "2026-10-19 20:00:00"
   },
   {
    "_assign": null,
@@ -368,7 +358,7 @@
    "creation": "2026-10-19 15:30:03.239586",
    "default": null,
    "depends_on": "eval:doc.custom_enable_estimation",
-   "description": "Sale Value minus Total Estimated Value.",
+   "description": "Net Total of the Items (the Job Item's rate) minus Total Estimated Value.",
    "docstatus": 0,
    "dt": "Quotation",
    "fetch_from": null,
@@ -386,14 +376,14 @@
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
-   "insert_after": "custom_sale_value_without_tax",
+   "insert_after": "custom_column_break_og1",
    "is_system_generated": 0,
    "is_virtual": 0,
-   "label": "Difference Value (Co Net Profit)",
+   "label": "Net Profit",
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
-   "modified": "2026-10-19 18:00:00",
+   "modified": "2026-10-19 20:00:00",
    "modified_by": "Administrator",
    "module": null,
    "name": "Quotation-custom_net_profit",
@@ -492,20 +482,6 @@
    "translatable": 0,
    "unique": 0,
    "width": null
-  },
-  {
-   "dt": "Quotation",
-   "name": "Quotation-custom_sale_value_without_tax",
-   "doctype": "Custom Field",
-   "insert_after": "custom_total_estimated_value",
-   "fieldname": "custom_sale_value_without_tax",
-   "label": "Sale Value without TAX/VAT",
-   "fieldtype": "Currency",
-   "modified": "2026-10-19 18:00:00",
-   "options": "currency",
-   "read_only": 1,
-   "depends_on": "eval:doc.custom_enable_estimation",
-   "description": "Net Total of the Items (the Job Item line)."
   },
   {
    "_assign": null,
@@ -892,44 +868,6 @@
    "width": null
   },
   {
-   "dt": "Quotation",
-   "name": "Quotation-custom_tax_amount",
-   "doctype": "Custom Field",
-   "insert_after": "custom_tax_basis",
-   "fieldname": "custom_tax_amount",
-   "label": "Tax Amount",
-   "fieldtype": "Currency",
-   "modified": "2026-10-19 18:00:00",
-   "options": "currency",
-   "read_only": 1,
-   "depends_on": "eval:doc.custom_enable_estimation",
-   "description": "Tax Basis × Tax %"
-  },
-  {
-   "dt": "Quotation",
-   "name": "Quotation-custom_tax_basis",
-   "doctype": "Custom Field",
-   "insert_after": "custom_tax_percent",
-   "fieldname": "custom_tax_basis",
-   "label": "Tax Basis",
-   "fieldtype": "Select",
-   "modified": "2026-10-19 18:00:00",
-   "options": "\nSale Value\nSale Value + VAT",
-   "depends_on": "eval:doc.custom_enable_estimation",
-   "description": "Blank uses Sale Value + VAT."
-  },
-  {
-   "dt": "Quotation",
-   "name": "Quotation-custom_tax_percent",
-   "doctype": "Custom Field",
-   "insert_after": "custom_column_break_og2",
-   "fieldname": "custom_tax_percent",
-   "label": "Tax % (if any)",
-   "fieldtype": "Percent",
-   "modified": "2026-10-19 18:00:00",
-   "depends_on": "eval:doc.custom_enable_estimation"
-  },
-  {
    "_assign": null,
    "_comments": null,
    "_liked_by": null,
@@ -994,21 +932,6 @@
    "width": null
   },
   {
-   "dt": "Quotation",
-   "name": "Quotation-custom_total_quoted_value",
-   "doctype": "Custom Field",
-   "insert_after": "custom_tax_amount",
-   "fieldname": "custom_total_quoted_value",
-   "label": "Total Quoted / Invoice Value",
-   "fieldtype": "Currency",
-   "modified": "2026-10-19 18:00:00",
-   "options": "currency",
-   "read_only": 1,
-   "bold": 1,
-   "depends_on": "eval:doc.custom_enable_estimation",
-   "description": "Sale Value + VAT + Tax"
-  },
-  {
    "_assign": null,
    "_comments": null,
    "_liked_by": null,
@@ -1071,31 +994,6 @@
    "translatable": 0,
    "unique": 0,
    "width": null
-  },
-  {
-   "dt": "Quotation",
-   "name": "Quotation-custom_vat_amount",
-   "doctype": "Custom Field",
-   "insert_after": "custom_vat_percent",
-   "fieldname": "custom_vat_amount",
-   "label": "VAT Amount",
-   "fieldtype": "Currency",
-   "modified": "2026-10-19 18:00:00",
-   "options": "currency",
-   "read_only": 1,
-   "depends_on": "eval:doc.custom_enable_estimation",
-   "description": "Sale Value × VAT %"
-  },
-  {
-   "dt": "Quotation",
-   "name": "Quotation-custom_vat_percent",
-   "doctype": "Custom Field",
-   "insert_after": "custom_column_break_og1",
-   "fieldname": "custom_vat_percent",
-   "label": "VAT % (if applicable)",
-   "fieldtype": "Percent",
-   "modified": "2026-10-19 18:00:00",
-   "depends_on": "eval:doc.custom_enable_estimation"
   },
   {
    "_assign": null,
@@ -1834,7 +1732,7 @@
    "field_name": null,
    "idx": 0,
    "is_system_generated": 0,
-   "modified": "2026-10-19 18:00:00",
+   "modified": "2026-10-19 20:00:00",
    "modified_by": "Administrator",
    "module": null,
    "name": "Quotation-main-field_order",
@@ -1842,7 +1740,7 @@
    "property": "field_order",
    "property_type": "Data",
    "row_name": null,
-   "value": "[\"customer_section\", \"title\", \"naming_series\", \"quotation_to\", \"party_name\", \"enquiry_reference\", \"crm_deal\", \"customer_name\", \"column_break_7\", \"transaction_date\", \"expected_closing_date\", \"valid_till\", \"column_break1\", \"order_type\", \"company\", \"custom_types\", \"custom_finished_item_group\", \"custom_show_project_details\", \"custom_show_job_item\", \"custom_show_vehicle_item\", \"custom_show_additional_items\", \"custom_enable_estimation\", \"custom_vehicle_type\", \"oil_gas_item\", \"has_unit_price_items\", \"amended_from\", \"custom_column_break_mp4fw\", \"custom_project\", \"estimator\", \"revision_number\", \"revision_history_section\", \"revision_history\", \"currency_and_price_list\", \"currency\", \"conversion_rate\", \"column_break2\", \"selling_price_list\", \"price_list_currency\", \"plc_conversion_rate\", \"ignore_pricing_rule\", \"custom_section_break_xjxuo\", \"custom_costing\", \"custom_oil_gas_pricing_section\", \"custom_total_estimated_value\", \"custom_sale_value_without_tax\", \"custom_net_profit\", \"custom_column_break_og1\", \"custom_vat_percent\", \"custom_vat_amount\", \"custom_column_break_og2\", \"custom_tax_percent\", \"custom_tax_basis\", \"custom_tax_amount\", \"custom_total_quoted_value\", \"items_section\", \"scan_barcode\", \"last_scanned_warehouse\", \"items\", \"custom_section_break_xuxav\", \"custom_additional_items\", \"sec_break23\", \"total_qty\", \"total_net_weight\", \"column_break_28\", \"base_total\", \"base_net_total\", \"column_break_31\", \"total\", \"net_total\", \"taxes_section\", \"tax_category\", \"column_break_36\", \"taxes_and_charges\", \"shipping_rule\", \"column_break_34\", \"incoterm\", \"named_place\", \"section_break_36\", \"taxes\", \"section_break_39\", \"total_taxes_and_charges\", \"column_break_42\", \"base_total_taxes_and_charges\", \"totals\", \"base_grand_total\", \"base_rounding_adjustment\", \"base_rounded_total\", \"base_in_words\", \"grand_total\", \"rounding_adjustment\", \"rounded_total\", \"column_break3\", \"in_words\", \"disable_rounded_total\", \"section_break_44\", \"apply_discount_on\", \"coupon_code\", \"column_break_46\", \"additional_discount_percentage\", \"referral_sales_partner\", \"discount_amount\", \"base_discount_amount\", \"sec_tax_breakup\", \"other_charges_calculation\", \"bundle_items_section\", \"packed_items\", \"pricing_rule_details\", \"pricing_rules\", \"address_and_contact_tab\", \"billing_address_section\", \"customer_address\", \"address_display\", \"col_break98\", \"contact_person\", \"contact_display\", \"contact_mobile\", \"contact_email\", \"shipping_address_section\", \"shipping_address_name\", \"column_break_81\", \"shipping_address\", \"company_address_section\", \"company_address\", \"company_address_display\", \"column_break_87\", \"company_contact_person\", \"terms_tab\", \"payment_schedule_section\", \"payment_terms_template\", \"payment_schedule\", \"terms_section_break\", \"tc_name\", \"terms\", \"more_info_tab\", \"subscription_section\", \"auto_repeat\", \"update_auto_repeat_reference\", \"print_settings\", \"letter_head\", \"group_same_items\", \"column_break_73\", \"select_print_heading\", \"language\", \"lost_reasons_section\", \"lost_reasons\", \"competitors\", \"column_break_117\", \"order_lost_reason\", \"additional_info_section\", \"status\", \"customer_group\", \"territory\", \"column_break_108\", \"campaign\", \"source\", \"column_break4\", \"opportunity\", \"supplier_quotation\", \"enq_det\", \"connections_tab\"]"
+   "value": "[\"customer_section\", \"title\", \"naming_series\", \"quotation_to\", \"party_name\", \"enquiry_reference\", \"crm_deal\", \"customer_name\", \"column_break_7\", \"transaction_date\", \"expected_closing_date\", \"valid_till\", \"column_break1\", \"order_type\", \"company\", \"custom_types\", \"custom_finished_item_group\", \"custom_show_project_details\", \"custom_show_job_item\", \"custom_show_vehicle_item\", \"custom_show_additional_items\", \"custom_enable_estimation\", \"custom_vehicle_type\", \"oil_gas_item\", \"has_unit_price_items\", \"amended_from\", \"custom_column_break_mp4fw\", \"custom_project\", \"estimator\", \"revision_number\", \"revision_history_section\", \"revision_history\", \"currency_and_price_list\", \"currency\", \"conversion_rate\", \"column_break2\", \"selling_price_list\", \"price_list_currency\", \"plc_conversion_rate\", \"ignore_pricing_rule\", \"custom_section_break_xjxuo\", \"custom_costing\", \"custom_oil_gas_pricing_section\", \"custom_total_estimated_value\", \"custom_column_break_og1\", \"custom_net_profit\", \"items_section\", \"scan_barcode\", \"last_scanned_warehouse\", \"items\", \"custom_section_break_xuxav\", \"custom_additional_items\", \"sec_break23\", \"total_qty\", \"total_net_weight\", \"column_break_28\", \"base_total\", \"base_net_total\", \"column_break_31\", \"total\", \"net_total\", \"taxes_section\", \"tax_category\", \"column_break_36\", \"taxes_and_charges\", \"shipping_rule\", \"column_break_34\", \"incoterm\", \"named_place\", \"section_break_36\", \"taxes\", \"section_break_39\", \"total_taxes_and_charges\", \"column_break_42\", \"base_total_taxes_and_charges\", \"totals\", \"base_grand_total\", \"base_rounding_adjustment\", \"base_rounded_total\", \"base_in_words\", \"grand_total\", \"rounding_adjustment\", \"rounded_total\", \"column_break3\", \"in_words\", \"disable_rounded_total\", \"section_break_44\", \"apply_discount_on\", \"coupon_code\", \"column_break_46\", \"additional_discount_percentage\", \"referral_sales_partner\", \"discount_amount\", \"base_discount_amount\", \"sec_tax_breakup\", \"other_charges_calculation\", \"bundle_items_section\", \"packed_items\", \"pricing_rule_details\", \"pricing_rules\", \"address_and_contact_tab\", \"billing_address_section\", \"customer_address\", \"address_display\", \"col_break98\", \"contact_person\", \"contact_display\", \"contact_mobile\", \"contact_email\", \"shipping_address_section\", \"shipping_address_name\", \"column_break_81\", \"shipping_address\", \"company_address_section\", \"company_address\", \"company_address_display\", \"column_break_87\", \"company_contact_person\", \"terms_tab\", \"payment_schedule_section\", \"payment_terms_template\", \"payment_schedule\", \"terms_section_break\", \"tc_name\", \"terms\", \"more_info_tab\", \"subscription_section\", \"auto_repeat\", \"update_auto_repeat_reference\", \"print_settings\", \"letter_head\", \"group_same_items\", \"column_break_73\", \"select_print_heading\", \"language\", \"lost_reasons_section\", \"lost_reasons\", \"competitors\", \"column_break_117\", \"order_lost_reason\", \"additional_info_section\", \"status\", \"customer_group\", \"territory\", \"column_break_108\", \"campaign\", \"source\", \"column_break4\", \"opportunity\", \"supplier_quotation\", \"enq_det\", \"connections_tab\"]"
   },
   {
    "_assign": null,

@@ -9,6 +9,7 @@ COST_CODE_MARKER = "jagadamba.setup_estimation_cost_codes_v1"
 REMOVE_QUOTATION_ESTIMATION_MARKER = "jagadamba.remove_quotation_estimation_v1"
 FORM_CLEANUP_MARKER = "jagadamba.form_cleanup_v1"
 QUOTATION_COSTING_MARKER = "jagadamba.enable_quotation_costing_v1"
+REMOVE_QUOTATION_PRICING_MARKER = "jagadamba.remove_quotation_pricing_v1"
 # Types that quote manufactured jobs and get the Quotation Costing sheet on first migrate.
 COSTING_TYPES = ("Oil & Gas",)
 # Unused or empty layout fields; dropping them from the fixtures does not delete them on a site.
@@ -27,6 +28,12 @@ REMOVED_LAYOUT_FIELDS = (
 REMOVED_QUOTATION_FIELDS = (
 	"custom_estimation_section", "custom_estimation_cost_source", "custom_estimation_items",
 )
+# Quotation keeps only Total Estimated Value and Net Profit under its Costing table; the customer
+# price is the Job Item's rate in Items, so the VAT/Tax summary is Sales Order only.
+REMOVED_QUOTATION_PRICING_FIELDS = (
+	"custom_sale_value_without_tax", "custom_vat_percent", "custom_vat_amount", "custom_column_break_og2",
+	"custom_tax_percent", "custom_tax_basis", "custom_tax_amount", "custom_total_quoted_value",
+)
 
 
 def execute():
@@ -35,6 +42,7 @@ def execute():
 	_remove_quotation_estimation()
 	_remove_layout_fields()
 	_enable_quotation_costing()
+	_remove_quotation_pricing()
 
 
 def _setup_type_configuration():
@@ -114,3 +122,15 @@ def _enable_quotation_costing():
 			frappe.db.set_value("Type", name, "enable_estimation", 1, update_modified=False)
 			frappe.clear_document_cache("Type", name)
 	frappe.get_doc({"doctype": "Patch Log", "patch": QUOTATION_COSTING_MARKER}).insert(ignore_permissions=True)
+
+
+def _remove_quotation_pricing():
+	"""Drops the Quotation VAT/Tax summary fields; stored column values are left in place."""
+	if frappe.db.exists("Patch Log", {"patch": REMOVE_QUOTATION_PRICING_MARKER}):
+		return
+	for fieldname in REMOVED_QUOTATION_PRICING_FIELDS:
+		name = "Quotation-" + fieldname
+		if frappe.db.exists("Custom Field", name):
+			frappe.delete_doc("Custom Field", name, ignore_permissions=True, force=True)
+	frappe.clear_cache(doctype="Quotation")
+	frappe.get_doc({"doctype": "Patch Log", "patch": REMOVE_QUOTATION_PRICING_MARKER}).insert(ignore_permissions=True)

@@ -6,7 +6,7 @@ Form behavior on Lead, Opportunity, Quotation and Sales Order is driven by the *
 
 A System Manager sets these on each Type. Each checkbox explains on the Type form what it shows:
 
-- Enable Costing and Pricing: shows the **Costing** sheet on Quotation and the Sale Value, VAT %, Tax %, Difference Value (profit) and Total Quoted / Invoice Value summary on Quotation and Sales Order
+- Enable Costing and Pricing: shows the **Costing** table with Total Estimated Value and Net Profit on Quotation, and Sale Value, VAT %, Tax %, Difference Value (profit) and Total Quoted / Invoice Value on Sales Order
 - Show Additional Items: shows the **Additional Items** table directly under the Quotation items
 - Show Vehicle Item
 - Show Job Item
@@ -29,7 +29,7 @@ Lead and Prospect have no **Create > Opportunity** button (Lead also hides **Cre
 
 ## Quotation costing (Oil & Gas)
 
-For a Type with **Enable Costing and Pricing** (Oil & Gas), the Quotation shows a **Costing** sheet above the items. If it is missing, open **Type > Oil & Gas** and check that box.
+For a Type with **Enable Costing and Pricing** (Oil & Gas), the Quotation shows a **Costing** table above the items. If it is missing, open **Type > Oil & Gas** and check that box.
 
 | Column | Meaning |
 | --- | --- |
@@ -40,17 +40,13 @@ For a Type with **Enable Costing and Pricing** (Oil & Gas), the Quotation shows 
 Below it:
 
 - **Total Estimated Value** = sum of the Costing rows.
-- **Sale Value without TAX/VAT** = Net Total of the Items table.
-- **Difference Value (Co Net Profit)** = Sale Value − Total Estimated Value.
-- **VAT Amount** = Sale Value × VAT %.
-- **Tax Amount** = (Sale Value + VAT) × Tax %, or Sale Value × Tax % when Tax Basis is Sale Value.
-- **Total Quoted / Invoice Value** = Sale Value + VAT + Tax.
+- **Net Profit** = Net Total of the Items − Total Estimated Value.
 
-The **Job Item** is the item being manufactured, so selecting it adds it to the Items table (filling an empty row or adding one with qty 1). Enter its selling rate there; that rate drives the Sale Value. Changing the Job Item swaps the item on that row; clearing it leaves the Items table as it is.
+The **Job Item** chosen on the Lead (or Opportunity) is the item being manufactured. When the Quotation is created it is added to the Items table, and selecting or changing the Job Item on the Quotation does the same. Enter the selling rate on that line: it is the quoted amount and drives Net Profit. VAT and other taxes use ERPNext's standard Taxes table.
 
-The Costing sheet, Total Estimated Value and Difference Value are hidden on prints. The server recalculates every amount on save.
+The Costing table, Total Estimated Value and Net Profit are hidden on prints and recalculated by the server on save.
 
-Example: Costing rows of 50,000 + 1,000 + 20,000 + 10,000 + 2,500 + 750 = 84,250. With the Job Item at 85,750, the Difference Value is 1,500; at 5 % VAT and 10 % Tax, VAT is 4,287.50, Tax is 9,003.75 and the Total Quoted Value is 99,041.25.
+Example: Costing rows of 50,000 + 1,000 + 20,000 + 10,000 + 2,500 + 750 = 84,250. With the Job Item at 85,750, Net Profit is 1,500.
 
 ## Downstream documents
 

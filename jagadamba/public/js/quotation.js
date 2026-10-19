@@ -28,8 +28,13 @@ frappe.ui.form.on("Quotation", {
 			}
 		}
 		await prefill_quotation_type(frm);
-		frm.__jagadamba_job_item = {doc: frm.doc, item: frm.doc.oil_gas_item};
-		if (frm.is_new()) await recalc_costing(frm);
+		// A Job Item copied from the Lead or Opportunity becomes the quoted line on a new Quotation.
+		if (frm.is_new()) {
+			await add_job_item_to_items(frm);
+			await recalc_costing(frm);
+		} else {
+			frm.__jagadamba_job_item = {doc: frm.doc, item: frm.doc.oil_gas_item};
+		}
 
 		if (!frm.is_new()) {
 			frm.add_custom_button(__("Log Revision Note"), function () {
@@ -54,9 +59,6 @@ frappe.ui.form.on("Quotation", {
 
 	opportunity(frm) { return prefill_quotation_type(frm); },
 	oil_gas_item(frm) { return add_job_item_to_items(frm); },
-	custom_vat_percent(frm) { return recalc_costing(frm); },
-	custom_tax_percent(frm) { return recalc_costing(frm); },
-	custom_tax_basis(frm) { return recalc_costing(frm); },
 
 	custom_types: async function (frm) {
 		await jagadamba.sales_flow.clear_type_items(frm, ["custom_vehicle_type", "oil_gas_item"]);
@@ -89,8 +91,18 @@ async function update_cost_row(frm, cdt, cdn) {
 	return recalc_costing(frm);
 }
 
+// Total Estimated Value is the Costing table; Net Profit is the items' Net Total (the Job Item's rate) minus it.
 function recalc_costing(frm) {
-	return jagadamba.sales_flow.recalculate(frm);
+	const doc = frm.doc;
+	if (doc.docstatus !== 0 || !doc.custom_enable_estimation) return Promise.resolve();
+	const cost = flt((doc.custom_costing || []).reduce((sum, row) => sum + flt(row.amount), 0),
+		precision("custom_total_estimated_value"));
+	const values = {
+		custom_total_estimated_value: cost,
+		custom_net_profit: flt(flt(doc.net_total) - cost, precision("custom_net_profit")),
+	};
+	const changes = Object.fromEntries(Object.entries(values).filter(([field, value]) => flt(doc[field]) !== value));
+	return Object.keys(changes).length ? frm.set_value(changes) : Promise.resolve();
 }
 
 // The Job Item is what the client manufactures and quotes, so it is the customer-facing line in Items.
