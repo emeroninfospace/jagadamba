@@ -37,9 +37,9 @@
   },
   {
    "fieldname": "enable_estimation",
-   "label": "Enable Sales Order Pricing",
+   "label": "Enable Costing and Pricing",
    "fieldtype": "Check",
-   "description": "Shows Sale Value, VAT, Tax, Difference Value (profit) and Total Quoted Value on Sales Order."
+   "description": "Shows the Costing sheet with Sale Value, VAT, Tax, Difference Value (profit) and Total Quoted Value on Quotation, and the same pricing summary on Sales Order."
   },
   {
    "fieldname": "show_additional_items",
@@ -76,7 +76,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-12 13:00:00",
+ "modified": "2026-10-19 18:00:00",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Type",

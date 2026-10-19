@@ -1,53 +1,21 @@
 frappe.ui.form.on("Purchase Order", {
 	refresh(frm) {
-		const needsProject = !frm.doc.project;
-		const needsCustom = !frm.doc.custom_types || (!frm.doc.custom_vehicle_type && !frm.doc.oil_gas_item);
-
-		if (!needsProject && !needsCustom) return;
-
+		if (frm.doc.docstatus !== 0) return;
 		const items = frm.doc.items || [];
-
-		if (needsProject) {
-			const itemProject = (items.find(i => i.project) || {}).project;
-			if (itemProject) frm.set_value("project", itemProject);
+		if (!frm.doc.project) {
+			const item_project = (items.find(i => i.project) || {}).project;
+			if (item_project) frm.set_value("project", item_project);
 		}
 
-		if (needsCustom) {
-			const mr = (items.find(i => i.material_request) || {}).material_request;
-			if (mr) {
-				frappe.db.get_value("Material Request", mr,
-					["custom_types", "custom_vehicle_type", "oil_gas_item"], (r) => {
-						if (!r) return;
-						if (!frm.doc.custom_types && r.custom_types) frm.set_value("custom_types", r.custom_types);
-						if (!frm.doc.custom_vehicle_type && r.custom_vehicle_type) frm.set_value("custom_vehicle_type", r.custom_vehicle_type);
-						if (!frm.doc.oil_gas_item && r.oil_gas_item) frm.set_value("oil_gas_item", r.oil_gas_item);
-					}
-				);
-				return;
-			}
+		// Type comes from the Material Request the items were raised from, else from the Project.
+		const material_request = (items.find(i => i.material_request) || {}).material_request;
+		if (material_request) {
+			return jagadamba.sales_flow.inherit_type(frm, "Material Request", material_request);
 		}
-
-		if (frm.doc.project && needsCustom) {
-			frappe.db.get_value("Project", frm.doc.project,
-				["custom_types", "custom_vehicle_type", "oil_gas_item"], (r) => {
-					if (!r) return;
-					if (!frm.doc.custom_types && r.custom_types) frm.set_value("custom_types", r.custom_types);
-					if (!frm.doc.custom_vehicle_type && r.custom_vehicle_type) frm.set_value("custom_vehicle_type", r.custom_vehicle_type);
-					if (!frm.doc.oil_gas_item && r.oil_gas_item) frm.set_value("oil_gas_item", r.oil_gas_item);
-				}
-			);
-		}
+		return jagadamba.sales_flow.inherit_type(frm, "Project", frm.doc.project);
 	},
 
 	project(frm) {
-		if (!frm.doc.project) return;
-		frappe.db.get_value("Project", frm.doc.project,
-			["custom_types", "custom_vehicle_type", "oil_gas_item"], (r) => {
-				if (!r) return;
-				if (r.custom_types) frm.set_value("custom_types", r.custom_types);
-				if (r.custom_vehicle_type) frm.set_value("custom_vehicle_type", r.custom_vehicle_type);
-				if (r.oil_gas_item) frm.set_value("oil_gas_item", r.oil_gas_item);
-			}
-		);
+		return jagadamba.sales_flow.inherit_type(frm, "Project", frm.doc.project, true);
 	},
 });

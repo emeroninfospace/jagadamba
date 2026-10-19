@@ -19,12 +19,10 @@ REMOVED_LAYOUT_FIELDS = (
 	("Sales Order", "custom_item_groups"), ("Sales Order", "custom_estimation_cost_source"),
 	("Lead", "custom_column_break_ddhxm"),
 )
+# The Costing sheet brought the pricing fields back to Quotation under their old names, so only
+# the old estimation table is removed; deleting the others would drop the new fields on a fresh site.
 REMOVED_QUOTATION_FIELDS = (
 	"custom_estimation_section", "custom_estimation_cost_source", "custom_estimation_items",
-	"custom_oil_gas_pricing_section", "custom_total_estimated_value", "custom_sale_value_without_tax",
-	"custom_net_profit", "custom_column_break_og1", "custom_vat_percent", "custom_vat_amount",
-	"custom_tax_percent", "custom_tax_basis", "custom_tax_amount", "custom_column_break_og2",
-	"custom_total_quoted_value", "custom_enable_estimation",
 )
 
 
@@ -74,8 +72,8 @@ def _setup_finished_item_default():
 
 
 def _remove_quotation_estimation():
-	"""Quotation no longer carries the estimation calculation. Fixture sync never deletes
-	custom fields, so remove them here; stored column values and child rows are left in place."""
+	"""Removes the old Quotation estimation table. Fixture sync never deletes custom fields,
+	so remove them here; stored column values and child rows are left in place."""
 	if frappe.db.exists("Patch Log", {"patch": REMOVE_QUOTATION_ESTIMATION_MARKER}):
 		return
 	for fieldname in REMOVED_QUOTATION_FIELDS:

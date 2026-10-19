@@ -20,7 +20,7 @@ const context = vm.createContext({console, Promise, WeakMap, Map, Set,
 		}}},
 	},
 });
-for (const file of ['sales_flow', 'lead', 'opportunity', 'quotation', 'sales_order']) {
+for (const file of ['sales_flow', 'lead', 'opportunity', 'quotation', 'sales_order', 'prospect', 'purchase_order']) {
 	vm.runInContext(fs.readFileSync(`jagadamba/public/js/${file}.js`, 'utf8'), context);
 }
 function form(doctype, data, isNew=true) {
@@ -174,6 +174,69 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 		context.locals={'Quotation Additional Item':{r1:{item_group:'Axles'}}};
 		assert.deepEqual(JSON.parse(JSON.stringify(queries['item_code.custom_additional_items'](frm.doc,'Quotation Additional Item','r1'))),
 			{filters:{disabled:0,item_group:['descendants of (inclusive)','Axles']}});
+	});
+	await test('quotation costing sheet: cost from rows, sale from items net total',async()=>{
+		const rows=[[10,5000],[1,1000],[1000,20],[1,10000],[10,250],[7.5,100]].map(([qty,rate])=>({qty,rate,amount:qty*rate}));
+		const frm=form('Quotation',{custom_enable_estimation:1,custom_costing:rows,net_total:85750,custom_vat_percent:5,custom_tax_percent:10});
+		await flow.recalculate(frm);
+		assert.equal(frm.doc.custom_total_estimated_value,84250);assert.equal(frm.doc.custom_sale_value_without_tax,85750);
+		assert.equal(frm.doc.custom_net_profit,1500);assert.equal(frm.doc.custom_vat_amount,4287.5);
+		assert.equal(frm.doc.custom_tax_amount,9003.75);assert.equal(frm.doc.custom_total_quoted_value,99041.25);
+	});
+	await test('costing row amount is qty x unit price',async()=>{
+		const row={doctype:'Quotation Cost Estimate',name:'c1',qty:1000,rate:20};
+		const frm=form('Quotation',{custom_enable_estimation:1,custom_costing:[row],net_total:25000});
+		context.locals={'Quotation Cost Estimate':{c1:row}};
+		context.frappe.model={set_value:async(cdt,cdn,field,value)=>{context.locals[cdt][cdn][field]=value;}};
+		await handlers['Quotation Cost Estimate.rate'][0](frm,'Quotation Cost Estimate','c1');
+		assert.equal(row.amount,20000);assert.equal(frm.doc.custom_net_profit,5000);
+	});
+	await test('job item becomes the quoted line in items',async()=>{
+		const set=[];context.frappe.model={set_value:async(cdt,cdn,field,value)=>{set.push([cdn,field,value]);
+			frm.doc.items.find(row=>row.name===cdn)[field]=value;}};
+		const frm=form('Quotation',{custom_show_job_item:1,items:[{doctype:'Quotation Item',name:'i1',qty:0}]});
+		frm.add_child=(table,values={})=>{const row={doctype:'Quotation Item',name:'i'+(frm.doc[table].length+1),...values};frm.doc[table].push(row);return row;};
+		const handler=handlers['Quotation.oil_gas_item'][0];
+		frm.doc.oil_gas_item='PUMP';await handler(frm);
+		assert.deepEqual(set,[['i1','item_code','PUMP']]);assert.equal(frm.doc.items[0].qty,1);
+		await handler(frm);assert.equal(set.length,1,'not added twice');
+		frm.doc.oil_gas_item='SKID';await handler(frm);
+		assert.deepEqual(set[1],['i1','item_code','SKID']);assert.equal(frm.doc.items.length,1,'job item swapped in place');
+		frm.doc.oil_gas_item='';await handler(frm);assert.equal(frm.doc.items[0].item_code,'SKID','clearing keeps items');
+		frm.doc.items[0].item_code='OTHER';frm.doc.oil_gas_item='TANK';await handler(frm);
+		assert.equal(frm.doc.items.length,2);assert.equal(frm.doc.items[1].item_code,'TANK');
+		const trading=form('Quotation',{custom_show_job_item:0,oil_gas_item:'PUMP',items:[]});
+		await handler(trading);assert.equal(set.length,3,'types without a job item leave items alone');
+	});
+	await test('downstream documents inherit type from the first source that is set',async()=>{
+		const frm=form('Stock Entry',{project:'P1',work_order:'WO1'});
+		await handlers['Stock Entry.work_order'][0](frm);assert.equal(pending.length,0,'project wins over work order');
+		const task=handlers['Stock Entry.refresh'][0](frm);
+		assert.equal(pending[0].args[0],'Project');resolveNext({custom_types:'Oil & Gas',oil_gas_item:'PUMP'});await task;
+		assert.equal(frm.doc.custom_types,'Oil & Gas');assert.equal(frm.doc.oil_gas_item,'PUMP');
+		await handlers['Stock Entry.refresh'][0](frm);assert.equal(pending.length,0,'filled forms do not refetch');
+		const card=form('Job Card',{work_order:'WO1',custom_types:'Trailers'});
+		const change=handlers['Job Card.work_order'][0](card);
+		resolveNext({custom_types:'Oil & Gas',oil_gas_item:'PUMP'});await change;assert.equal(card.doc.custom_types,'Oil & Gas');
+		const submitted=form('Sales Invoice',{project:'P1',docstatus:1});
+		await handlers['Sales Invoice.refresh'][0](submitted);assert.equal(submitted.writes.length,0);
+	});
+	await test('purchase order takes type from the material request before the project',async()=>{
+		const frm=form('Purchase Order',{project:'P1',items:[{material_request:'MR1'}]});
+		const task=handlers['Purchase Order.refresh'][0](frm);
+		assert.equal(pending[0].args[0],'Material Request');resolveNext({custom_types:'Trading'});await task;
+		assert.equal(frm.doc.custom_types,'Trading');
+	});
+	await test('no opportunity button on prospect or lead',async()=>{
+		const removed=[];const frm=form('Prospect',{});frm.remove_custom_button=(label,group)=>removed.push([label,group]);
+		await handlers['Prospect.refresh'][0](frm);assert.deepEqual(removed,[['Opportunity','Create']]);
+		const timers=[];context.setTimeout=fn=>timers.push(fn);
+		try {
+			const lead=form('Lead',{},false);const added=[];lead.remove_custom_button=(label,group)=>removed.push([label,group]);
+			lead.add_custom_button=label=>added.push(label);
+			await handlers['Lead.refresh'][0](lead);timers.forEach(fn=>fn());
+			assert.ok(removed.some(([label,group])=>label==='Opportunity'&&group==='Create'));assert.deepEqual(added,[]);
+		} finally {context.setTimeout=()=>{};}
 	});
 	console.log(`PASS: ${passed} sales-flow regression cases`);
 })().catch(error=>{console.error(error);process.exitCode=1;});

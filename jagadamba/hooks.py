@@ -106,15 +106,11 @@ doctype_js = {
 	"Sales Order": "public/js/sales_order.js",
 	"Project": "public/js/project.js",
 	"BOM": "public/js/bom.js",
-	"Material Request": "public/js/material_request.js",
 	"Purchase Order": "public/js/purchase_order.js",
-	"Work Order": "public/js/work_order.js",
-	"Purchase Receipt": "public/js/purchase_receipt.js",
-	"Job Card": "public/js/job_card.js",
-	"Stock Entry": "public/js/stock_entry.js",
-	"Sales Invoice": "public/js/sales_invoice.js",
-	"Purchase Invoice": "public/js/purchase_invoice.js",
+	"Prospect": "public/js/prospect.js",
 }
+# Work Order, Job Card, Material Request, Purchase Receipt, Purchase Invoice, Sales Invoice and
+# Stock Entry take their Type from the source document via sales_flow.js in jagadamba.bundle.js.
 fixtures = [
     {
         "dt": "Custom HTML Block",

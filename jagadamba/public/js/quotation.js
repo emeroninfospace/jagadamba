@@ -28,6 +28,8 @@ frappe.ui.form.on("Quotation", {
 			}
 		}
 		await prefill_quotation_type(frm);
+		frm.__jagadamba_job_item = {doc: frm.doc, item: frm.doc.oil_gas_item};
+		if (frm.is_new()) await recalc_costing(frm);
 
 		if (!frm.is_new()) {
 			frm.add_custom_button(__("Log Revision Note"), function () {
@@ -51,6 +53,10 @@ frappe.ui.form.on("Quotation", {
 	},
 
 	opportunity(frm) { return prefill_quotation_type(frm); },
+	oil_gas_item(frm) { return add_job_item_to_items(frm); },
+	custom_vat_percent(frm) { return recalc_costing(frm); },
+	custom_tax_percent(frm) { return recalc_costing(frm); },
+	custom_tax_basis(frm) { return recalc_costing(frm); },
 
 	custom_types: async function (frm) {
 		await jagadamba.sales_flow.clear_type_items(frm, ["custom_vehicle_type", "oil_gas_item"]);
@@ -58,24 +64,52 @@ frappe.ui.form.on("Quotation", {
 	},
 });
 frappe.ui.form.on("Quotation Cost Estimate", {
-    qty: (frm, cdt, cdn) => calc_row(frm, cdt, cdn),
-    rate: (frm, cdt, cdn) => calc_row(frm, cdt, cdn),
-    custom_costing_remove: (frm) => calc_totals(frm),
+	qty(frm, cdt, cdn) { return update_cost_row(frm, cdt, cdn); },
+	rate(frm, cdt, cdn) { return update_cost_row(frm, cdt, cdn); },
+	custom_costing_remove(frm) { return recalc_costing(frm); },
 });
- function calc_row(frm, cdt, cdn) {
-    const row = locals[cdt][cdn];
-    frappe.model.set_value(cdt, cdn, "amount", flt(row.qty) * flt(row.rate));
-    calc_totals(frm);
+
+frappe.ui.form.on("Quotation Item", {
+	item_code: after_item_totals,
+	qty: after_item_totals,
+	rate: after_item_totals,
+	discount_percentage: after_item_totals,
+	discount_amount: after_item_totals,
+	items_remove: after_item_totals,
+});
+
+// ERPNext recalculates Net Total in its own handlers, which run after these and may fetch prices first.
+function after_item_totals(frm) {
+	setTimeout(() => frappe.after_ajax(() => recalc_costing(frm)), 0);
 }
- 
-function calc_totals(frm) {
-    const estimated = (frm.doc.custom_costing || [])
-        .reduce((sum, r) => sum + flt(r.amount), 0);
-    const sale = flt(frm.doc.total);
- 
-    frm.set_value("custom_total_estimated_value", estimated);
-    frm.set_value("custom_net_profit", sale - estimated);
-   
+
+async function update_cost_row(frm, cdt, cdn) {
+	const row = locals[cdt][cdn];
+	await frappe.model.set_value(cdt, cdn, "amount", flt(flt(row.qty) * flt(row.rate), precision("amount", row)));
+	return recalc_costing(frm);
+}
+
+function recalc_costing(frm) {
+	return jagadamba.sales_flow.recalculate(frm);
+}
+
+// The Job Item is what the client manufactures and quotes, so it is the customer-facing line in Items.
+// Changing the Job Item swaps that line's item; clearing it leaves the Items table alone.
+async function add_job_item_to_items(frm) {
+	const doc = frm.doc;
+	const item = doc.oil_gas_item;
+	const tracked = frm.__jagadamba_job_item;
+	const previous = tracked && tracked.doc === doc ? tracked.item : null;
+	frm.__jagadamba_job_item = {doc, item};
+	if (!item || doc.docstatus !== 0 || !doc.custom_show_job_item) return;
+	const items = doc.items || [];
+	if (items.some(row => row.item_code === item)) return;
+	const row = (previous && items.find(row => row.item_code === previous))
+		|| items.find(row => !row.item_code)
+		|| frm.add_child("items");
+	if (!flt(row.qty)) row.qty = 1;
+	frm.refresh_field("items");
+	await frappe.model.set_value(row.doctype, row.name, "item_code", item);
 }
 
 frappe.ui.form.on("Quotation Additional Item", {
