@@ -136,6 +136,10 @@ fixtures = [
         "dt": "Workflow",
         "filters": [["name", "in", ["Drawing Workflow", "Project Budget Approval", "BOM", "Material Request Approval", "Purchase Order Approval"]]],
     },
+    {
+        "dt": "Property Setter",
+        "filters": [["name", "in", ["Employee-naming_series-options", "Employee-naming_series-default"]]],
+    },
 ]
 
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
