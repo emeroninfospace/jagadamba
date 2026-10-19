@@ -33,7 +33,8 @@ For a Type with **Enable Costing and Pricing** (Oil & Gas), the Quotation shows 
 
 | Column | Meaning |
 | --- | --- |
-| Code | The cost item (Material, Consumable, Labour, Subcontract, Surface Preparation & Painting, Pickling & Passivation …). Description and Unit are fetched from the item and can be edited. |
+| Code | The cost item (Material, Consumable, Labour, Subcontract, Surface Preparation & Painting, Pickling & Passivation …). Only items with **Maintain Stock** unchecked can be picked; saving rejects stock items. |
+| Description, Unit | Filled from the item as plain text (the item name when it has no description) and editable. |
 | Qty, Unit Price | Entered. |
 | Total Price | Qty × Unit Price. |
 

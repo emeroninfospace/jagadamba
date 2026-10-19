@@ -184,6 +184,20 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 		const count=frm.writes.length;await handlers['Quotation Cost Estimate.custom_costing_remove'][0](frm);
 		assert.equal(frm.writes.length,count,'no rewrite when unchanged');
 	});
+	await test('costing code lists non-stock items and fills a plain-text description',async()=>{
+		const queries={};const frm=form('Quotation',{});frm.fields_dict={};
+		frm.set_query=(field,table,fn)=>{queries[field+'.'+table]=fn;};
+		for (const handler of handlers['Quotation.setup']) handler(frm);
+		assert.deepEqual(JSON.parse(JSON.stringify(queries['item.custom_costing']())),{filters:{disabled:0,is_stock_item:0}});
+		const row={item:'LAB'};context.locals={'Quotation Cost Estimate':{c1:row}};
+		context.frappe.model={set_value:async(cdt,cdn,field,value)=>{context.locals[cdt][cdn][field]=value;}};
+		context.frappe.utils={html2text:html=>html.replace(/<[^>]*>/g,'').replace(/&amp;/g,'&')};
+		const task=handlers['Quotation Cost Estimate.item'][0](frm,'Quotation Cost Estimate','c1');
+		resolveNext({item_name:'Labour',description:'<div><p>Welding &amp; fit-up</p></div>'});await task;
+		assert.equal(row.description,'Welding & fit-up');
+		row.item='CONS';const empty=handlers['Quotation Cost Estimate.item'][0](frm,'Quotation Cost Estimate','c1');
+		resolveNext({item_name:'Consumables',description:'<p></p>'});await empty;assert.equal(row.description,'Consumables');
+	});
 	await test('job item from the lead is added on a new quotation',async()=>{
 		const set=[];context.frappe.model={set_value:async(cdt,cdn,field,value)=>{set.push([cdn,field,value]);}};
 		const frm=form('Quotation',{custom_types:'Oil & Gas',oil_gas_item:'PUMP',quotation_to:'Customer',items:[{doctype:'Quotation Item',name:'i1'}]});
