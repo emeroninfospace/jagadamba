@@ -57,6 +57,26 @@ frappe.ui.form.on("Quotation", {
 		return jagadamba.sales_flow.configure(frm);
 	},
 });
+frappe.ui.form.on("Quotation Cost Estimate", {
+    qty: (frm, cdt, cdn) => calc_row(frm, cdt, cdn),
+    rate: (frm, cdt, cdn) => calc_row(frm, cdt, cdn),
+    custom_costing_remove: (frm) => calc_totals(frm),
+});
+ function calc_row(frm, cdt, cdn) {
+    const row = locals[cdt][cdn];
+    frappe.model.set_value(cdt, cdn, "amount", flt(row.qty) * flt(row.rate));
+    calc_totals(frm);
+}
+ 
+function calc_totals(frm) {
+    const estimated = (frm.doc.custom_costing || [])
+        .reduce((sum, r) => sum + flt(r.amount), 0);
+    const sale = flt(frm.doc.total);
+ 
+    frm.set_value("custom_total_estimated_value", estimated);
+    frm.set_value("custom_net_profit", sale - estimated);
+   
+}
 
 frappe.ui.form.on("Quotation Additional Item", {
 	item_group(frm, cdt, cdn) {
