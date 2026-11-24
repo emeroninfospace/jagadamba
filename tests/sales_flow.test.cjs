@@ -266,15 +266,18 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 		const original=context.frappe.call;const calls=[];
 		context.frappe.call=async({method,args})=>{calls.push([method,args]);return {message:args.item_group==='Pipes'?{prefix:'404060',next:'4040600069'}:null};};
 		try {
-			const props={};const reqd={};const frm=form('Item',{item_group:'Pipes',item_code:'TYPED'});
+			const props={};const reqd={};const frm=form('Item',{item_group:'Pipes',custom_types:'Trailers',item_code:'TYPED'});
 			frm.set_df_property=(field,prop,value)=>{props[field+'.'+prop]=value;};frm.toggle_reqd=(field,value)=>{reqd[field]=value;};
 			await handlers['Item.item_group'][0](frm);
 			assert.equal(calls[0][0],'jagadamba.jagadamba.item_code.get_item_code_preview');
+			assert.deepEqual(JSON.parse(JSON.stringify(calls[0][1])),{item_group:'Pipes',item_type:'Trailers'});
 			assert.equal(reqd.item_code,false);assert.equal(props['item_code.read_only'],1);
 			assert.match(props['item_code.description'],/4040600069/);assert.equal(frm.doc.item_code,'');
 			frm.doc.item_group='Other';await handlers['Item.item_group'][0](frm);
 			assert.equal(reqd.item_code,true);assert.equal(props['item_code.read_only'],0);
-			const saved=form('Item',{item_group:'Pipes',item_code:'4040600001'},false);
+			const typeless=form('Item',{item_group:'Pipes',item_code:'OWN'});typeless.set_df_property=()=>{};typeless.toggle_reqd=()=>{};
+			await handlers['Item.item_group'][0](typeless);assert.equal(typeless.doc.item_code,'OWN');assert.equal(calls.length,2,'no lookup without a Type');
+			const saved=form('Item',{item_group:'Pipes',custom_types:'Trailers',item_code:'4040600001'},false);
 			await handlers['Item.refresh'][0](saved);assert.equal(saved.doc.item_code,'4040600001');assert.equal(calls.length,2);
 		} finally {context.frappe.call=original;}
 	});
