@@ -382,9 +382,11 @@ class SetupTests(unittest.TestCase):
 		self.assertEqual(order[order.index('custom_types'):order.index('column_break0') + 3],
 			['custom_types', 'custom_auto_item_code', 'custom_material_category', 'custom_mat_group', 'item_group',
 				'column_break0', 'item_code', 'item_name'])
+		self.assertEqual(order[order.index('item_name') + 1], 'custom_design_item')
 		fields = {f['fieldname']: f for f in data['custom_fields']}
-		for name in ('custom_material_category', 'custom_mat_group'):
+		for name in ('custom_material_category', 'custom_mat_group', 'custom_design_item'):
 			self.assertEqual(fields[name]['depends_on'], 'eval:doc.custom_auto_item_code')
+		self.assertEqual((fields['custom_design_item']['fieldtype'], fields['custom_design_item']['options']), ('Link', 'Item'))
 		self.assertEqual(fields['custom_auto_item_code']['fetch_from'], 'custom_types.auto_item_code')
 		for field in fields.values():
 			self.assertIn(field['insert_after'], order, field['fieldname'])
@@ -542,6 +544,11 @@ class ItemCodeTests(unittest.TestCase):
 			doc = Doc(custom_types="Oil & Gas", item_group="MS Sheet & Plate", custom_mat_group="Kept")
 			self.module.set_classification(doc)
 			self.assertEqual(doc.custom_mat_group, "Kept")
+
+	def test_design_item_cannot_point_to_itself(self):
+		with self.assertRaises(ValueError):
+			self.module.set_classification(Doc(name="4010100001", custom_design_item="4010100001"))
+		self.module.set_classification(Doc(name="4010100001", custom_design_item="JGES-40101001", custom_types=None))
 
 	def test_classification_query_walks_the_tree(self):
 		subs = [Doc(name="MS Sheet & Plate", parent_item_group="HR/CR SHEET & PLATE"),

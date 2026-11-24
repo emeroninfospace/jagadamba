@@ -9,6 +9,9 @@ frappe.ui.form.on("Item", {
 		frm.set_query("custom_mat_group", () => ({
 			query, filters: { level: "group", parent: frm.doc.custom_material_category || "" },
 		}));
+		frm.set_query("custom_design_item", () => ({
+			filters: [["Item", "disabled", "=", 0], ["Item", "name", "!=", frm.doc.name]],
+		}));
 		frm.set_query("item_group", () => frm.doc.custom_auto_item_code
 			? { query, filters: { level: "sub_group", parent: frm.doc.custom_mat_group || "" } }
 			: { filters: [["Item Group", "docstatus", "!=", 2]] });

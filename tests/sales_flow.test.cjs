@@ -287,6 +287,8 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 		const queries={};frm.set_query=(field,fn)=>{queries[field]=fn;};
 		for (const handler of handlers['Item.setup']) handler(frm);
 		assert.equal(queries.item_group().filters.level,'sub_group');
+		frm.doc.name='4010100001';
+		assert.deepEqual(JSON.parse(JSON.stringify(queries.custom_design_item())),{filters:[['Item','disabled','=',0],['Item','name','!=','4010100001']]});
 		handlers['Item.custom_auto_item_code'][0](frm);assert.equal(props['item_group.label'],'Mat Sub-Group Description');
 		frm.doc.custom_auto_item_code=0;handlers['Item.custom_auto_item_code'][0](frm);assert.equal(props['item_group.label'],'Item Group');
 		assert.deepEqual(JSON.parse(JSON.stringify(queries.item_group())),{filters:[['Item Group','docstatus','!=',2]]});

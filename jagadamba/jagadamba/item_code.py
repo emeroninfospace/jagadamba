@@ -46,6 +46,8 @@ def set_item_code(doc, method=None):
 def set_classification(doc, method=None):
 	"""Item validate. For Trailers items the Material Category and Mat Group are the parents of
 	the Mat Sub-Group (Item Group), so they always match the classification."""
+	if doc.get("custom_design_item") and doc.custom_design_item == doc.get("name"):
+		frappe.throw(frappe._("Design Item cannot be the item itself."))
 	if not uses_auto_code(doc.get("custom_types")):
 		return
 	group = category = None
