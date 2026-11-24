@@ -1,0 +1,24 @@
+{
+ "custom_fields": [
+  {
+   "dt": "Item Group",
+   "name": "Item Group-custom_item_code_prefix",
+   "doctype": "Custom Field",
+   "insert_after": "parent_item_group",
+   "fieldname": "custom_item_code_prefix",
+   "label": "Item Code Prefix",
+   "fieldtype": "Data",
+   "length": 8,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "search_index": 1,
+   "description": "Category + Group + Sub-group digits, e.g. 404060. Items in this group get this prefix plus a 4-digit running number (4040600001) when saved.",
+   "modified": "2026-11-24 12:00:00"
+  }
+ ],
+ "custom_perms": [],
+ "doctype": "Item Group",
+ "links": [],
+ "property_setters": [],
+ "sync_on_migrate": 1
+}

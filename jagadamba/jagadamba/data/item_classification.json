@@ -1,0 +1,422 @@
+[
+ {
+  "prefix": "40",
+  "description": "(RM) Raw Material",
+  "parent": null
+ },
+ {
+  "prefix": "50",
+  "description": "(BO) Bought-out parts / Commercial Parts",
+  "parent": null
+ },
+ {
+  "prefix": "60",
+  "description": "(CU) Consumables",
+  "parent": null
+ },
+ {
+  "prefix": "4010",
+  "description": "HR/CR SHEET & PLATE",
+  "parent": "40"
+ },
+ {
+  "prefix": "4020",
+  "description": "COLUMNS & BEAMS",
+  "parent": "40"
+ },
+ {
+  "prefix": "4030",
+  "description": "CHANNELS & ANGLES",
+  "parent": "40"
+ },
+ {
+  "prefix": "4040",
+  "description": "BARS, HOLLOW SECTION TUBE/PIPE & GRATING",
+  "parent": "40"
+ },
+ {
+  "prefix": "4050",
+  "description": "OTHER RAW MATERIAL GROUP",
+  "parent": "40"
+ },
+ {
+  "prefix": "5010",
+  "description": "LONG LEAD ITEMS",
+  "parent": "50"
+ },
+ {
+  "prefix": "5020",
+  "description": "TOOLS, MACHINING, ELECTRICAL & MAINTENANCE ITEM",
+  "parent": "50"
+ },
+ {
+  "prefix": "5030",
+  "description": "FASTENER, FIXTURES & PIPE FITTING ITEMS",
+  "parent": "50"
+ },
+ {
+  "prefix": "5040",
+  "description": "SIGNAGE & MARKETING MATERIALS",
+  "parent": "50"
+ },
+ {
+  "prefix": "5050",
+  "description": "OTHER BOP/COMMERCIAL ITEM",
+  "parent": "50"
+ },
+ {
+  "prefix": "6010",
+  "description": "CONSUMABLE-GENERAL",
+  "parent": "60"
+ },
+ {
+  "prefix": "6020",
+  "description": "CONSUMABLE-PAINT",
+  "parent": "60"
+ },
+ {
+  "prefix": "6030",
+  "description": "CONSUMABLE-SHOT BLASTING",
+  "parent": "60"
+ },
+ {
+  "prefix": "6040",
+  "description": "CONSUMABLE-WELDING M/C",
+  "parent": "60"
+ },
+ {
+  "prefix": "6050",
+  "description": "CONSUMABLE-GAS CUTTING",
+  "parent": "60"
+ },
+ {
+  "prefix": "6060",
+  "description": "CONSUMABLE-OFFICE ACCESSORIES",
+  "parent": "60"
+ },
+ {
+  "prefix": "401010",
+  "description": "MS Sheet & Plate",
+  "parent": "4010"
+ },
+ {
+  "prefix": "401020",
+  "description": "MS Chq. Sheet & Plate",
+  "parent": "4010"
+ },
+ {
+  "prefix": "401030",
+  "description": "HARDOX Sheet & Plate",
+  "parent": "4010"
+ },
+ {
+  "prefix": "401050",
+  "description": "SS Sheet & Plate",
+  "parent": "4010"
+ },
+ {
+  "prefix": "401070",
+  "description": "Aluminium Sheet & Plate",
+  "parent": "4010"
+ },
+ {
+  "prefix": "401080",
+  "description": "ADNOC/ENOC ACCESSORIES",
+  "parent": "4010"
+ },
+ {
+  "prefix": "402010",
+  "description": "(MB) MEMBER BEAMS",
+  "parent": "4020"
+ },
+ {
+  "prefix": "402020",
+  "description": "(UB) UNIVERSAL BEAMS",
+  "parent": "4020"
+ },
+ {
+  "prefix": "402030",
+  "description": "(UC) UNIVERSAL COLUMNS",
+  "parent": "4020"
+ },
+ {
+  "prefix": "402070",
+  "description": "(IPE) EUROPEAN I BEAMS (IPE-SECTION)",
+  "parent": "4020"
+ },
+ {
+  "prefix": "403010",
+  "description": "(MC) MEMBER CHANNELS",
+  "parent": "4030"
+ },
+ {
+  "prefix": "403020",
+  "description": "(JC) JAPANESE CHANNELS",
+  "parent": "4030"
+ },
+ {
+  "prefix": "403050",
+  "description": "(EA) EQUAL ANGLES",
+  "parent": "4030"
+ },
+ {
+  "prefix": "403060",
+  "description": "(UA) UNEQUAL ANGLES",
+  "parent": "4030"
+ },
+ {
+  "prefix": "404010",
+  "description": "(FB) FLAT BARS",
+  "parent": "4040"
+ },
+ {
+  "prefix": "404020",
+  "description": "(RB) ROUND BARS",
+  "parent": "4040"
+ },
+ {
+  "prefix": "404040",
+  "description": "(RHS) RECTANGULAR HOLLOW SECTION",
+  "parent": "4040"
+ },
+ {
+  "prefix": "404050",
+  "description": "(SHS) SQUARE HOLLOW SECTION",
+  "parent": "4040"
+ },
+ {
+  "prefix": "404060",
+  "description": "(A.P.I.) SCHEDULE TUBE/PIPE",
+  "parent": "4040"
+ },
+ {
+  "prefix": "404070",
+  "description": "MS/SS GRATING",
+  "parent": "4040"
+ },
+ {
+  "prefix": "405010",
+  "description": "OTHER RAW MATERIAL SUB-GROUP",
+  "parent": "4050"
+ },
+ {
+  "prefix": "501010",
+  "description": "AXLES",
+  "parent": "5010"
+ },
+ {
+  "prefix": "501020",
+  "description": "SUSPENSION",
+  "parent": "5010"
+ },
+ {
+  "prefix": "501025",
+  "description": "AXLE & SUSPENSION",
+  "parent": "5010"
+ },
+ {
+  "prefix": "501030",
+  "description": "LANDING LEGS",
+  "parent": "5010"
+ },
+ {
+  "prefix": "501040",
+  "description": "KINGPIN",
+  "parent": "5010"
+ },
+ {
+  "prefix": "501050",
+  "description": "TYRES & WHEEL RIM",
+  "parent": "5010"
+ },
+ {
+  "prefix": "501060",
+  "description": "BRAKE",
+  "parent": "5010"
+ },
+ {
+  "prefix": "501070",
+  "description": "COMPRESSOR /HYDRUALIC CYLINDER KIT",
+  "parent": "5010"
+ },
+ {
+  "prefix": "501080",
+  "description": "ADNOC/ENOC ACCESSORIES",
+  "parent": "5010"
+ },
+ {
+  "prefix": "501090",
+  "description": "PAINT",
+  "parent": "5010"
+ },
+ {
+  "prefix": "501091",
+  "description": "ASSEMBLY/SUB-ASSEMBLY/PARTS",
+  "parent": "5010"
+ },
+ {
+  "prefix": "502030",
+  "description": "OTHER MACHINING ITEMS",
+  "parent": "5020"
+ },
+ {
+  "prefix": "502040",
+  "description": "MAINTENANCE- MACHINE",
+  "parent": "5020"
+ },
+ {
+  "prefix": "502050",
+  "description": "MAINTENANCE- ELECTRICAL",
+  "parent": "5020"
+ },
+ {
+  "prefix": "502060",
+  "description": "ELECTRICAL",
+  "parent": "5020"
+ },
+ {
+  "prefix": "502070",
+  "description": "TOOLS",
+  "parent": "5020"
+ },
+ {
+  "prefix": "502080",
+  "description": "MACHINES",
+  "parent": "5020"
+ },
+ {
+  "prefix": "503010",
+  "description": "BOLT/SCREW",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503011",
+  "description": "NUT",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503012",
+  "description": "WASHER",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503013",
+  "description": "STUD/PIN",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503016",
+  "description": "HINGES",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503018",
+  "description": "HOOK",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503019",
+  "description": "HOSE / PVC PIPE & FITTINGS",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503020",
+  "description": "HOSE CLAMP /U-CLAMP / CLAMP",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503021",
+  "description": "FLANGES",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503022",
+  "description": "ELBOW",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503023",
+  "description": "T-JOINT",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503024",
+  "description": "COUPLING",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503026",
+  "description": "NIPPLE",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503027",
+  "description": "VALVES",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503028",
+  "description": "REDUCER",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503029",
+  "description": "GASKET",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503030",
+  "description": "SOCKET / ADAPTOR (MS/SS/ALU.)",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503050",
+  "description": "OTHER FASTENER/FIXTURE/ PIPE FITTING ITEMS",
+  "parent": "5030"
+ },
+ {
+  "prefix": "504010",
+  "description": "STICKER",
+  "parent": "5040"
+ },
+ {
+  "prefix": "504030",
+  "description": "REFLECTORS",
+  "parent": "5040"
+ },
+ {
+  "prefix": "505010",
+  "description": "OTHER BOP ITEMS SUB-GROUP",
+  "parent": "5050"
+ },
+ {
+  "prefix": "601010",
+  "description": "CU-GEN-SUB-GROUP",
+  "parent": "6010"
+ },
+ {
+  "prefix": "602010",
+  "description": "CU-PNT-SUB-GROUP",
+  "parent": "6020"
+ },
+ {
+  "prefix": "603010",
+  "description": "CU-SHB-SUB-GROUP",
+  "parent": "6030"
+ },
+ {
+  "prefix": "604010",
+  "description": "CU-WEL-SUB-GROUP",
+  "parent": "6040"
+ },
+ {
+  "prefix": "605010",
+  "description": "CU-GAS-SUB-GROUP",
+  "parent": "6050"
+ },
+ {
+  "prefix": "606010",
+  "description": "CU-OFFICE ACCESSORIES-SUB-GROUP",
+  "parent": "6060"
+ }
+]
