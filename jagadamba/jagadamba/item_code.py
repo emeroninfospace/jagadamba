@@ -1,5 +1,6 @@
 """Item codes from the store classification: Item Group prefix (Category + Group + Sub-group,
-2 digits each) followed by a 4-digit running number, e.g. 404060 + 0069 = 4040600069."""
+2 digits each) followed by a 4-digit running number, e.g. 404060 + 0069 = 4040600069.
+Applies to Items whose Type has Auto Item Code (Trailers)."""
 import json
 import os
 import re
@@ -21,9 +22,16 @@ def get_prefix(item_group):
 	return ((item_group and frappe.db.get_value("Item Group", item_group, PREFIX_FIELD)) or "").strip()
 
 
+def uses_auto_code(item_type):
+	"""Only Types with Auto Item Code (Trailers) take generated codes."""
+	return bool(item_type) and bool(cint(frappe.get_cached_value("Type", item_type, "auto_item_code")))
+
+
 def set_item_code(doc, method=None):
 	"""Item before_insert. A code already in the group's pattern (an import of existing items) is
 	kept and the counter moves past it; anything else is replaced by the next number."""
+	if not uses_auto_code(doc.get("custom_types")):
+		return
 	prefix = get_prefix(doc.get("item_group"))
 	if not prefix:
 		return
@@ -87,10 +95,12 @@ def sync_item_group_counter(doc, method=None):
 
 
 @frappe.whitelist()
-def get_item_code_preview(item_group):
+def get_item_code_preview(item_group, item_type=None):
 	"""Next code for the Item form; the number is only taken when the Item is saved."""
 	if not frappe.has_permission("Item", "create"):
 		frappe.throw(frappe._("Not permitted"), frappe.PermissionError)
+	if not uses_auto_code(item_type):
+		return None
 	prefix = get_prefix(item_group)
 	if not prefix:
 		return None

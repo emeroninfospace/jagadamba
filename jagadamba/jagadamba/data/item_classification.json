@@ -1,5 +1,20 @@
 [
  {
+  "prefix": "10",
+  "description": "(FG)Finished Goods",
+  "parent": null
+ },
+ {
+  "prefix": "20",
+  "description": "(SFG)Semi Finished Goods",
+  "parent": null
+ },
+ {
+  "prefix": "30",
+  "description": "(ACC)Accessories/Finishing",
+  "parent": null
+ },
+ {
   "prefix": "40",
   "description": "(RM) Raw Material",
   "parent": null
@@ -13,6 +28,111 @@
   "prefix": "60",
   "description": "(CU) Consumables",
   "parent": null
+ },
+ {
+  "prefix": "1010",
+  "description": "(FG-BU) CEMENT BULKER",
+  "parent": "10"
+ },
+ {
+  "prefix": "1020",
+  "description": "(FG-TA) TANKER",
+  "parent": "10"
+ },
+ {
+  "prefix": "1030",
+  "description": "(FG-TP) TIPPER",
+  "parent": "10"
+ },
+ {
+  "prefix": "1040",
+  "description": "(FG-TT) TIP-TRAILER",
+  "parent": "10"
+ },
+ {
+  "prefix": "1050",
+  "description": "(FG-TR) TRAILER",
+  "parent": "10"
+ },
+ {
+  "prefix": "1060",
+  "description": "(FG-SI) SILO",
+  "parent": "10"
+ },
+ {
+  "prefix": "1070",
+  "description": "(FG-MS) MISC.",
+  "parent": "10"
+ },
+ {
+  "prefix": "2010",
+  "description": "(SFG-BU) CEMENT BULKER",
+  "parent": "20"
+ },
+ {
+  "prefix": "2020",
+  "description": "(SFG-TA) TANKER",
+  "parent": "20"
+ },
+ {
+  "prefix": "2030",
+  "description": "(SFG-TP) TIPPER",
+  "parent": "20"
+ },
+ {
+  "prefix": "2040",
+  "description": "(SFG-TT) TIP-TRAILER",
+  "parent": "20"
+ },
+ {
+  "prefix": "2050",
+  "description": "(SFG-TR) TRAILER",
+  "parent": "20"
+ },
+ {
+  "prefix": "2060",
+  "description": "(SFG-SI) SILO",
+  "parent": "20"
+ },
+ {
+  "prefix": "2070",
+  "description": "(SFG-MS) MISC.",
+  "parent": "20"
+ },
+ {
+  "prefix": "3010",
+  "description": "(ACC-BU) CEMENT BULKER",
+  "parent": "30"
+ },
+ {
+  "prefix": "3020",
+  "description": "(ACC-TA) TANKER",
+  "parent": "30"
+ },
+ {
+  "prefix": "3030",
+  "description": "(ACC-TP) TIPPER",
+  "parent": "30"
+ },
+ {
+  "prefix": "3040",
+  "description": "(ACC-TT) TIP-TRAILER",
+  "parent": "30"
+ },
+ {
+  "prefix": "3050",
+  "description": "(ACC-TR) TRAILER",
+  "parent": "30"
+ },
+ {
+  "prefix": "3060",
+  "description": "(ACC-SI) SILO",
+  "parent": "30"
+ },
+ {
+  "prefix": "3070",
+  "description": "(ACC-MS) MISC.",
+  "parent": "30"
  },
  {
   "prefix": "4010",
@@ -95,6 +215,231 @@
   "parent": "60"
  },
  {
+  "prefix": "101010",
+  "description": "(FG-BU-ED) ELLIPTICAL DISH",
+  "parent": "1010"
+ },
+ {
+  "prefix": "101011",
+  "description": "(FG-BU-CD)CIRCULAR DISH",
+  "parent": "1010"
+ },
+ {
+  "prefix": "102010",
+  "description": "(FG-TA-FT) FUEL TANKER",
+  "parent": "1020"
+ },
+ {
+  "prefix": "102011",
+  "description": "(FG-TA-WT) WATER TANKER",
+  "parent": "1020"
+ },
+ {
+  "prefix": "102012",
+  "description": "(FG-TA-FR) FRACK TANK",
+  "parent": "1020"
+ },
+ {
+  "prefix": "103010",
+  "description": "(FG-TP) 18CBM",
+  "parent": "1030"
+ },
+ {
+  "prefix": "103011",
+  "description": "(FG-TP) 16CBM",
+  "parent": "1030"
+ },
+ {
+  "prefix": "104010",
+  "description": "(FG-TT)48CBM",
+  "parent": "1040"
+ },
+ {
+  "prefix": "105010",
+  "description": "(FG-TR-FB) FLAT BED TRAILER",
+  "parent": "1050"
+ },
+ {
+  "prefix": "105020",
+  "description": "(FG-TR-LB) LOW BED TRAILER",
+  "parent": "1050"
+ },
+ {
+  "prefix": "105030",
+  "description": "(FG-TR-SK) SKELETON TRAILER",
+  "parent": "1050"
+ },
+ {
+  "prefix": "105040",
+  "description": "(FG-TR-CC) CAR CARRIER TRAILER",
+  "parent": "1050"
+ },
+ {
+  "prefix": "106010",
+  "description": "(FG-SI)140CBM/200T",
+  "parent": "1060"
+ },
+ {
+  "prefix": "107010",
+  "description": "(FG-MS-STR) STRUCTURE WORK",
+  "parent": "1070"
+ },
+ {
+  "prefix": "107011",
+  "description": "(FG-MS-OTH) MISC. OTHER",
+  "parent": "1070"
+ },
+ {
+  "prefix": "201010",
+  "description": "(SFG-BU-ED) ELLIPTICAL DISH",
+  "parent": "2010"
+ },
+ {
+  "prefix": "201011",
+  "description": "(SFG-BU-CD)CIRCULAR DISH",
+  "parent": "2010"
+ },
+ {
+  "prefix": "202010",
+  "description": "(SFG-TA-FT) FUEL TANKER",
+  "parent": "2020"
+ },
+ {
+  "prefix": "202011",
+  "description": "(SFG-TA-WT) WATER TANKER",
+  "parent": "2020"
+ },
+ {
+  "prefix": "202012",
+  "description": "(SFG-TA-FR) FRACK TANK",
+  "parent": "2020"
+ },
+ {
+  "prefix": "203010",
+  "description": "(SFG-TP) 18CBM",
+  "parent": "2030"
+ },
+ {
+  "prefix": "203011",
+  "description": "(SFG-TP) 16CBM",
+  "parent": "2030"
+ },
+ {
+  "prefix": "204010",
+  "description": "(SFG-TT)48CBM",
+  "parent": "2040"
+ },
+ {
+  "prefix": "205010",
+  "description": "(SFG-TR-FB) FLAT BED TRAILER",
+  "parent": "2050"
+ },
+ {
+  "prefix": "205020",
+  "description": "(SFG-TR-LB) LOW BED TRAILER",
+  "parent": "2050"
+ },
+ {
+  "prefix": "205030",
+  "description": "(SFG-TR-SK) SKELETON TRAILER",
+  "parent": "2050"
+ },
+ {
+  "prefix": "205040",
+  "description": "(SFG-TR-CC) CAR CARRIER TRAILER",
+  "parent": "2050"
+ },
+ {
+  "prefix": "206010",
+  "description": "(SFG-SI)140CBM/200T",
+  "parent": "2060"
+ },
+ {
+  "prefix": "207010",
+  "description": "(SFG-MS-STR) STRUCTURE WORK",
+  "parent": "2070"
+ },
+ {
+  "prefix": "207011",
+  "description": "(SFG-MS-OTH) MISC. OTHER",
+  "parent": "2070"
+ },
+ {
+  "prefix": "301010",
+  "description": "(ACC-BU-ED) ELLIPTICAL DISH",
+  "parent": "3010"
+ },
+ {
+  "prefix": "301011",
+  "description": "(ACC-BU-CD)CIRCULAR DISH",
+  "parent": "3010"
+ },
+ {
+  "prefix": "302010",
+  "description": "(ACC-TA-FT) FUEL TANKER",
+  "parent": "3020"
+ },
+ {
+  "prefix": "302011",
+  "description": "(ACC-TA-WT) WATER TANKER",
+  "parent": "3020"
+ },
+ {
+  "prefix": "302012",
+  "description": "(ACC-TA-FR) FRACK TANK",
+  "parent": "3020"
+ },
+ {
+  "prefix": "303010",
+  "description": "(ACC-TP) 18CBM",
+  "parent": "3030"
+ },
+ {
+  "prefix": "303011",
+  "description": "(ACC-TP) 16CBM",
+  "parent": "3030"
+ },
+ {
+  "prefix": "304010",
+  "description": "(ACC-TT)48CBM",
+  "parent": "3040"
+ },
+ {
+  "prefix": "305010",
+  "description": "(ACC-TR-FB) FLAT BED TRAILER",
+  "parent": "3050"
+ },
+ {
+  "prefix": "305020",
+  "description": "(ACC-TR-LB) LOW BED TRAILER",
+  "parent": "3050"
+ },
+ {
+  "prefix": "305030",
+  "description": "(ACC-TR-SK) SKELETON TRAILER",
+  "parent": "3050"
+ },
+ {
+  "prefix": "305040",
+  "description": "(ACC-TR-CC) CAR CARRIER TRAILER",
+  "parent": "3050"
+ },
+ {
+  "prefix": "306010",
+  "description": "(ACC-SI)140CBM/200T",
+  "parent": "3060"
+ },
+ {
+  "prefix": "307010",
+  "description": "(ACC-MS-STR) STRUCTURE WORK",
+  "parent": "3070"
+ },
+ {
+  "prefix": "307011",
+  "description": "(ACC-MS-OTH) MISC. OTHER",
+  "parent": "3070"
+ },
+ {
   "prefix": "401010",
   "description": "MS Sheet & Plate",
   "parent": "4010"
@@ -110,18 +455,23 @@
   "parent": "4010"
  },
  {
+  "prefix": "401040",
+  "description": "STRENX Sheet & Plate",
+  "parent": "4010"
+ },
+ {
   "prefix": "401050",
   "description": "SS Sheet & Plate",
   "parent": "4010"
  },
  {
-  "prefix": "401070",
-  "description": "Aluminium Sheet & Plate",
+  "prefix": "401060",
+  "description": "SS Chq. Sheet & Plate",
   "parent": "4010"
  },
  {
-  "prefix": "401080",
-  "description": "ADNOC/ENOC ACCESSORIES",
+  "prefix": "401070",
+  "description": "Aluminium Sheet & Plate",
   "parent": "4010"
  },
  {
@@ -140,8 +490,33 @@
   "parent": "4020"
  },
  {
+  "prefix": "402040",
+  "description": "(UP) UNIVERSAL BEARING PILES",
+  "parent": "4020"
+ },
+ {
+  "prefix": "402050",
+  "description": "(WFB) AMERICAN WIDE FLANGE BEAMS (W-SECTION)",
+  "parent": "4020"
+ },
+ {
+  "prefix": "402060",
+  "description": "(IHE) EUROPEAN FLANGE BEAMS (HE-SECTION)",
+  "parent": "4020"
+ },
+ {
   "prefix": "402070",
   "description": "(IPE) EUROPEAN I BEAMS (IPE-SECTION)",
+  "parent": "4020"
+ },
+ {
+  "prefix": "402080",
+  "description": "(IPN) EUROPEAN I BEAMS (IPN-SECTION)",
+  "parent": "4020"
+ },
+ {
+  "prefix": "402090",
+  "description": "(JFB) JAPANESE WIDE FLANGE BEAMS",
   "parent": "4020"
  },
  {
@@ -152,6 +527,16 @@
  {
   "prefix": "403020",
   "description": "(JC) JAPANESE CHANNELS",
+  "parent": "4030"
+ },
+ {
+  "prefix": "403030",
+  "description": "(BC) BRITISH CHANNELS",
+  "parent": "4030"
+ },
+ {
+  "prefix": "403040",
+  "description": "(EC) EUROPEAN CHANNELS (UPN)",
   "parent": "4030"
  },
  {
@@ -175,6 +560,11 @@
   "parent": "4040"
  },
  {
+  "prefix": "404030",
+  "description": "(SB) SQUARE BARS",
+  "parent": "4040"
+ },
+ {
   "prefix": "404040",
   "description": "(RHS) RECTANGULAR HOLLOW SECTION",
   "parent": "4040"
@@ -192,6 +582,11 @@
  {
   "prefix": "404070",
   "description": "MS/SS GRATING",
+  "parent": "4040"
+ },
+ {
+  "prefix": "404080",
+  "description": "OTHER SECTION MATERIAL",
   "parent": "4040"
  },
  {
@@ -255,6 +650,16 @@
   "parent": "5010"
  },
  {
+  "prefix": "502010",
+  "description": "ROD (MACHINING)",
+  "parent": "5020"
+ },
+ {
+  "prefix": "502020",
+  "description": "BUSH (MACHINING)",
+  "parent": "5020"
+ },
+ {
   "prefix": "502030",
   "description": "OTHER MACHINING ITEMS",
   "parent": "5020"
@@ -305,6 +710,16 @@
   "parent": "5030"
  },
  {
+  "prefix": "503014",
+  "description": "SOCKET SCREWS",
+  "parent": "5030"
+ },
+ {
+  "prefix": "503015",
+  "description": "ANTILUCE/LOCKS",
+  "parent": "5030"
+ },
+ {
   "prefix": "503016",
   "description": "HINGES",
   "parent": "5030"
@@ -345,6 +760,11 @@
   "parent": "5030"
  },
  {
+  "prefix": "503025",
+  "description": "UNION",
+  "parent": "5030"
+ },
+ {
   "prefix": "503026",
   "description": "NIPPLE",
   "parent": "5030"
@@ -380,8 +800,18 @@
   "parent": "5040"
  },
  {
+  "prefix": "504020",
+  "description": "DECAL",
+  "parent": "5040"
+ },
+ {
   "prefix": "504030",
   "description": "REFLECTORS",
+  "parent": "5040"
+ },
+ {
+  "prefix": "504040",
+  "description": "VIN/NAME PLATE",
   "parent": "5040"
  },
  {

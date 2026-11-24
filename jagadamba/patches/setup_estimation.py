@@ -10,6 +10,9 @@ REMOVE_QUOTATION_ESTIMATION_MARKER = "jagadamba.remove_quotation_estimation_v1"
 FORM_CLEANUP_MARKER = "jagadamba.form_cleanup_v1"
 QUOTATION_COSTING_MARKER = "jagadamba.enable_quotation_costing_v1"
 REMOVE_QUOTATION_PRICING_MARKER = "jagadamba.remove_quotation_pricing_v1"
+AUTO_ITEM_CODE_MARKER = "jagadamba.auto_item_code_v1"
+# Types whose store items are coded from the classification sheet on first migrate.
+AUTO_ITEM_CODE_TYPES = ("Trailers",)
 # Types that quote manufactured jobs and get the Quotation Costing sheet on first migrate.
 COSTING_TYPES = ("Oil & Gas",)
 # Unused or empty layout fields; dropping them from the fixtures does not delete them on a site.
@@ -43,6 +46,7 @@ def execute():
 	_remove_layout_fields()
 	_enable_quotation_costing()
 	_remove_quotation_pricing()
+	_enable_auto_item_code()
 
 
 def _setup_type_configuration():
@@ -134,3 +138,14 @@ def _remove_quotation_pricing():
 			frappe.delete_doc("Custom Field", name, ignore_permissions=True, force=True)
 	frappe.clear_cache(doctype="Quotation")
 	frappe.get_doc({"doctype": "Patch Log", "patch": REMOVE_QUOTATION_PRICING_MARKER}).insert(ignore_permissions=True)
+
+
+def _enable_auto_item_code():
+	"""Ticks Auto Item Code once on Trailers; administrators can change it afterwards."""
+	if frappe.db.exists("Patch Log", {"patch": AUTO_ITEM_CODE_MARKER}):
+		return
+	for name in AUTO_ITEM_CODE_TYPES:
+		if frappe.db.exists("Type", name):
+			frappe.db.set_value("Type", name, "auto_item_code", 1, update_modified=False)
+			frappe.clear_document_cache("Type", name)
+	frappe.get_doc({"doctype": "Patch Log", "patch": AUTO_ITEM_CODE_MARKER}).insert(ignore_permissions=True)

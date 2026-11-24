@@ -14,7 +14,9 @@
   "show_vehicle_item",
   "show_job_item",
   "show_project_details",
-  "finished_item_group"
+  "finished_item_group",
+  "item_master_section",
+  "auto_item_code"
  ],
  "fields": [
   {
@@ -71,12 +73,23 @@
    "fieldtype": "Link",
    "options": "Item Group",
    "description": "Item group used to filter Vehicle, Job and Finished Item links. Leave blank to use the default in Jagadamba Settings."
+  },
+  {
+   "fieldname": "item_master_section",
+   "label": "Item Master",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "auto_item_code",
+   "label": "Auto Item Code",
+   "fieldtype": "Check",
+   "description": "New Items of this Type get their code from the Item Group's Item Code Prefix plus a 4-digit running number, e.g. 4040600069."
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-19 18:00:00",
+ "modified": "2026-11-24 12:00:00",
  "modified_by": "Administrator",
  "module": "Jagadamba",
  "name": "Type",

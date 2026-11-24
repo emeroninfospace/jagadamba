@@ -353,6 +353,17 @@ class SetupTests(unittest.TestCase):
 		self.assertEqual({c.args[:2] for c in delete.call_args_list}, {('Custom Field', 'Quotation-custom_vat_percent')})
 		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.REMOVE_QUOTATION_PRICING_MARKER})
 
+	def test_auto_item_code_enabled_once_for_trailers(self):
+		from jagadamba.patches import setup_estimation
+		api = setup_estimation.frappe
+		with patch.object(api.db, 'exists', side_effect=lambda dt, name: dt == 'Type'), \
+			patch.object(api.db, 'set_value') as write, \
+			patch.object(api, 'clear_document_cache', create=True), \
+			patch.object(api, 'get_doc', return_value=Mock()) as log:
+			setup_estimation._enable_auto_item_code()
+		write.assert_called_once_with('Type', 'Trailers', 'auto_item_code', 1, update_modified=False)
+		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.AUTO_ITEM_CODE_MARKER})
+
 	def test_removed_layout_fields_are_gone_from_fixtures(self):
 		import json
 
@@ -429,12 +440,15 @@ class ItemCodeTests(unittest.TestCase):
 			patch.object(self.api.db, "sql", side_effect=sql),
 			patch.object(self.api.db, "get_value", side_effect=lambda dt, name, field=None: self.prefixes.get(name)),
 			patch.object(self.api.db, "exists", side_effect=lambda dt, name: name in self.existing),
+			patch.object(self.api, "get_cached_value", create=True,
+				side_effect=lambda dt, name, field: int(dt == "Type" and name == "Trailers" and field == "auto_item_code")),
 		]
 		for p in patches:
 			p.start()
 			self.addCleanup(p.stop)
 
 	def insert(self, **values):
+		values.setdefault("custom_types", "Trailers")
 		doc = Doc(values)
 		self.module.set_item_code(doc)
 		return doc.item_code
@@ -457,6 +471,12 @@ class ItemCodeTests(unittest.TestCase):
 		self.existing = {"4040600001", "4040600002"}
 		self.assertEqual(self.insert(item_group="Pipes"), "4040600003")
 
+	def test_only_auto_item_code_types_are_coded(self):
+		self.assertEqual(self.insert(item_group="Pipes", custom_types="Oil & Gas", item_code="OG-1"), "OG-1")
+		self.assertEqual(self.insert(item_group="Pipes", custom_types=None, item_code="X-1"), "X-1")
+		self.assertIsNone(self.module.get_item_code_preview("Pipes", "Oil & Gas"))
+		self.assertEqual(self.series, {})
+
 	def test_groups_without_prefix_keep_manual_codes(self):
 		self.assertEqual(self.insert(item_group="Other", item_code="MANUAL-1"), "MANUAL-1")
 
@@ -467,9 +487,9 @@ class ItemCodeTests(unittest.TestCase):
 
 	def test_preview_does_not_take_a_number(self):
 		self.series["jagadamba-item-404060"] = 68
-		self.assertEqual(self.module.get_item_code_preview("Pipes"), {"prefix": "404060", "next": "4040600069"})
+		self.assertEqual(self.module.get_item_code_preview("Pipes", "Trailers"), {"prefix": "404060", "next": "4040600069"})
 		self.assertEqual(self.series["jagadamba-item-404060"], 68)
-		self.assertIsNone(self.module.get_item_code_preview("Other"))
+		self.assertIsNone(self.module.get_item_code_preview("Other", "Trailers"))
 
 	def test_item_group_prefix_rules(self):
 		def get_value(dt, name, field=None):
@@ -488,12 +508,14 @@ class ItemCodeTests(unittest.TestCase):
 		entries = json.loads(Path("jagadamba/jagadamba/data/item_classification.json").read_text())
 		prefixes = [entry["prefix"] for entry in entries]
 		self.assertEqual(len(prefixes), len(set(prefixes)))
-		self.assertEqual(sorted(len(p) for p in prefixes).count(6), 65)
+		self.assertEqual([len(p) for p in prefixes].count(2), 6)
+		self.assertEqual([len(p) for p in prefixes].count(6), 127)
 		for entry in entries:
 			if entry["parent"]:
 				self.assertTrue(entry["prefix"].startswith(entry["parent"]))
 				self.assertIn(entry["parent"], prefixes)
 		self.assertIn({"prefix": "404060", "description": "(A.P.I.) SCHEDULE TUBE/PIPE", "parent": "4040"}, entries)
+		self.assertIn({"prefix": "105010", "description": "(FG-TR-FB) FLAT BED TRAILER", "parent": "1050"}, entries)
 
 
 if __name__ == "__main__":
