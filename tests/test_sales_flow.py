@@ -23,7 +23,12 @@ if importlib.util.find_spec("frappe") is None:
 	frappe.get_cached_doc = Mock()
 	utils.today = lambda: "2026-10-12"
 	utils.get_fullname = lambda user: "Tester"
-	sys.modules.update({"frappe": frappe, "frappe.utils": utils})
+	model = types.ModuleType("frappe.model")
+	naming = types.ModuleType("frappe.model.naming")
+	naming.getseries = Mock()
+	frappe.has_permission = Mock(return_value=True)
+	frappe.PermissionError = PermissionError
+	sys.modules.update({"frappe": frappe, "frappe.utils": utils, "frappe.model": model, "frappe.model.naming": naming})
 
 from jagadamba.jagadamba.pricing import calculate_oil_gas_pricing
 from jagadamba.jagadamba.overrides import quotation_overrides as quotation
@@ -395,6 +400,100 @@ class TypeConfigurationTests(unittest.TestCase):
 	def test_finished_item_query_ignores_unknown_type(self):
 		_, call = self._query({'type': 'Missing'}, type_exists=False, group='')
 		self.assertEqual(call.kwargs['filters'], {'disabled': 0})
+
+
+class ItemCodeTests(unittest.TestCase):
+	def setUp(self):
+		from jagadamba.jagadamba import item_code
+		self.module = item_code
+		self.api = item_code.frappe
+		self.prefixes = {"Pipes": "404060", "Tools": "502070", "Other": ""}
+		self.series = {}
+		self.existing = set()
+		def getseries(key, digits):
+			self.series[key] = self.series.get(key, 0) + 1
+			return str(self.series[key]).zfill(digits)
+		def sql(query, values=()):
+			key = values[-1] if "UPDATE" in query else values[0]
+			if query.startswith("SELECT `current`"):
+				return [(self.series[key],)] if key in self.series else ()
+			if query.startswith("INSERT"):
+				self.series[values[0]] = values[1]
+			elif query.startswith("UPDATE"):
+				self.series[values[1]] = values[0]
+			elif "MAX(CAST" in query:
+				return [(None,)]
+			return ()
+		patches = [
+			patch.object(item_code, "getseries", side_effect=getseries),
+			patch.object(self.api.db, "sql", side_effect=sql),
+			patch.object(self.api.db, "get_value", side_effect=lambda dt, name, field=None: self.prefixes.get(name)),
+			patch.object(self.api.db, "exists", side_effect=lambda dt, name: name in self.existing),
+		]
+		for p in patches:
+			p.start()
+			self.addCleanup(p.stop)
+
+	def insert(self, **values):
+		doc = Doc(values)
+		self.module.set_item_code(doc)
+		return doc.item_code
+
+	def test_new_item_gets_prefix_and_running_number(self):
+		self.assertEqual(self.insert(item_group="Pipes"), "4040600001")
+		self.assertEqual(self.insert(item_group="Pipes", item_code="anything typed"), "4040600002")
+		self.assertEqual(self.insert(item_group="Tools"), "5020700001")
+
+	def test_imported_code_is_kept_without_star_and_counter_moves_past_it(self):
+		self.assertEqual(self.insert(item_group="Pipes", item_code="4040600068*"), "4040600068")
+		self.assertEqual(self.insert(item_group="Pipes"), "4040600069")
+		self.assertEqual(self.insert(item_group="Pipes", item_code="4040600010"), "4040600010")
+		self.assertEqual(self.insert(item_group="Pipes"), "4040600070", "lower imports do not move the counter back")
+
+	def test_code_of_another_group_is_not_kept(self):
+		self.assertEqual(self.insert(item_group="Pipes", item_code="5020700005"), "4040600001")
+
+	def test_taken_numbers_are_skipped(self):
+		self.existing = {"4040600001", "4040600002"}
+		self.assertEqual(self.insert(item_group="Pipes"), "4040600003")
+
+	def test_groups_without_prefix_keep_manual_codes(self):
+		self.assertEqual(self.insert(item_group="Other", item_code="MANUAL-1"), "MANUAL-1")
+
+	def test_running_number_limit(self):
+		self.series["jagadamba-item-404060"] = 9999
+		with self.assertRaises(ValueError):
+			self.insert(item_group="Pipes")
+
+	def test_preview_does_not_take_a_number(self):
+		self.series["jagadamba-item-404060"] = 68
+		self.assertEqual(self.module.get_item_code_preview("Pipes"), {"prefix": "404060", "next": "4040600069"})
+		self.assertEqual(self.series["jagadamba-item-404060"], 68)
+		self.assertIsNone(self.module.get_item_code_preview("Other"))
+
+	def test_item_group_prefix_rules(self):
+		def get_value(dt, name, field=None):
+			if isinstance(name, dict):
+				return "Existing Group" if name[self.module.PREFIX_FIELD] == "404050" else None
+			return {"Bars": "4040"}.get(name)
+		with patch.object(self.api.db, "get_value", side_effect=get_value):
+			self.module.validate_item_group(Doc(name="Pipes", parent_item_group="Bars", custom_item_code_prefix=" 404060 "))
+			for prefix in ("40A", "4", "123456789", "404050", "501010"):
+				with self.subTest(prefix=prefix), self.assertRaises(ValueError):
+					self.module.validate_item_group(Doc(name="Pipes", parent_item_group="Bars", custom_item_code_prefix=prefix))
+
+	def test_classification_data_matches_the_store_sheet(self):
+		import json
+		from pathlib import Path
+		entries = json.loads(Path("jagadamba/jagadamba/data/item_classification.json").read_text())
+		prefixes = [entry["prefix"] for entry in entries]
+		self.assertEqual(len(prefixes), len(set(prefixes)))
+		self.assertEqual(sorted(len(p) for p in prefixes).count(6), 65)
+		for entry in entries:
+			if entry["parent"]:
+				self.assertTrue(entry["prefix"].startswith(entry["parent"]))
+				self.assertIn(entry["parent"], prefixes)
+		self.assertIn({"prefix": "404060", "description": "(A.P.I.) SCHEDULE TUBE/PIPE", "parent": "4040"}, entries)
 
 
 if __name__ == "__main__":

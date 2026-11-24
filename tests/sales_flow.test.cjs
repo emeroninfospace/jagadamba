@@ -4,7 +4,7 @@ const vm = require('node:vm');
 const handlers = {};
 const pending = [];
 const context = vm.createContext({console, Promise, WeakMap, Map, Set,
-	flt: (value, digits) => digits == null ? Number(value || 0) : Number(Number(value || 0).toFixed(digits)), precision: () => 2, __: value => value,
+	flt: (value, digits) => digits == null ? Number(value || 0) : Number(Number(value || 0).toFixed(digits)), precision: () => 2, __: (value, args = []) => value.replace(/{(\d+)}/g, (_, i) => args[i]),
 	setTimeout: () => {},
 	frappe: {
 		provide: () => { context.jagadamba = {sales_flow: {}}; },
@@ -20,7 +20,7 @@ const context = vm.createContext({console, Promise, WeakMap, Map, Set,
 		}}},
 	},
 });
-for (const file of ['sales_flow', 'lead', 'opportunity', 'quotation', 'sales_order', 'prospect', 'purchase_order']) {
+for (const file of ['sales_flow', 'lead', 'opportunity', 'quotation', 'sales_order', 'prospect', 'purchase_order', 'item']) {
 	vm.runInContext(fs.readFileSync(`jagadamba/public/js/${file}.js`, 'utf8'), context);
 }
 function form(doctype, data, isNew=true) {
@@ -261,6 +261,22 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 			await handlers['Lead.refresh'][0](lead);timers.forEach(fn=>fn());
 			assert.ok(removed.some(([label,group])=>label==='Opportunity'&&group==='Create'));assert.deepEqual(added,[]);
 		} finally {context.setTimeout=()=>{};}
+	});
+	await test('item code is generated for groups with a prefix',async()=>{
+		const original=context.frappe.call;const calls=[];
+		context.frappe.call=async({method,args})=>{calls.push([method,args]);return {message:args.item_group==='Pipes'?{prefix:'404060',next:'4040600069'}:null};};
+		try {
+			const props={};const reqd={};const frm=form('Item',{item_group:'Pipes',item_code:'TYPED'});
+			frm.set_df_property=(field,prop,value)=>{props[field+'.'+prop]=value;};frm.toggle_reqd=(field,value)=>{reqd[field]=value;};
+			await handlers['Item.item_group'][0](frm);
+			assert.equal(calls[0][0],'jagadamba.jagadamba.item_code.get_item_code_preview');
+			assert.equal(reqd.item_code,false);assert.equal(props['item_code.read_only'],1);
+			assert.match(props['item_code.description'],/4040600069/);assert.equal(frm.doc.item_code,'');
+			frm.doc.item_group='Other';await handlers['Item.item_group'][0](frm);
+			assert.equal(reqd.item_code,true);assert.equal(props['item_code.read_only'],0);
+			const saved=form('Item',{item_group:'Pipes',item_code:'4040600001'},false);
+			await handlers['Item.refresh'][0](saved);assert.equal(saved.doc.item_code,'4040600001');assert.equal(calls.length,2);
+		} finally {context.frappe.call=original;}
 	});
 	console.log(`PASS: ${passed} sales-flow regression cases`);
 })().catch(error=>{console.error(error);process.exitCode=1;});

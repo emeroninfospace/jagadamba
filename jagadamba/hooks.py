@@ -58,6 +58,13 @@ doc_events = {
     "Customer": {
         "before_insert": "jagadamba.jagadamba.overrides.customer_overrides.before_insert",
     },
+    "Item": {
+        "before_insert": "jagadamba.jagadamba.item_code.set_item_code",
+    },
+    "Item Group": {
+        "validate": "jagadamba.jagadamba.item_code.validate_item_group",
+        "on_update": "jagadamba.jagadamba.item_code.sync_item_group_counter",
+    },
     "Lead": {
         "validate": "jagadamba.jagadamba.type_settings.sync_type_settings",
     },
@@ -108,6 +115,7 @@ doctype_js = {
 	"BOM": "public/js/bom.js",
 	"Purchase Order": "public/js/purchase_order.js",
 	"Prospect": "public/js/prospect.js",
+	"Item": "public/js/item.js",
 }
 # Work Order, Job Card, Material Request, Purchase Receipt, Purchase Invoice, Sales Invoice and
 # Stock Entry take their Type from the source document via sales_flow.js in jagadamba.bundle.js.
