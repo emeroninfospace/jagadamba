@@ -18,7 +18,7 @@ def _series_key(prefix):
 
 
 def get_prefix(item_group):
-	return (item_group and frappe.db.get_value("Item Group", item_group, PREFIX_FIELD) or "").strip()
+	return ((item_group and frappe.db.get_value("Item Group", item_group, PREFIX_FIELD)) or "").strip()
 
 
 def set_item_code(doc, method=None):
@@ -28,7 +28,7 @@ def set_item_code(doc, method=None):
 	if not prefix:
 		return
 	code = (doc.get("item_code") or "").strip().rstrip("*").strip()
-	if re.fullmatch(re.escape(prefix) + r"\d{%d}" % RUNNING_DIGITS, code):
+	if re.fullmatch(re.escape(prefix) + rf"\d{{{RUNNING_DIGITS}}}", code):
 		_raise_counter(prefix, int(code[len(prefix):]))
 	else:
 		code = _next_code(prefix)
@@ -42,7 +42,7 @@ def _next_code(prefix):
 		if number >= 10 ** RUNNING_DIGITS:
 			frappe.throw(frappe._("Item Group with prefix {0} has used all {1}-digit item numbers.").format(
 				prefix, RUNNING_DIGITS))
-		code = "{0}{1:0{2}d}".format(prefix, number, RUNNING_DIGITS)
+		code = f"{prefix}{number:0{RUNNING_DIGITS}d}"
 		if not frappe.db.exists("Item", code):
 			return code
 	frappe.throw(frappe._("Could not find a free item code for prefix {0}.").format(prefix))
@@ -58,7 +58,7 @@ def _raise_counter(prefix, number):
 
 
 def _highest_existing(prefix):
-	pattern = "^{0}[0-9]{{{1}}}$".format(prefix, RUNNING_DIGITS)
+	pattern = f"^{prefix}[0-9]{{{RUNNING_DIGITS}}}$"
 	result = frappe.db.sql("SELECT MAX(CAST(SUBSTRING(`name`, %s) AS UNSIGNED)) FROM `tabItem` WHERE `name` REGEXP %s",
 		(len(prefix) + 1, pattern))
 	return cint(result and result[0][0])
@@ -96,7 +96,7 @@ def get_item_code_preview(item_group):
 		return None
 	current = frappe.db.sql("SELECT `current` FROM `tabSeries` WHERE `name`=%s", (_series_key(prefix),))
 	number = max(cint(current and current[0][0]), _highest_existing(prefix)) + 1
-	return {"prefix": prefix, "next": "{0}{1:0{2}d}".format(prefix, number, RUNNING_DIGITS)}
+	return {"prefix": prefix, "next": f"{prefix}{number:0{RUNNING_DIGITS}d}"}
 
 
 def create_item_groups():
@@ -115,7 +115,7 @@ def create_item_groups():
 		parent = frappe.db.get_value("Item Group", {PREFIX_FIELD: entry["parent"]}) if entry["parent"] else root
 		frappe.get_doc({
 			"doctype": "Item Group",
-			"item_group_name": "{0} - {1}".format(prefix, entry["description"]),
+			"item_group_name": f"{prefix} - {entry['description']}",
 			"parent_item_group": parent,
 			"is_group": 1 if prefix in parents else 0,
 			PREFIX_FIELD: prefix,
