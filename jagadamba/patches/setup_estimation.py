@@ -11,6 +11,7 @@ FORM_CLEANUP_MARKER = "jagadamba.form_cleanup_v1"
 QUOTATION_COSTING_MARKER = "jagadamba.enable_quotation_costing_v1"
 REMOVE_QUOTATION_PRICING_MARKER = "jagadamba.remove_quotation_pricing_v1"
 AUTO_ITEM_CODE_MARKER = "jagadamba.auto_item_code_v1"
+ITEM_CLASSIFICATION_MARKER = "jagadamba.item_classification_fields_v1"
 # Types whose store items are coded from the classification sheet on first migrate.
 AUTO_ITEM_CODE_TYPES = ("Trailers",)
 # Types that quote manufactured jobs and get the Quotation Costing sheet on first migrate.
@@ -47,6 +48,7 @@ def execute():
 	_enable_quotation_costing()
 	_remove_quotation_pricing()
 	_enable_auto_item_code()
+	_fill_item_classification()
 
 
 def _setup_type_configuration():
@@ -149,3 +151,19 @@ def _enable_auto_item_code():
 			frappe.db.set_value("Type", name, "auto_item_code", 1, update_modified=False)
 			frappe.clear_document_cache("Type", name)
 	frappe.get_doc({"doctype": "Patch Log", "patch": AUTO_ITEM_CODE_MARKER}).insert(ignore_permissions=True)
+
+
+def _fill_item_classification():
+	"""Fills Auto Item Code from each Item's Type, and Material Category / Mat Group from the
+	Item Group's parents for Trailers items in a prefixed sub-group. Runs once; saving an Item
+	keeps them in step afterwards."""
+	if frappe.db.exists("Patch Log", {"patch": ITEM_CLASSIFICATION_MARKER}):
+		return
+	frappe.db.sql("""UPDATE `tabItem` it JOIN `tabType` ty ON ty.name = it.custom_types
+		SET it.custom_auto_item_code = ty.auto_item_code""")
+	frappe.db.sql("""UPDATE `tabItem` it
+		JOIN `tabItem Group` sg ON sg.name = it.item_group
+		LEFT JOIN `tabItem Group` mg ON mg.name = sg.parent_item_group
+		SET it.custom_mat_group = sg.parent_item_group, it.custom_material_category = mg.parent_item_group
+		WHERE it.custom_auto_item_code = 1 AND IFNULL(sg.custom_item_code_prefix, '') != ''""")
+	frappe.get_doc({"doctype": "Patch Log", "patch": ITEM_CLASSIFICATION_MARKER}).insert(ignore_permissions=True)
