@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const handlers = {};
 const pending = [];
-const context = vm.createContext({console, Promise, WeakMap, Map, Set,
+const context = vm.createContext({console, Promise, WeakMap, Map, Set, setImmediate,
 	flt: (value, digits) => digits == null ? Number(value || 0) : Number(Number(value || 0).toFixed(digits)), precision: () => 2, __: (value, args = []) => value.replace(/{(\d+)}/g, (_, i) => args[i]),
 	setTimeout: () => {},
 	frappe: {
@@ -25,7 +25,7 @@ for (const file of ['sales_flow', 'lead', 'opportunity', 'quotation', 'sales_ord
 }
 function form(doctype, data, isNew=true) {
 	const frm = {doc:{doctype, docstatus:0, custom_enable_estimation: data.custom_types === "Oil & Gas" ? 1 : 0, ...data}, writes:[], is_new:()=>isNew,
-		set_query:()=>{},get_field:()=>null,add_custom_button:()=>{},refresh_fields:()=>{},refresh_field:()=>{},
+		set_query:()=>{},get_field:()=>null,add_custom_button:()=>{},refresh_fields:()=>{},refresh_field:()=>{},set_df_property:()=>{},toggle_reqd:()=>{},
 		async set_value(field, value) {
 			const values = typeof field === 'string' ? {[field]:value} : field;
 			this.writes.push({...values});
@@ -279,6 +279,30 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 			await handlers['Item.item_group'][0](typeless);assert.equal(typeless.doc.item_code,'OWN');assert.equal(calls.length,2,'no lookup without a Type');
 			const saved=form('Item',{item_group:'Pipes',custom_types:'Trailers',item_code:'4040600001'},false);
 			await handlers['Item.refresh'][0](saved);assert.equal(saved.doc.item_code,'4040600001');assert.equal(calls.length,2);
+		} finally {context.frappe.call=original;}
+	});
+	await test('trailers item: classification labels and cascade',async()=>{
+		const props={};const frm=form('Item',{custom_types:'Trailers',custom_auto_item_code:1});
+		frm.set_df_property=(field,prop,value)=>{props[field+'.'+prop]=value;};frm.toggle_reqd=()=>{};
+		const queries={};frm.set_query=(field,fn)=>{queries[field]=fn;};
+		for (const handler of handlers['Item.setup']) handler(frm);
+		assert.equal(queries.item_group().filters.level,'sub_group');
+		handlers['Item.custom_auto_item_code'][0](frm);assert.equal(props['item_group.label'],'Mat Sub-Group Description');
+		frm.doc.custom_auto_item_code=0;handlers['Item.custom_auto_item_code'][0](frm);assert.equal(props['item_group.label'],'Item Group');
+		assert.deepEqual(JSON.parse(JSON.stringify(queries.item_group())),{filters:[['Item Group','docstatus','!=',2]]});
+		frm.doc.custom_auto_item_code=1;
+		const original=context.frappe.call;context.frappe.call=async()=>({message:null});
+		try {
+			const tree={'MS Sheet & Plate':'HR/CR SHEET & PLATE','HR/CR SHEET & PLATE':'(RM) Raw Material'};
+			const answer=async task=>{let done=false;task.then(()=>{done=true;});
+				while(!done){await new Promise(r=>setImmediate(r));
+					while(pending.length){const p=pending.shift();p.resolve({message:{parent_item_group:tree[p.args[1]]}});}}
+				return task;};
+			frm.doc.item_group='MS Sheet & Plate';await answer(handlers['Item.item_group'][0](frm));
+			assert.equal(frm.doc.custom_mat_group,'HR/CR SHEET & PLATE');assert.equal(frm.doc.custom_material_category,'(RM) Raw Material');
+			assert.equal(frm.doc.item_group,'MS Sheet & Plate');
+			frm.doc.custom_material_category='(BO) Bought-out';await answer(handlers['Item.custom_material_category'][0](frm));
+			assert.equal(frm.doc.custom_mat_group,'');assert.equal(frm.doc.item_group,'','clearing the group clears the sub-group');
 		} finally {context.frappe.call=original;}
 	});
 	console.log(`PASS: ${passed} sales-flow regression cases`);

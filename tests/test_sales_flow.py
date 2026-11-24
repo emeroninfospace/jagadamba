@@ -364,6 +364,31 @@ class SetupTests(unittest.TestCase):
 		write.assert_called_once_with('Type', 'Trailers', 'auto_item_code', 1, update_modified=False)
 		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.AUTO_ITEM_CODE_MARKER})
 
+	def test_item_classification_backfilled_once(self):
+		from jagadamba.patches import setup_estimation
+		api = setup_estimation.frappe
+		with patch.object(api.db, 'exists', return_value=False), patch.object(api.db, 'sql') as sql, \
+			patch.object(api, 'get_doc', return_value=Mock()) as log:
+			setup_estimation._fill_item_classification()
+		self.assertEqual(sql.call_count, 2)
+		self.assertIn("custom_item_code_prefix", sql.call_args_list[1].args[0])
+		log.assert_called_once_with({'doctype': 'Patch Log', 'patch': setup_estimation.ITEM_CLASSIFICATION_MARKER})
+
+	def test_item_form_puts_classification_first(self):
+		import json
+		from pathlib import Path
+		data = json.loads(Path('jagadamba/jagadamba/custom/item.json').read_text())
+		order = json.loads(next(p['value'] for p in data['property_setters'] if p['property'] == 'field_order'))
+		self.assertEqual(order[order.index('custom_types'):order.index('column_break0') + 3],
+			['custom_types', 'custom_auto_item_code', 'custom_material_category', 'custom_mat_group', 'item_group',
+				'column_break0', 'item_code', 'item_name'])
+		fields = {f['fieldname']: f for f in data['custom_fields']}
+		for name in ('custom_material_category', 'custom_mat_group'):
+			self.assertEqual(fields[name]['depends_on'], 'eval:doc.custom_auto_item_code')
+		self.assertEqual(fields['custom_auto_item_code']['fetch_from'], 'custom_types.auto_item_code')
+		for field in fields.values():
+			self.assertIn(field['insert_after'], order, field['fieldname'])
+
 	def test_removed_layout_fields_are_gone_from_fixtures(self):
 		import json
 
@@ -501,6 +526,34 @@ class ItemCodeTests(unittest.TestCase):
 			for prefix in ("40A", "4", "123456789", "404050", "501010"):
 				with self.subTest(prefix=prefix), self.assertRaises(ValueError):
 					self.module.validate_item_group(Doc(name="Pipes", parent_item_group="Bars", custom_item_code_prefix=prefix))
+
+	def test_trailers_item_gets_category_and_group_from_sub_group(self):
+		parents = {"MS Sheet & Plate": "HR/CR SHEET & PLATE", "HR/CR SHEET & PLATE": "(RM) Raw Material"}
+		prefixes = {"MS Sheet & Plate": "401010"}
+		def get_value(dt, name, field=None):
+			return prefixes.get(name) if field == self.module.PREFIX_FIELD else parents.get(name)
+		with patch.object(self.api.db, "get_value", side_effect=get_value):
+			doc = Doc(custom_types="Trailers", item_group="MS Sheet & Plate", custom_mat_group="Wrong", custom_material_category="Wrong")
+			self.module.set_classification(doc)
+			self.assertEqual((doc.custom_material_category, doc.custom_mat_group), ("(RM) Raw Material", "HR/CR SHEET & PLATE"))
+			doc = Doc(custom_types="Trailers", item_group="Finished Goods", custom_mat_group="X")
+			self.module.set_classification(doc)
+			self.assertIsNone(doc.custom_mat_group)
+			doc = Doc(custom_types="Oil & Gas", item_group="MS Sheet & Plate", custom_mat_group="Kept")
+			self.module.set_classification(doc)
+			self.assertEqual(doc.custom_mat_group, "Kept")
+
+	def test_classification_query_walks_the_tree(self):
+		subs = [Doc(name="MS Sheet & Plate", parent_item_group="HR/CR SHEET & PLATE"),
+			Doc(name="TOOLS", parent_item_group="TOOLS, MACHINING"), Doc(name="NUT", parent_item_group="FASTENERS")]
+		ups = [("HR/CR SHEET & PLATE", "(RM) Raw Material"), ("TOOLS, MACHINING", "(BO) Bought-out"), ("FASTENERS", "(BO) Bought-out")]
+		self.api._dict = getattr(self.api, "_dict", None) or Doc
+		with patch.object(self.api, "get_all", create=True, side_effect=lambda dt, filters, fields, as_list=False: ups if as_list else subs):
+			q = lambda level, parent=None, txt="": self.module.classification_query("Item Group", txt, "name", 0, 20, {"level": level, "parent": parent})
+			self.assertEqual(q("category"), [["(BO) Bought-out"], ["(RM) Raw Material"]])
+			self.assertEqual(q("group", "(BO) Bought-out"), [["FASTENERS"], ["TOOLS, MACHINING"]])
+			self.assertEqual(q("sub_group", "FASTENERS"), [["NUT"]])
+			self.assertEqual(q("sub_group", txt="ms sheet"), [["MS Sheet & Plate"]])
 
 	def test_classification_data_matches_the_store_sheet(self):
 		import json

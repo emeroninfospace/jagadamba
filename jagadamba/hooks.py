@@ -60,6 +60,7 @@ doc_events = {
     },
     "Item": {
         "before_insert": "jagadamba.jagadamba.item_code.set_item_code",
+        "validate": "jagadamba.jagadamba.item_code.set_classification",
     },
     "Item Group": {
         "validate": "jagadamba.jagadamba.item_code.validate_item_group",

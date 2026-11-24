@@ -19,6 +19,21 @@ Item codes follow the client's store classification (STORE.xlsx): **Category + G
 
 3. Import the existing items with **Data Import > Item > Insert New Records** using the prepared file (Item Code, Item Name, Item Group, Default Unit of Measure, Description, Maintain Stock, Type = Trailers, Company). Fill the Company column first and make sure the UOMs it uses exist. The codes are kept (without `*`) and each sub-group's counter moves past the highest imported number.
 
+## Item form (Trailers)
+
+For a Type with Auto Item Code the first column of the Item form reads, top to bottom:
+
+| Field | Meaning |
+| --- | --- |
+| Type | Trailers |
+| Material Category Description | e.g. `(RM) Raw Material` |
+| Mat Group Description | e.g. `HR/CR SHEET & PLATE` |
+| Mat Sub-Group Description | the Item Group, e.g. `MS Sheet & Plate` (the Item Group field is relabelled for Trailers) |
+
+Each list only offers entries under the one above it, and only classification groups (those on the path of a sub-group with an Item Code Prefix). Picking a sub-group fills its group and category; on save the server sets both from the sub-group, so they always match. Item Code and Item Name sit in the second column. Other Types see the usual Item Group field and no category/group fields.
+
+Migrating fills Material Category and Mat Group once on existing Trailers items.
+
 ## Creating items
 
 Select **Type** Trailers and the sub-group as **Item Group** (Type sits next to Item Group). Item Code becomes read-only and shows the next code; the number is taken when the Item is saved, so two users saving at once never get the same code. Numbers are never reused, so gaps from deleted items stay.

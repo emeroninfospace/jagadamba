@@ -1,10 +1,74 @@
-// For a Type with Auto Item Code (Trailers) in an Item Group with an Item Code Prefix,
-// the code is generated on save (prefix + running number).
+// Trailers items (Type with Auto Item Code) follow the store classification:
+// Material Category > Mat Group > Mat Sub-Group (the Item Group), and their code is generated
+// on save from the sub-group's Item Code Prefix plus a running number.
+
 frappe.ui.form.on("Item", {
-	refresh(frm) { return show_item_code_rule(frm); },
-	item_group(frm) { return show_item_code_rule(frm); },
+	setup(frm) {
+		const query = "jagadamba.jagadamba.item_code.classification_query";
+		frm.set_query("custom_material_category", () => ({ query, filters: { level: "category" } }));
+		frm.set_query("custom_mat_group", () => ({
+			query, filters: { level: "group", parent: frm.doc.custom_material_category || "" },
+		}));
+		frm.set_query("item_group", () => frm.doc.custom_auto_item_code
+			? { query, filters: { level: "sub_group", parent: frm.doc.custom_mat_group || "" } }
+			: { filters: [["Item Group", "docstatus", "!=", 2]] });
+	},
+
+	refresh(frm) {
+		show_classification_labels(frm);
+		return show_item_code_rule(frm);
+	},
+
 	custom_types(frm) { return show_item_code_rule(frm); },
+	custom_auto_item_code(frm) {
+		show_classification_labels(frm);
+		return show_item_code_rule(frm);
+	},
+
+	async custom_material_category(frm) {
+		const group = frm.doc.custom_mat_group;
+		if (group && await parent_of(group) !== frm.doc.custom_material_category) {
+			await frm.set_value("custom_mat_group", "");
+		}
+	},
+
+	async custom_mat_group(frm) {
+		const group = frm.doc.custom_mat_group;
+		if (!group) {
+			if (frm.doc.custom_auto_item_code && frm.doc.item_group) await frm.set_value("item_group", "");
+			return;
+		}
+		const category = await parent_of(group);
+		if (frm.doc.custom_mat_group !== group) return;
+		if (category && frm.doc.custom_material_category !== category) {
+			await frm.set_value("custom_material_category", category);
+		}
+		if (frm.doc.item_group && await parent_of(frm.doc.item_group) !== group) {
+			await frm.set_value("item_group", "");
+		}
+	},
+
+	async item_group(frm) {
+		const sub_group = frm.doc.item_group;
+		if (frm.doc.custom_auto_item_code && sub_group) {
+			const group = await parent_of(sub_group);
+			if (frm.doc.item_group === sub_group && group && frm.doc.custom_mat_group !== group) {
+				await frm.set_value("custom_mat_group", group);
+			}
+		}
+		return show_item_code_rule(frm);
+	},
 });
+
+async function parent_of(item_group) {
+	const response = await frappe.db.get_value("Item Group", item_group, "parent_item_group");
+	return response && response.message ? response.message.parent_item_group : null;
+}
+
+function show_classification_labels(frm) {
+	frm.set_df_property("item_group", "label",
+		frm.doc.custom_auto_item_code ? __("Mat Sub-Group Description") : __("Item Group"));
+}
 
 async function show_item_code_rule(frm) {
 	if (!frm.is_new()) return;

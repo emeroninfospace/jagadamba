@@ -43,6 +43,43 @@ def set_item_code(doc, method=None):
 	doc.item_code = code
 
 
+def set_classification(doc, method=None):
+	"""Item validate. For Trailers items the Material Category and Mat Group are the parents of
+	the Mat Sub-Group (Item Group), so they always match the classification."""
+	if not uses_auto_code(doc.get("custom_types")):
+		return
+	group = category = None
+	if get_prefix(doc.get("item_group")):
+		group = frappe.db.get_value("Item Group", doc.item_group, "parent_item_group")
+		category = group and frappe.db.get_value("Item Group", group, "parent_item_group")
+	doc.custom_mat_group = group
+	doc.custom_material_category = category
+
+
+@frappe.whitelist()
+def classification_query(doctype, txt, searchfield, start, page_len, filters):
+	"""Link search for Material Category / Mat Group / Mat Sub-Group: only groups on the
+	classification path of a sub-group that has an Item Code Prefix."""
+	filters = frappe._dict(filters or {})
+	level, parent = filters.get("level"), filters.get("parent")
+	sub_groups = frappe.get_all("Item Group", filters={PREFIX_FIELD: ["is", "set"]},
+		fields=["name", "parent_item_group"])
+	if level == "sub_group":
+		names = {row.name for row in sub_groups if not parent or row.parent_item_group == parent}
+	else:
+		groups = {row.parent_item_group for row in sub_groups if row.parent_item_group}
+		parents = dict(frappe.get_all("Item Group", filters={"name": ["in", list(groups)]},
+			fields=["name", "parent_item_group"], as_list=True)) if groups else {}
+		if level == "group":
+			names = {name for name, up in parents.items() if not parent or up == parent}
+		else:
+			names = {up for up in parents.values() if up}
+	txt = (txt or "").lower()
+	matches = sorted(name for name in names if txt in name.lower())
+	start = cint(start)
+	return [[name] for name in matches[start:start + (cint(page_len) or 20)]]
+
+
 def _next_code(prefix):
 	# Skips numbers already taken by items created outside this counter.
 	for _ in range(100):
