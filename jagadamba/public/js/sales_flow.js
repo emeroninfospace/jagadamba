@@ -104,9 +104,9 @@
 	// Finished-item links (Job Item, Vehicle Type, BOM item ...) list only the enabled items of
 	// the document's Type inside its Finished Item Group. The server resolves the group, so the
 	// filter holds even before the Type settings have loaded on the form.
-	jagadamba.sales_flow.finished_item_query = function (frm, {type_field = "custom_types", company = false, parent_item = false} = {}) {
+	jagadamba.sales_flow.finished_item_query = function (frm, {type_field = "custom_types", company = false, company_field = "company", parent_item = false} = {}) {
 		const filters = {type: (type_field && frm.doc[type_field]) || ""};
-		if (company && frm.doc.company) filters.company = frm.doc.company;
+		if (company && frm.doc[company_field]) filters.company = frm.doc[company_field];
 		if (parent_item) filters.parent_item = 1;
 		return {query: "jagadamba.jagadamba.type_settings.finished_item_query", filters};
 	};
@@ -118,6 +118,7 @@
 		"Quotation": [["custom_vehicle_type", SALES], ["oil_gas_item", SALES]],
 		"Sales Order": [["custom_vehicle_type", SALES], ["oil_gas_item", SALES]],
 		"BOM": [["item", {}]],
+		"Item": [["custom_finished_item", {company: true, company_field: "custom_company"}]],
 		"Documents": [["item", {type_field: "type"}], ["oil_gas_item", {type_field: "type"}],
 			["vehicle_type", {type_field: "type", parent_item: true}]],
 	};

@@ -382,9 +382,9 @@ class SetupTests(unittest.TestCase):
 		self.assertEqual(order[order.index('custom_types'):order.index('column_break0') + 3],
 			['custom_types', 'custom_auto_item_code', 'custom_material_category', 'custom_mat_group', 'item_group',
 				'column_break0', 'item_code', 'item_name'])
-		self.assertEqual(order[order.index('item_name') + 1], 'custom_design_item')
+		self.assertEqual(order[order.index('item_name') + 1:order.index('item_name') + 3], ['custom_design_item', 'custom_finished_item'])
 		fields = {f['fieldname']: f for f in data['custom_fields']}
-		for name in ('custom_material_category', 'custom_mat_group', 'custom_design_item'):
+		for name in ('custom_material_category', 'custom_mat_group', 'custom_design_item', 'custom_finished_item'):
 			self.assertEqual(fields[name]['depends_on'], 'eval:doc.custom_auto_item_code')
 		self.assertEqual((fields['custom_design_item']['fieldtype'], fields['custom_design_item']['options']), ('Link', 'Item'))
 		self.assertEqual(fields['custom_auto_item_code']['fetch_from'], 'custom_types.auto_item_code')
@@ -549,6 +549,21 @@ class ItemCodeTests(unittest.TestCase):
 		with self.assertRaises(ValueError):
 			self.module.set_classification(Doc(name="4010100001", custom_design_item="4010100001"))
 		self.module.set_classification(Doc(name="4010100001", custom_design_item="JGES-40101001", custom_types=None))
+
+	def test_finished_item_cannot_point_to_itself(self):
+		with self.assertRaises(ValueError):
+			self.module.set_classification(Doc(name="4010100001", custom_finished_item="4010100001"))
+
+	def test_item_group_tree_titles_carry_the_prefix(self):
+		treeview = types.ModuleType("frappe.desk.treeview")
+		treeview.get_children = Mock(return_value=[Doc(value="MS Sheet & Plate", title="MS Sheet & Plate", expandable=0),
+			Doc(value="Finished Goods", title="Finished Goods", expandable=1)])
+		with patch.dict(sys.modules, {"frappe.desk": types.ModuleType("frappe.desk"), "frappe.desk.treeview": treeview}), \
+			patch.object(self.api, "get_all", create=True, return_value=[["MS Sheet & Plate", "401010"]]):
+			nodes = self.module.get_item_group_tree_nodes("Item Group", "HR/CR SHEET & PLATE", is_root=0)
+		self.assertEqual([n["title"] for n in nodes], ["401010 - MS Sheet & Plate", "Finished Goods"])
+		self.assertEqual([n["value"] for n in nodes], ["MS Sheet & Plate", "Finished Goods"])
+		treeview.get_children.assert_called_once_with("Item Group", "HR/CR SHEET & PLATE", is_root=0)
 
 	def test_classification_query_walks_the_tree(self):
 		subs = [Doc(name="MS Sheet & Plate", parent_item_group="HR/CR SHEET & PLATE"),

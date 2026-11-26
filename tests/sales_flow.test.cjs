@@ -160,6 +160,10 @@ async function test(name, fn) { await fn(); assert.equal(pending.length,0,`${nam
 		for (const handler of handlers['Documents.setup']) handler(documents);
 		assert.deepEqual(JSON.parse(JSON.stringify(queries['documents.vehicle_type']().filters)),{type:'Trailers',parent_item:1});
 		assert.equal(handlers['Designing.setup'],undefined);
+		const item=form('Item',{custom_types:'Trailers',custom_company:'Jagadamba'});item.fields_dict={custom_finished_item:{}};
+		item.set_query=(field,fn)=>{queries['item.'+field]=fn;};
+		for (const handler of handlers['Item.setup']) handler(item);
+		assert.deepEqual(JSON.parse(JSON.stringify(queries['item.custom_finished_item']())),{query:'jagadamba.jagadamba.type_settings.finished_item_query',filters:{type:'Trailers',company:'Jagadamba'}});
 	});
 	await test('a new form without type still configures',async()=>{
 		const frm=form('Quotation',{});

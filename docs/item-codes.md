@@ -30,9 +30,13 @@ For a Type with Auto Item Code the first column of the Item form reads, top to b
 | Mat Group Description | e.g. `HR/CR SHEET & PLATE` |
 | Mat Sub-Group Description | the Item Group, e.g. `MS Sheet & Plate` (the Item Group field is relabelled for Trailers) |
 
-Each list only offers entries under the one above it, and only classification groups (those on the path of a sub-group with an Item Code Prefix). Picking a sub-group fills its group and category; on save the server sets both from the sub-group, so they always match. Item Code, Item Name and **Design Item** (a link to the design Item this store item is used for; it cannot point to itself) sit in the second column. Other Types see the usual Item Group field and no category/group fields.
+Each list only offers entries under the one above it, and only classification groups (those on the path of a sub-group with an Item Code Prefix). Picking a sub-group fills its group and category; on save the server sets both from the sub-group, so they always match. Item Code, Item Name, **Design Item** (the design Item this store item is used for) and **Finished Item** (the finished trailer it goes into; the list shows the Type's Finished Items for the item's Company, like Vehicle Type on sales documents) sit in the second column. Neither link can point to the item itself. Other Types see the usual Item Group field and no category/group fields.
 
 Migrating fills Material Category and Mat Group once on existing Trailers items.
+
+## Item Group tree
+
+The Item Group tree shows each group's prefix before its name, e.g. `401010 - MS Sheet & Plate`; groups without a prefix show their name only.
 
 ## Creating items
 
