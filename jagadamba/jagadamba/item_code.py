@@ -46,8 +46,9 @@ def set_item_code(doc, method=None):
 def set_classification(doc, method=None):
 	"""Item validate. For Trailers items the Material Category and Mat Group are the parents of
 	the Mat Sub-Group (Item Group), so they always match the classification."""
-	if doc.get("custom_design_item") and doc.custom_design_item == doc.get("name"):
-		frappe.throw(frappe._("Design Item cannot be the item itself."))
+	for field, label in (("custom_design_item", "Design Item"), ("custom_finished_item", "Finished Item")):
+		if doc.get(field) and doc.get(field) == doc.get("name"):
+			frappe.throw(frappe._("{0} cannot be the item itself.").format(frappe._(label)))
 	if not uses_auto_code(doc.get("custom_types")):
 		return
 	group = category = None
@@ -171,3 +172,19 @@ def create_item_groups():
 		}).insert()
 		created += 1
 	return created
+
+
+@frappe.whitelist()
+def get_item_group_tree_nodes(doctype, parent=None, **filters):
+	"""Item Group tree: the standard nodes, titled with their Item Code Prefix when they have one."""
+	from frappe.desk.treeview import get_children
+
+	nodes = get_children(doctype, parent, **filters)
+	names = [node.get("value") for node in nodes]
+	prefixes = dict(frappe.get_all("Item Group", filters={"name": ["in", names], PREFIX_FIELD: ["is", "set"]},
+		fields=["name", PREFIX_FIELD], as_list=True)) if names else {}
+	for node in nodes:
+		prefix = prefixes.get(node.get("value"))
+		if prefix:
+			node["title"] = f"{prefix} - {node.get('title') or node.get('value')}"
+	return nodes
