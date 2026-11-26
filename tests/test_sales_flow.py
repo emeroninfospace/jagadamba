@@ -504,6 +504,13 @@ class ItemCodeTests(unittest.TestCase):
 		self.assertIsNone(self.module.get_item_code_preview("Pipes", "Oil & Gas"))
 		self.assertEqual(self.series, {})
 
+	def test_category_and_group_prefixes_do_not_code_items(self):
+		self.prefixes.update({"Raw Material": "40", "Bars": "4040"})
+		self.assertEqual(self.insert(item_group="Bars", item_code="MANUAL-2"), "MANUAL-2")
+		self.assertEqual(self.insert(item_group="Raw Material", item_code="MANUAL-3"), "MANUAL-3")
+		self.assertIsNone(self.module.get_item_code_preview("Bars", "Trailers"))
+		self.assertEqual(self.series, {})
+
 	def test_groups_without_prefix_keep_manual_codes(self):
 		self.assertEqual(self.insert(item_group="Other", item_code="MANUAL-1"), "MANUAL-1")
 

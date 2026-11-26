@@ -10,6 +10,8 @@ from frappe.model.naming import getseries
 from frappe.utils import cint
 
 RUNNING_DIGITS = 4
+# Categories (2 digits) and groups (4) carry prefixes for the tree; only sub-groups (6) code items.
+SUB_GROUP_DIGITS = 6
 PREFIX_FIELD = "custom_item_code_prefix"
 PREFIX_PATTERN = re.compile(r"\d{2,8}")
 
@@ -22,6 +24,12 @@ def get_prefix(item_group):
 	return ((item_group and frappe.db.get_value("Item Group", item_group, PREFIX_FIELD)) or "").strip()
 
 
+def get_code_prefix(item_group):
+	"""The prefix item codes are built from: a sub-group's, never a category's or group's."""
+	prefix = get_prefix(item_group)
+	return prefix if len(prefix) == SUB_GROUP_DIGITS else ""
+
+
 def uses_auto_code(item_type):
 	"""Only Types with Auto Item Code (Trailers) take generated codes."""
 	return bool(item_type) and bool(cint(frappe.get_cached_value("Type", item_type, "auto_item_code")))
@@ -32,7 +40,7 @@ def set_item_code(doc, method=None):
 	kept and the counter moves past it; anything else is replaced by the next number."""
 	if not uses_auto_code(doc.get("custom_types")):
 		return
-	prefix = get_prefix(doc.get("item_group"))
+	prefix = get_code_prefix(doc.get("item_group"))
 	if not prefix:
 		return
 	code = (doc.get("item_code") or "").strip().rstrip("*").strip()
@@ -52,7 +60,7 @@ def set_classification(doc, method=None):
 	if not uses_auto_code(doc.get("custom_types")):
 		return
 	group = category = None
-	if get_prefix(doc.get("item_group")):
+	if get_code_prefix(doc.get("item_group")):
 		group = frappe.db.get_value("Item Group", doc.item_group, "parent_item_group")
 		category = group and frappe.db.get_value("Item Group", group, "parent_item_group")
 	doc.custom_mat_group = group
@@ -65,7 +73,7 @@ def classification_query(doctype, txt, searchfield, start, page_len, filters):
 	classification path of a sub-group that has an Item Code Prefix."""
 	filters = frappe._dict(filters or {})
 	level, parent = filters.get("level"), filters.get("parent")
-	sub_groups = frappe.get_all("Item Group", filters={PREFIX_FIELD: ["is", "set"]},
+	sub_groups = frappe.get_all("Item Group", filters={PREFIX_FIELD: ["like", "_" * SUB_GROUP_DIGITS]},
 		fields=["name", "parent_item_group"])
 	if level == "sub_group":
 		names = {row.name for row in sub_groups if not parent or row.parent_item_group == parent}
@@ -141,7 +149,7 @@ def get_item_code_preview(item_group, item_type=None):
 		frappe.throw(frappe._("Not permitted"), frappe.PermissionError)
 	if not uses_auto_code(item_type):
 		return None
-	prefix = get_prefix(item_group)
+	prefix = get_code_prefix(item_group)
 	if not prefix:
 		return None
 	current = frappe.db.sql("SELECT `current` FROM `tabSeries` WHERE `name`=%s", (_series_key(prefix),))

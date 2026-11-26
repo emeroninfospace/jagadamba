@@ -165,5 +165,5 @@ def _fill_item_classification():
 		JOIN `tabItem Group` sg ON sg.name = it.item_group
 		LEFT JOIN `tabItem Group` mg ON mg.name = sg.parent_item_group
 		SET it.custom_mat_group = sg.parent_item_group, it.custom_material_category = mg.parent_item_group
-		WHERE it.custom_auto_item_code = 1 AND IFNULL(sg.custom_item_code_prefix, '') != ''""")
+		WHERE it.custom_auto_item_code = 1 AND CHAR_LENGTH(IFNULL(sg.custom_item_code_prefix, '')) = 6""")
 	frappe.get_doc({"doctype": "Patch Log", "patch": ITEM_CLASSIFICATION_MARKER}).insert(ignore_permissions=True)
